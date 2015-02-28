@@ -23,7 +23,7 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <param name="playlist">The playlist.</param>
         protected PlaylistBase(string playlist)
         {
-            Require.RequireNotNull(playlist, "playlist");
+            playlist.RequireNotNull("playlist");
             Playlist = playlist;
         }
 

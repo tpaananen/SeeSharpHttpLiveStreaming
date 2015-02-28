@@ -45,10 +45,10 @@
     <Compile Include="Playlist\IHlsPlaylist.cs" />
     <Compile Include="Playlist\PlaylistBase.cs" />
     <Compile Include="Playlist\Tags\MasterPlaylist.cs" />
+    <Compile Include="Playlist\Tags\Master\ExtMedia.cs" />
     <Compile Include="Playlist\Tags\MediaSegment\IMediaSegment.cs" />
     <Compile Include="Playlist\Tags\MediaSegment\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\MediaPlaylist.cs" />
-    <Compile Include="Playlist\Tags\Master\ExtMedia.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInf.cs" />
     <Compile Include="Playlist\Tags\Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

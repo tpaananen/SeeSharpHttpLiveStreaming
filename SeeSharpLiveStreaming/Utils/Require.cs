@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SeeSharpLiveStreaming.Utils
 {
@@ -18,7 +14,7 @@ namespace SeeSharpLiveStreaming.Utils
         /// <exception cref="System.ArgumentNullException">
         /// Thrown if the <paramref name="instance"/> is <b>null</b>.
         /// </exception>
-        internal static void RequireNotNull(object instance, string name)
+        internal static void RequireNotNull(this object instance, string name = "")
         {
             if (instance == null)
             {
