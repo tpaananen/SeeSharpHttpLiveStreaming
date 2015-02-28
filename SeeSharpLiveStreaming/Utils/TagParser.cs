@@ -17,7 +17,9 @@ namespace SeeSharpLiveStreaming.Utils
         /// is ignored and the parser should move to the next line.
         /// </summary>
         /// <param name="line">The line.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// The tag parsed from the line or empty string if tag could not be parsed or the .
+        /// </returns>
         internal static string ParseTag(string line)
         {
             if (string.IsNullOrEmpty(line))
@@ -33,8 +35,8 @@ namespace SeeSharpLiveStreaming.Utils
                 return string.Empty;
             }
 
-            // minus one index, tag is reprented without the end marker.
-            var tag = line.Substring(0, indexOfEndMarker - 1);
+            // tag is reprented without the end marker.
+            var tag = line.Substring(0, indexOfEndMarker);
             return Tag.IsValid(tag) ? tag : string.Empty;
         }
 
@@ -54,12 +56,19 @@ namespace SeeSharpLiveStreaming.Utils
                 string line;
                 do
                 {
-                    while (currentLineNumber++ < lineNumber)
+                    while (currentLineNumber < lineNumber)
                     {
-                        stringReader.ReadLine();
+                        if (!string.IsNullOrEmpty(stringReader.ReadLine()))
+                        {
+                            ++currentLineNumber;
+                        }
                     }
-
+                    
                     line = stringReader.ReadLine();
+                    if (!string.IsNullOrEmpty(line))
+                    {
+                        ++currentLineNumber;
+                    }
 
                 } while (line == Tag.StartLine || string.IsNullOrWhiteSpace(line));
 
