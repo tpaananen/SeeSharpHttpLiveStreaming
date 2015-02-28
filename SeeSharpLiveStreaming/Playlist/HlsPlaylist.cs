@@ -12,18 +12,6 @@ namespace SeeSharpLiveStreaming.Playlist
     public class HlsPlaylist : IHlsPlaylist
     {
 
-        private readonly string _playlist;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HlsPlaylist"/> class.
-        /// </summary>
-        /// <param name="playlist">The playlist.</param>
-        public HlsPlaylist(string playlist)
-        {
-            playlist.RequireNotNull("playlist");
-            _playlist = playlist;
-        }
-
         /// <summary>
         /// Gets the playlist.
         /// </summary>
@@ -52,17 +40,20 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <summary>
         /// Deserializes an object.
         /// </summary>
+        /// <param name="content"></param>
         /// <exception cref="SerializationException">
         /// Thrown when the serialization fails.
         /// </exception>
-        public void Deserialize()
+        public void Deserialize(string content)
         {
+            content.RequireNotNull("content");
+
             if (Playlist != null)
             {
                 throw new InvalidOperationException("The playlist is already deserialized.");
             }
 
-            using (var reader = new StringReader(_playlist))
+            using (var reader = new StringReader(content))
             {
                 Playlist = PlaylistBase.Create(reader);
             }

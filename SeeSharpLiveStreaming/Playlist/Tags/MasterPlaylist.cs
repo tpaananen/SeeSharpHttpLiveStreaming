@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using SeeSharpLiveStreaming.Utils;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags
 {
@@ -15,21 +16,14 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MasterPlaylist" /> class.
-        /// </summary>
-        /// <param name="playlist">The playlist.</param>
-        public MasterPlaylist(string playlist)
-            : base(playlist)
-        {
-        }
-
-        /// <summary>
         /// Deserializes a <see cref="MasterPlaylist"/>.
         /// </summary>
+        /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        public override void Deserialize()
+        public override void Deserialize(string content)
         {
-            
+            content.RequireNotNull("content");
+            throw new NotImplementedException();
         }
     }
 }

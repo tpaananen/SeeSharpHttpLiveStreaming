@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SeeSharpLiveStreaming.Utils;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags.Master
 {
-    public class StreamInf
+    public class StreamInf : ISerializable
     {
 
-        public StreamInf(string line)
+        /// <summary>
+        /// Deserializes an object.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <exception cref="SerializationException">
+        /// Thrown when the serialization fails.
+        /// </exception>
+        public void Deserialize(string content)
         {
-            
+            content.RequireNotNull("content");
+            throw new NotImplementedException();
         }
-
     }
 }

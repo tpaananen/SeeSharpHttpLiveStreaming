@@ -18,8 +18,8 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <returns></returns>
         public static IHlsPlaylist Parse(string content)
         {
-            var playlist = new HlsPlaylist(content);
-            playlist.Deserialize();
+            var playlist = new HlsPlaylist();
+            playlist.Deserialize(content);
             return playlist;
         }
     }

@@ -1,25 +1,11 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Utils;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags.Master
 {
     public class ExtMedia : ISerializable
     {
-        /// <summary>
-        /// The line to be deserialized.
-        /// </summary>
-        private string _line;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtMedia"/> class.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        public ExtMedia(string line)
-        {
-            line.RequireNotNull("line");
-            _line = line;
-            Deserialize();
-        }
 
         /// <summary>
         /// The value is an enumerated-string; valid strings are AUDIO, VIDEO,
@@ -138,11 +124,13 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// <summary>
         /// Deserializes an object.
         /// </summary>
+        /// <param name="content"></param>
         /// <exception cref="SerializationException">
         /// Thrown when the serialization fails.
         /// </exception>
-        public void Deserialize()
+        public void Deserialize(string content)
         {
+            content.RequireNotNull("content");
             throw new NotImplementedException();
         }
     }

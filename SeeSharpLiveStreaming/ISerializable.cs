@@ -8,14 +8,14 @@ namespace SeeSharpLiveStreaming
     /// </summary>
     public interface ISerializable
     {
-
         /// <summary>
         /// Deserializes an object.
         /// </summary>
+        /// <param name="content"></param>
         /// <exception cref="SerializationException">
         /// Thrown when the serialization fails.
         /// </exception>
-        void Deserialize();
+        void Deserialize(string content);
 
     }
 }

@@ -10,15 +10,6 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MediaPlaylist" /> class.
-        /// </summary>
-        /// <param name="playlist">The playlist.</param>
-        public MediaPlaylist(string playlist)
-            : base(playlist)
-        {
-        }
-
-        /// <summary>
         /// Gets the media types.
         /// </summary>
         public IReadOnlyCollection<ExtMedia> MediaTypes { get; private set; }
@@ -26,8 +17,9 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         /// <summary>
         /// Deserializes a <see cref="MediaPlaylist"/>.
         /// </summary>
+        /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        public override void Deserialize()
+        public override void Deserialize(string content)
         {
             try
             {

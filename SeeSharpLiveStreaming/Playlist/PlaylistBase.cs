@@ -13,21 +13,6 @@ namespace SeeSharpLiveStreaming.Playlist
     {
 
         /// <summary>
-        /// Specifies the reader that holds the content of the playlist.
-        /// </summary>
-        protected readonly string Playlist;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PlaylistBase" /> class.
-        /// </summary>
-        /// <param name="playlist">The playlist.</param>
-        protected PlaylistBase(string playlist)
-        {
-            playlist.RequireNotNull("playlist");
-            Playlist = playlist;
-        }
-
-        /// <summary>
         /// Creates a specific playlist depending on content of the <paramref name="reader"/>.
         /// </summary>
         /// <param name="reader">The reader.</param>
@@ -38,31 +23,32 @@ namespace SeeSharpLiveStreaming.Playlist
         public static PlaylistBase Create(TextReader reader)
         {
             TagParser.ReadFirstLine(reader);
-            string playlist = reader.ReadToEnd();
-            string secondLine = TagParser.ReadWhileNonEmptyLine(playlist, 1);
+            string content = reader.ReadToEnd();
+            string secondLine = TagParser.ReadWhileNonEmptyLine(content, 1);
             string tag = TagParser.ParseTag(secondLine);
 
-            return CreatePlaylistByTag(tag, playlist);
+            var playlist = CreatePlaylistByTag(tag);
+            playlist.Deserialize(content);
+            return playlist;
         }
 
         /// <summary>
         /// Creates the playlist by tag.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <param name="playlist">The playlist.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">
         /// Thrown when the second tag is invalid. The playlist cannot be parsed.
         /// </exception>
-        private static PlaylistBase CreatePlaylistByTag(string tag, string playlist)
+        private static PlaylistBase CreatePlaylistByTag(string tag)
         {
             if (Tag.IsMasterTag(tag))
             {
-                return new MasterPlaylist(playlist);
+                return new MasterPlaylist();
             }
             if (Tag.IsMediaPlaylistTag(tag))
             {
-                return new MediaPlaylist(playlist);
+                return new MediaPlaylist();
             }
 
             throw new ArgumentException("Invalid second tag in reader. Cannot create a playlist instance.");
@@ -71,7 +57,8 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <summary>
         /// When overridden in a derived class deserializes an instance of <see cref="PlaylistBase"/>.
         /// </summary>
+        /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        public abstract void Deserialize();
+        public abstract void Deserialize(string content);
     }
 }
