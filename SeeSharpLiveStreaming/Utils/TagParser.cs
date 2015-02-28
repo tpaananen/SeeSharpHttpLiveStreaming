@@ -8,7 +8,7 @@ namespace SeeSharpLiveStreaming.Utils
     /// <summary>
     /// Represents a tag parser.
     /// </summary>
-    public static class TagParser
+    internal static class TagParser
     {
 
         /// <summary>
