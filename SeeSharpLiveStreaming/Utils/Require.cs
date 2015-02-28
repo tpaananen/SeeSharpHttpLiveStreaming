@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace SeeSharpLiveStreaming.Utils
 {
@@ -14,6 +15,7 @@ namespace SeeSharpLiveStreaming.Utils
         /// <exception cref="System.ArgumentNullException">
         /// Thrown if the <paramref name="instance"/> is <b>null</b>.
         /// </exception>
+        [DebuggerStepThrough]
         internal static void RequireNotNull(this object instance, string name = "")
         {
             if (instance == null)

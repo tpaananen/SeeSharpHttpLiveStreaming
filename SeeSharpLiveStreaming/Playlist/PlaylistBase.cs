@@ -22,6 +22,7 @@ namespace SeeSharpLiveStreaming.Playlist
         /// </returns>
         public static PlaylistBase Create(TextReader reader)
         {
+            reader.RequireNotNull("reader");
             TagParser.ReadFirstLine(reader);
             string content = reader.ReadToEnd();
             string secondLine = TagParser.ReadWhileNonEmptyLine(content, 1);
