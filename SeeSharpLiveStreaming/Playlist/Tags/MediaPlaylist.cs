@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization;
+using SeeSharpLiveStreaming.Playlist.Tags.Master;
+
+namespace SeeSharpLiveStreaming.Playlist.Tags
+{
+    public class MediaPlaylist : PlaylistBase
+    {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MediaPlaylist" /> class.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        public MediaPlaylist(string playlist)
+            : base(playlist)
+        {
+        }
+
+        /// <summary>
+        /// Gets the media types.
+        /// </summary>
+        public IReadOnlyCollection<ExtMedia> MediaTypes { get; private set; }
+
+        /// <summary>
+        /// Deserializes a <see cref="MediaPlaylist"/>.
+        /// </summary>
+        /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
+        public override void Deserialize()
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (SerializationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MediaPlaylist).Name), ex);
+            }
+        }
+    }
+}
