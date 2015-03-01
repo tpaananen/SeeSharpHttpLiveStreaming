@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using SeeSharpLiveStreaming.Utils;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags
@@ -12,7 +8,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
     /// <summary>
     /// Represents a master playlist.
     /// </summary>
-    public class MasterPlaylist : PlaylistBase
+    public sealed class MasterPlaylist : PlaylistBase
     {
 
         /// <summary>
@@ -20,8 +16,8 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="playlist">The playlist.</param>
         public MasterPlaylist(IList<PlaylistLine> playlist)
-            : base(playlist)
         {
+            Parse(playlist);
         }
 
         /// <summary>
@@ -29,10 +25,20 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        public override void Deserialize(string content)
+        protected override void Parse(IList<PlaylistLine> content)
         {
-            content.RequireNotNull("content");
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (SerializationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MediaPlaylist).Name), ex);
+            }
         }
     }
 }

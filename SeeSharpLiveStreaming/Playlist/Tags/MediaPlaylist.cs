@@ -6,7 +6,7 @@ using SeeSharpLiveStreaming.Playlist.Tags.Master;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags
 {
-    public class MediaPlaylist : PlaylistBase
+    public sealed class MediaPlaylist : PlaylistBase
     {
 
         /// <summary>
@@ -14,8 +14,8 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="playlist">The playlist.</param>
         public MediaPlaylist(IList<PlaylistLine> playlist)
-            : base(playlist)
         {
+            Parse(playlist);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        public override void Deserialize(string content)
+        protected override void Parse(IList<PlaylistLine> content)
         {
             try
             {

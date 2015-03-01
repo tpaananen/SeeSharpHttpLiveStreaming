@@ -54,17 +54,6 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
         public static string[] NewLines = { "\r\n", "\n" };
 
         [Theory]
-        public void TestParserReadsAllLinesWithLineEnding(string newLine)
-        {
-            var playlist = CreateValidMediaPlaylist(newLine);
-            var playlistObject = HlsPlaylistParser.Parse(playlist);
-
-            Assert.IsNotNull(playlistObject);
-            Assert.That(playlistObject is HlsPlaylist);
-            Assert.IsNotNull(playlistObject.Playlist);
-        }
-
-        [Theory]
         public void TestParserCreatesMasterPlaylist(string newLine)
         {
             var playlist = CreateValidMasterPlaylist(newLine);

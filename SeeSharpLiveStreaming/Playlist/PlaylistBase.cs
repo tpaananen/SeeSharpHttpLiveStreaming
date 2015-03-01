@@ -11,23 +11,8 @@ namespace SeeSharpLiveStreaming.Playlist
     /// <summary>
     /// Represents a base class for playlists.
     /// </summary>
-    public abstract class PlaylistBase : ISerializable
+    public abstract class PlaylistBase
     {
-
-        /// <summary>
-        /// The playlist lines.
-        /// </summary>
-        protected readonly IList<PlaylistLine> _playlist;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PlaylistBase"/> class.
-        /// </summary>
-        /// <param name="playlist">The playlist.</param>
-        protected PlaylistBase(IList<PlaylistLine> playlist)
-        {
-            playlist.RequireNotEmpty("playlist");
-            _playlist = playlist;
-        }
 
         /// <summary>
         /// Creates a specific playlist depending on content of the <paramref name="playlist" />.
@@ -80,8 +65,7 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <summary>
         /// When overridden in a derived class deserializes an instance of <see cref="PlaylistBase"/>.
         /// </summary>
-        /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        public abstract void Deserialize(string content);
+        protected abstract void Parse(IList<PlaylistLine> playlist);
     }
 }
