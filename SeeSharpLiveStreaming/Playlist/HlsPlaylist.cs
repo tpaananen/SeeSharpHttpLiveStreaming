@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Playlist.Tags;
 using SeeSharpLiveStreaming.Utils;
@@ -44,6 +43,12 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <exception cref="SerializationException">
         /// Thrown when the serialization fails.
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the playlist has already been deserialized.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the <paramref name="content"/> is <b>null</b>.
+        /// </exception>
         public void Deserialize(string content)
         {
             content.RequireNotNull("content");
@@ -52,10 +57,18 @@ namespace SeeSharpLiveStreaming.Playlist
             {
                 throw new InvalidOperationException("The playlist is already deserialized.");
             }
-
-            using (var reader = new StringReader(content))
+            try
             {
-                Playlist = PlaylistBase.Create(reader);
+                var playlist = TagParser.ReadLines(content);
+                Playlist = PlaylistBase.Create(playlist);
+            }
+            catch (Exception ex)
+            {
+                if (ex is SerializationException)
+                {
+                    throw;
+                }
+                throw new SerializationException("Failed to deserialize HlsPlaylist.", ex);
             }
         }
     }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using SeeSharpLiveStreaming.Playlist.Tags;
 
-namespace SeeSharpLiveStreaming.Utils
+namespace SeeSharpLiveStreaming.Playlist.Tags
 {
     /// <summary>
     /// Represents a tag parser.
@@ -41,42 +42,6 @@ namespace SeeSharpLiveStreaming.Utils
         }
 
         /// <summary>
-        /// Reads line by line from the <paramref name="playlist" /> until a non empty line is read.
-        /// </summary>
-        /// <param name="playlist">The playlist.</param>
-        /// <param name="lineNumber">The line number.</param>
-        /// <returns>
-        /// Non empty line if the line read property or <b>null</b> is no such line is found.
-        /// </returns>
-        internal static string ReadWhileNonEmptyLine(string playlist, int lineNumber)
-        {
-            int currentLineNumber = 0;
-            using (var stringReader = new StringReader(playlist))
-            {
-                string line;
-                do
-                {
-                    while (currentLineNumber < lineNumber)
-                    {
-                        if (!string.IsNullOrEmpty(stringReader.ReadLine()))
-                        {
-                            ++currentLineNumber;
-                        }
-                    }
-                    
-                    line = stringReader.ReadLine();
-                    if (!string.IsNullOrEmpty(line))
-                    {
-                        ++currentLineNumber;
-                    }
-
-                } while (line == Tag.StartLine || string.IsNullOrWhiteSpace(line));
-
-                return line;
-            }
-        }
-
-        /// <summary>
         /// Reads the first line from the <paramref name="reader"/>.
         /// </summary>
         /// <param name="reader">The reader.</param>
@@ -91,6 +56,32 @@ namespace SeeSharpLiveStreaming.Utils
             {
                 throw new SerializationException(string.Format("The start tag of the playlist is not {0}.", Tag.StartLine));
             }
+        }
+
+        /// <summary>
+        /// Reads the lines from the playlist. Returned list of lines does not contain the start line
+        /// but is validated that the playlist starts correctly.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        /// <returns></returns>
+        internal static IList<PlaylistLine> ReadLines(string playlist)
+        {
+            var lines = new List<PlaylistLine>();
+            using (var reader = new StringReader(playlist))
+            {
+                ReadFirstLine(reader);
+
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var tag = ParseTag(line);
+                    if (!string.IsNullOrEmpty(tag))
+                    {
+                        lines.Add(new PlaylistLine(tag, line));
+                    }
+                }
+            }
+            return lines;
         }
     }
 }

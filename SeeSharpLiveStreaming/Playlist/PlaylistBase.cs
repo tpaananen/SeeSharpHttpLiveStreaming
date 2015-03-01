@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Playlist.Tags;
 using SeeSharpLiveStreaming.Utils;
@@ -13,24 +15,44 @@ namespace SeeSharpLiveStreaming.Playlist
     {
 
         /// <summary>
-        /// Creates a specific playlist depending on content of the <paramref name="reader"/>.
+        /// The playlist lines.
         /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        /// <returns>
-        /// The <see cref="PlaylistBase"/> instance.
-        /// </returns>
-        public static PlaylistBase Create(TextReader reader)
-        {
-            reader.RequireNotNull("reader");
-            TagParser.ReadFirstLine(reader);
-            string content = reader.ReadToEnd();
-            string secondLine = TagParser.ReadWhileNonEmptyLine(content, 1);
-            string tag = TagParser.ParseTag(secondLine);
+        protected readonly IList<PlaylistLine> _playlist;
 
-            var playlist = CreatePlaylistByTag(tag);
-            playlist.Deserialize(content);
-            return playlist;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaylistBase"/> class.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        protected PlaylistBase(IList<PlaylistLine> playlist)
+        {
+            playlist.RequireNotEmpty("playlist");
+            _playlist = playlist;
+        }
+
+        /// <summary>
+        /// Creates a specific playlist depending on content of the <paramref name="playlist" />.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        /// <returns>
+        /// The <see cref="PlaylistBase" /> instance.
+        /// </returns>
+        /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
+        internal static PlaylistBase Create(IList<PlaylistLine> playlist)
+        {
+            playlist.RequireNotEmpty("playlist");
+
+            var firstTag = GetFirstNonCommonTag(playlist);
+            return CreatePlaylistByTag(firstTag, playlist);
+        }
+
+        /// <summary>
+        /// Gets the first non common tag.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        /// <returns></returns>
+        private static string GetFirstNonCommonTag(IEnumerable<PlaylistLine> playlist)
+        {
+            return playlist.First(x => !Tag.IsBasicTag(x.Tag)).Tag;
         }
 
         /// <summary>
@@ -41,18 +63,18 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <exception cref="System.ArgumentException">
         /// Thrown when the second tag is invalid. The playlist cannot be parsed.
         /// </exception>
-        private static PlaylistBase CreatePlaylistByTag(string tag)
+        private static PlaylistBase CreatePlaylistByTag(string tag, IList<PlaylistLine> playlist)
         {
             if (Tag.IsMasterTag(tag))
             {
-                return new MasterPlaylist();
+                return new MasterPlaylist(playlist);
             }
             if (Tag.IsMediaPlaylistTag(tag))
             {
-                return new MediaPlaylist();
+                return new MediaPlaylist(playlist);
             }
 
-            throw new ArgumentException("Invalid second tag in reader. Cannot create a playlist instance.");
+            throw new ArgumentException("Invalid second tag. Cannot create a playlist instance.");
         }
 
         /// <summary>

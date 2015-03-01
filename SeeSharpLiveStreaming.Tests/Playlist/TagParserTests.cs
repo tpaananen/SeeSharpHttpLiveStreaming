@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
 using NUnit.Framework;
-using SeeSharpLiveStreaming.Utils;
+using SeeSharpLiveStreaming.Playlist.Tags;
 
 namespace SeeSharpLiveStreaming.Tests.Playlist
 {
@@ -41,22 +41,6 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
             }
         }
 
-        [Theory]
-        public void TestReadWhileNonEmptyLineReadsTheSecondLine(string lineFeed)
-        {
-            var playlist = GetPlaylist(lineFeed);
-            var secondLine = TagParser.ReadWhileNonEmptyLine(playlist, 1);
-            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000 http://example.com/low.m3u8", secondLine);
-        }
-
-        [Theory]
-        public void TestReadWhileNonEmptyLineReadsTheLastLine(string lineFeed)
-        {
-            var playlist = GetPlaylist(lineFeed);
-            var secondLine = TagParser.ReadWhileNonEmptyLine(playlist, 4);
-            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\" http://example.com/audio-only.m3u8", secondLine);
-        }
-
         [Test]
         public void TestParseTagReturnsEmptyString()
         {
@@ -87,6 +71,27 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
             var line = "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000 http://example.com/low.m3u8" + lineFeed;
             var tag = TagParser.ParseTag(line);
             Assert.AreEqual("#EXT-X-STREAM-INF", tag);
+        }
+
+        [Theory]
+        public void TestTagParserCreatesPlaylistCollection(string lineFeed)
+        {
+            var playlist = GetPlaylist(lineFeed);
+            var list = TagParser.ReadLines(playlist);
+
+            Assert.IsNotNull(list);
+            Assert.AreEqual(4, list.Count);
+            
+            Assert.AreEqual("#EXT-X-STREAM-INF", list[0].Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list[1].Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list[2].Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list[3].Tag);
+
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000 http://example.com/low.m3u8", list[0].Line);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000 http://example.com/mid.m3u8", list[1].Line);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000 http://example.com/hi.m3u8", list[2].Line);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\" http://example.com/audio-only.m3u8", list[3].Line);
+
         }
     }
 }

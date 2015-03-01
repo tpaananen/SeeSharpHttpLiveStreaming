@@ -16,6 +16,15 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
     {
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MasterPlaylist"/> class.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        public MasterPlaylist(IList<PlaylistLine> playlist)
+            : base(playlist)
+        {
+        }
+
+        /// <summary>
         /// Deserializes a <see cref="MasterPlaylist"/>.
         /// </summary>
         /// <param name="content"></param>

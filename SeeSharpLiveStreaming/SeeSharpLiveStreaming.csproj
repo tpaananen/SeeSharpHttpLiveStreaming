@@ -50,10 +50,11 @@
     <Compile Include="Playlist\Tags\MediaSegment\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\MediaPlaylist.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInf.cs" />
+    <Compile Include="Playlist\Tags\PlaylistLine.cs" />
     <Compile Include="Playlist\Tags\Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Require.cs" />
-    <Compile Include="Utils\TagParser.cs" />
+    <Compile Include="Playlist\Tags\TagParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

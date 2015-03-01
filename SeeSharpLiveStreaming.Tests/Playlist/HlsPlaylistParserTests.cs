@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SeeSharpLiveStreaming.Playlist;
+using SeeSharpLiveStreaming.Playlist.Tags;
 
 namespace SeeSharpLiveStreaming.Tests.Playlist
 {
@@ -72,6 +73,7 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
             Assert.IsNotNull(playlistObject);
             Assert.That(playlistObject is HlsPlaylist);
             Assert.IsNotNull(playlistObject.Playlist);
+            Assert.That(playlistObject.Playlist is MasterPlaylist);
         }
 
         [Theory]
@@ -83,6 +85,7 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
             Assert.IsNotNull(playlistObject);
             Assert.That(playlistObject is HlsPlaylist);
             Assert.IsNotNull(playlistObject.Playlist);
+            Assert.That(playlistObject.Playlist is MediaPlaylist);
         }
     }
 }

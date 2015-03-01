@@ -10,6 +10,15 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
     {
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MediaPlaylist"/> class.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        public MediaPlaylist(IList<PlaylistLine> playlist)
+            : base(playlist)
+        {
+        }
+
+        /// <summary>
         /// Gets the media types.
         /// </summary>
         public IReadOnlyCollection<ExtMedia> MediaTypes { get; private set; }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace SeeSharpLiveStreaming.Utils
@@ -24,6 +26,13 @@ namespace SeeSharpLiveStreaming.Utils
             }
         }
 
-
+        internal static void RequireNotEmpty<T>(this ICollection<T> collection, string name = "")
+        {
+            RequireNotNull(collection, name);
+            if (collection.Count == 0)
+            {
+                throw new ArgumentException("The collection " + name + " is empty.", name);
+            }
+        }
     }
 }
