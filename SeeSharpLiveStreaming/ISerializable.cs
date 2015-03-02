@@ -11,11 +11,10 @@ namespace SeeSharpLiveStreaming
         /// <summary>
         /// Deserializes an object.
         /// </summary>
-        /// <param name="content"></param>
-        /// <exception cref="SerializationException">
-        /// Thrown when the serialization fails.
-        /// </exception>
-        void Deserialize(string content);
+        /// <param name="content">The content.</param>
+        /// <param name="version">The version.</param>
+        /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
+        void Deserialize(string content, int version);
 
     }
 }

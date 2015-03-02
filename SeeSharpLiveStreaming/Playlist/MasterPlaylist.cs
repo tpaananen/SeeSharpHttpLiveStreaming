@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Runtime.Serialization;
+using SeeSharpLiveStreaming.Playlist.Tags;
 
-namespace SeeSharpLiveStreaming.Playlist.Tags
+namespace SeeSharpLiveStreaming.Playlist
 {
     /// <summary>
-    /// Represents the media playlist.
+    /// Represents a master playlist.
     /// </summary>
-    public sealed class MediaPlaylist : PlaylistBase
+    public sealed class MasterPlaylist : PlaylistBase
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MediaPlaylist"/> class.
+        /// Initializes a new instance of the <see cref="MasterPlaylist"/> class.
         /// </summary>
         /// <param name="playlist">The playlist.</param>
-        public MediaPlaylist(IList<PlaylistLine> playlist)
+        public MasterPlaylist(IList<PlaylistLine> playlist)
         {
             Parse(playlist);
         }
 
         /// <summary>
-        /// Deserializes a <see cref="MediaPlaylist"/>.
+        /// Deserializes a <see cref="MasterPlaylist"/>.
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
@@ -32,9 +31,9 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
             {
                 foreach (var line in content)
                 {
-                    if (Tag.IsMasterTag(line.Tag))
+                    if (Tag.IsMediaPlaylistTag(line.Tag) || Tag.IsMediaSegmentTag(line.Tag))
                     {
-                        throw new SerializationException("The tag " + line.Tag + " is a master playlist tag. Media playlist tag must not contain master playlist tags.");
+                        throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist tag must not contain other than master playlist tags or basic tags.");
                     }
                     CreateLine(line);
                 }
@@ -45,7 +44,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
             }
             catch (Exception ex)
             {
-                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MediaPlaylist).Name), ex);
+                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MasterPlaylist).Name), ex);
             }
         }
     }

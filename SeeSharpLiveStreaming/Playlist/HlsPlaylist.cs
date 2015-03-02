@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Playlist.Tags;
 using SeeSharpLiveStreaming.Utils;
@@ -37,11 +38,11 @@ namespace SeeSharpLiveStreaming.Playlist
         public int Version { get; private set; }
 
         /// <summary>
-        /// Deserializes an object.
+        /// Parses an object from the string content.
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">
-        /// Thrown when the serialization fails.
+        /// Thrown when parsing fails.
         /// </exception>
         /// <exception cref="InvalidOperationException">
         /// Thrown if the playlist has already been deserialized.
@@ -49,7 +50,7 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="content"/> is <b>null</b>.
         /// </exception>
-        public void Deserialize(string content)
+        public void Parse(string content)
         {
             content.RequireNotNull("content");
 
@@ -59,7 +60,7 @@ namespace SeeSharpLiveStreaming.Playlist
             }
             try
             {
-                var playlist = TagParser.ReadLines(content);
+                IList<PlaylistLine> playlist = TagParser.ReadLines(content);
                 Playlist = PlaylistBase.Create(playlist);
             }
             catch (Exception ex)

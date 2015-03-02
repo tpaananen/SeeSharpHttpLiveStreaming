@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Utils;
 
@@ -36,9 +37,21 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.BasicTags
         /// <summary>
         /// Deserializes an object.
         /// </summary>
-        /// <param name="content"></param>
-        public override void Deserialize(string content)
+        /// <param name="content">The content.</param>
+        /// <param name="version">The version.</param>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the <paramref name="version"/> is not zero.
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when the parsing of an integer fails.
+        /// </exception>
+        public override void Deserialize(string content, int version)
         {
+            if (version != 0)
+            {
+                throw new InvalidOperationException("The version number must be zero when deserializing EXT-X-VERSION tag.");
+            }
+
             content.RequireNotNull("content");
             if (content == string.Empty)
             {
@@ -46,7 +59,6 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.BasicTags
             }
             else
             {
-                int version;
                 if (!int.TryParse(content, NumberStyles.Integer, CultureInfo.InvariantCulture, out version))
                 {
                     throw new SerializationException("Faild to parse version number attribute of the EXT-X-VERSION tag.");

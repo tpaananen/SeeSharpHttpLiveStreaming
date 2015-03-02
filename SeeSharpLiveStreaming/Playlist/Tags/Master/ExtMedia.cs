@@ -136,11 +136,10 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// <summary>
         /// Deserializes an object.
         /// </summary>
-        /// <param name="content"></param>
-        /// <exception cref="SerializationException">
-        /// Thrown when the serialization fails.
-        /// </exception>
-        public void Deserialize(string content)
+        /// <param name="content">The content.</param>
+        /// <param name="version">The version.</param>
+        /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
+        public void Deserialize(string content, int version)
         {
             content.RequireNotNull("content");
             try

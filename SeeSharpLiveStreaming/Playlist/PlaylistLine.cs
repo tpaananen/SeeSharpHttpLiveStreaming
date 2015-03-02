@@ -1,7 +1,7 @@
 ﻿using System;
 using SeeSharpLiveStreaming.Utils;
 
-namespace SeeSharpLiveStreaming.Playlist.Tags
+namespace SeeSharpLiveStreaming.Playlist
 {
     public struct PlaylistLine : IEquatable<PlaylistLine>
     {

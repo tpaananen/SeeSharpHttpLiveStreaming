@@ -15,6 +15,10 @@ namespace SeeSharpLiveStreaming.Playlist
     public abstract class PlaylistBase
     {
 
+        /// <summary>
+        /// The list of tags.
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
         protected readonly List<BaseTag> _tags = new List<BaseTag>();
 
         /// <summary>
@@ -25,7 +29,7 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <summary>
         /// Gets the compatibility level version number tag.
         /// </summary>
-        protected ExtXVersion VersionTag { get; private set; }
+        protected int Version { get; private set; }
 
         /// <summary>
         /// Creates a specific playlist depending on content of the <paramref name="playlist" />.
@@ -58,6 +62,7 @@ namespace SeeSharpLiveStreaming.Playlist
         /// Creates the playlist by tag.
         /// </summary>
         /// <param name="tag">The tag.</param>
+        /// <param name="playlist">The playlist.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">
         /// Thrown when the second tag is invalid. The playlist cannot be parsed.
@@ -88,18 +93,15 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <param name="line">The line.</param>
         protected void CreateLine(PlaylistLine line)
         {
-            var tag = BaseTag.Create(line);
+            var tag = BaseTag.Create(line, Version);
             if (tag.TagType != TagType.ExtXVersion)
             {
                 _tags.Add(tag);
             }
             else
             {
-                if (VersionTag != null)
-                {
-                    throw new SerializationException("The playlist contains multiple EXT-X-VERSION tags.");
-                }
-                VersionTag = (ExtXVersion)tag;
+                var versionTag = (ExtXVersion) tag;
+                Version = versionTag.Version;
             }
         }
     }

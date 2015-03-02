@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using SeeSharpLiveStreaming.Playlist.Tags;
 
-namespace SeeSharpLiveStreaming.Playlist.Tags
+namespace SeeSharpLiveStreaming.Playlist
 {
     /// <summary>
-    /// Represents a master playlist.
+    /// Represents the media playlist.
     /// </summary>
-    public sealed class MasterPlaylist : PlaylistBase
+    public sealed class MediaPlaylist : PlaylistBase
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MasterPlaylist"/> class.
+        /// Initializes a new instance of the <see cref="MediaPlaylist"/> class.
         /// </summary>
         /// <param name="playlist">The playlist.</param>
-        public MasterPlaylist(IList<PlaylistLine> playlist)
+        public MediaPlaylist(IList<PlaylistLine> playlist)
         {
             Parse(playlist);
         }
 
         /// <summary>
-        /// Deserializes a <see cref="MasterPlaylist"/>.
+        /// Deserializes a <see cref="MediaPlaylist"/>.
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
@@ -30,9 +31,9 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
             {
                 foreach (var line in content)
                 {
-                    if (Tag.IsMediaPlaylistTag(line.Tag) || Tag.IsMediaSegmentTag(line.Tag))
+                    if (Tag.IsMasterTag(line.Tag))
                     {
-                        throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist tag must not contain other than master playlist tags or basic tags.");
+                        throw new SerializationException("The tag " + line.Tag + " is a master playlist tag. Media playlist tag must not contain master playlist tags.");
                     }
                     CreateLine(line);
                 }
@@ -43,7 +44,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
             }
             catch (Exception ex)
             {
-                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MasterPlaylist).Name), ex);
+                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MediaPlaylist).Name), ex);
             }
         }
     }
