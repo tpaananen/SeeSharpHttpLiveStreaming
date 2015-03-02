@@ -71,43 +71,36 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
             {
                 ReadFirstLine(reader);
 
-                bool parseUriNotTag = false;
-
-                string tag = null;
-                string currentLine = null;
-
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (parseUriNotTag)
+                    string tag = ParseTag(line);
+                    if (string.IsNullOrEmpty(tag))
                     {
-                        if (string.IsNullOrWhiteSpace(line))
-                        {
-                            continue;
-                        }
-                        parseUriNotTag = false;
-                        lines.Add(new PlaylistLine(tag, currentLine, line));
-                        currentLine = null;
+                        continue;
+                    }
+
+                    if (Tag.IsFollowedByUri(tag))
+                    {
+                        // Some tags are followed by uri
+                        string uri = ReadUri(reader);
+                        lines.Add(new PlaylistLine(tag, line, uri));
                     }
                     else
                     {
-                        tag = ParseTag(line);
-                        if (Tag.IsFollowedByUri(tag))
-                        {
-                            // Media segment tags are followed by uri
-                            currentLine = line;
-                            parseUriNotTag = true;
-                            continue;
-                        }
-
-                        if (!string.IsNullOrEmpty(tag))
-                        {
-                            lines.Add(new PlaylistLine(tag, line));
-                        }
+                        lines.Add(new PlaylistLine(tag, line));
                     }
+
                 }
             }
             return lines;
+        }
+
+        private static string ReadUri(TextReader reader)
+        {
+            string line;
+            while (string.IsNullOrWhiteSpace(line = reader.ReadLine())) {}
+            return line;
         }
     }
 }
