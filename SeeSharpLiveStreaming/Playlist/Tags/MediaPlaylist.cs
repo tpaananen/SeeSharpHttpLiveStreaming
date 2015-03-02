@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization;
-using SeeSharpLiveStreaming.Playlist.Tags.Master;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags
 {
+    /// <summary>
+    /// Represents the media playlist.
+    /// </summary>
     public sealed class MediaPlaylist : PlaylistBase
     {
 
@@ -19,11 +22,6 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         }
 
         /// <summary>
-        /// Gets the media types.
-        /// </summary>
-        public IReadOnlyCollection<ExtMedia> MediaTypes { get; private set; }
-
-        /// <summary>
         /// Deserializes a <see cref="MediaPlaylist"/>.
         /// </summary>
         /// <param name="content"></param>
@@ -32,7 +30,14 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         {
             try
             {
-                throw new NotImplementedException();
+                foreach (var line in content)
+                {
+                    if (Tag.IsMasterTag(line.Tag))
+                    {
+                        throw new SerializationException("The tag " + line.Tag + " is a master playlist tag. Media playlist tag must not contain master playlist tags.");
+                    }
+                    CreateLine(line);
+                }
             }
             catch (SerializationException)
             {

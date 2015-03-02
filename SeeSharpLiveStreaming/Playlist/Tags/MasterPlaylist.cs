@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using SeeSharpLiveStreaming.Utils;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags
 {
@@ -29,7 +28,14 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         {
             try
             {
-                throw new NotImplementedException();
+                foreach (var line in content)
+                {
+                    if (Tag.IsMediaPlaylistTag(line.Tag) || Tag.IsMediaSegmentTag(line.Tag))
+                    {
+                        throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist tag must not contain other than master playlist tags or basic tags.");
+                    }
+                    CreateLine(line);
+                }
             }
             catch (SerializationException)
             {
@@ -37,7 +43,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
             }
             catch (Exception ex)
             {
-                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MediaPlaylist).Name), ex);
+                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MasterPlaylist).Name), ex);
             }
         }
     }

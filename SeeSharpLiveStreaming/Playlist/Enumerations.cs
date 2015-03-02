@@ -69,4 +69,31 @@
         public const string Subtitles = "SUBTITLES";
         public const string ClosedCaptions = "CLOSED-CAPTIONS";
     }
+
+    /// <summary>
+    /// Enumerates the tag types.
+    /// </summary>
+    public enum TagType
+    {
+        ExtM3U = 0,
+        ExtXVersion = 1,
+        ExtInf = 2,
+        ExtXByteRange = 3,
+        ExtXDiscontinuity = 4,
+        ExtXKey = 5,
+        ExtXMap = 6,
+        ExtXProgramDateTime = 7,
+        ExtXTargetDuration = 8,
+        ExtXMediaSequence = 9,
+        ExtXDiscontinuitySequence = 10,
+        ExtXEndList = 11,
+        ExtXPlaylistType = 12,
+        ExtXIFramesOnly = 13,
+        ExtXMedia = 14,
+        ExtXStreamInf = 15,
+        ExtXIFrameStreamInf = 16,
+        ExtXSessionData = 17,
+        ExtXIndependentSegments = 18,
+        ExtXStart = 19
+    }
 }

@@ -44,6 +44,8 @@
     <Compile Include="Playlist\IEncryption.cs" />
     <Compile Include="Playlist\IHlsPlaylist.cs" />
     <Compile Include="Playlist\PlaylistBase.cs" />
+    <Compile Include="Playlist\Tags\BaseTag.cs" />
+    <Compile Include="Playlist\Tags\BasicTags\ExtXVersion.cs" />
     <Compile Include="Playlist\Tags\MasterPlaylist.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMedia.cs" />
     <Compile Include="Playlist\Tags\MediaSegment\IMediaSegment.cs" />

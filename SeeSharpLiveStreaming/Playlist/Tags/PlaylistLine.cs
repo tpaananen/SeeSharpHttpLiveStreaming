@@ -29,6 +29,20 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
             Line = line;
         }
 
+        /// <summary>
+        /// Gets the parameters of the line. Returned string does not contain the tag itself.
+        /// </summary>
+        /// <returns></returns>
+        public string GetParameters()
+        {
+            int tagLength = Tag.Length + Tags.Tag.TagEndMarker.Length;
+            if (tagLength >= Line.Length)
+            {
+                return string.Empty;
+            }
+            return Line.Substring(tagLength);
+        }
+
         #region Equality members
 
         public bool Equals(PlaylistLine other)

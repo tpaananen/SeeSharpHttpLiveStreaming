@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Playlist.Tags;
@@ -13,6 +13,13 @@ namespace SeeSharpLiveStreaming.Playlist
     /// </summary>
     public abstract class PlaylistBase
     {
+
+        protected readonly List<BaseTag> _tags = new List<BaseTag>();
+
+        /// <summary>
+        /// Gets the tags.
+        /// </summary>
+        public IReadOnlyCollection<BaseTag> Tags => new ReadOnlyCollection<BaseTag>(_tags);
 
         /// <summary>
         /// Creates a specific playlist depending on content of the <paramref name="playlist" />.
@@ -37,7 +44,8 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <returns></returns>
         private static string GetFirstNonCommonTag(IEnumerable<PlaylistLine> playlist)
         {
-            return playlist.First(x => !Tag.IsBasicTag(x.Tag)).Tag;
+            return playlist.FirstOrDefault(x => Tag.IsMasterTag(x.Tag) || 
+                                                Tag.IsMediaPlaylistTag(x.Tag)).Tag ?? string.Empty;
         }
 
         /// <summary>
@@ -67,5 +75,15 @@ namespace SeeSharpLiveStreaming.Playlist
         /// </summary>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
         protected abstract void Parse(IList<PlaylistLine> playlist);
+
+        /// <summary>
+        /// Processes the playlist line.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        protected void CreateLine(PlaylistLine line)
+        {
+            var tag = BaseTag.Create(line);
+            _tags.Add(tag);
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
     /// Its format is:
     /// #EXT-X-STREAM-INF:<attribute-list>
     /// </summary>
-    public class StreamInf : ISerializable
+    public class StreamInf : BaseTag
     {
 
         /// <summary>
@@ -65,7 +65,8 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
 
         /// <summary>
         /// The value is a decimal-resolution describing the optimal pixel
-        /// resolution at which to display all the video in the Variant Stream.        /// The RESOLUTION attribute is OPTIONAL but is recommended if the
+        /// resolution at which to display all the video in the Variant Stream.
+        /// The RESOLUTION attribute is OPTIONAL but is recommended if the
         /// Variant Stream includes video.
         /// </summary>
         public decimal Resolution { get; private set; }
@@ -123,13 +124,18 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
                                          ClosedCaptions.Equals("NONE", StringComparison.Ordinal);
 
         /// <summary>
+        /// Gets the type of the tag.
+        /// </summary>
+        public override TagType TagType => TagType.ExtXStreamInf;
+
+        /// <summary>
         /// Deserializes an object.
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">
         /// Thrown when the serialization fails.
         /// </exception>
-        public void Deserialize(string content)
+        public override void Deserialize(string content)
         {
             try
             {
