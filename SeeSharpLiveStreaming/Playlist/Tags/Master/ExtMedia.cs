@@ -6,14 +6,14 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
 {
     /// <summary>
     /// The EXT-X-MEDIA tag is used to relate Media Playlists that contain
-    /// alternative Renditions(Section 4.3.4.2.1) of the same content.For
+    /// alternative Renditions (Section 4.3.4.2.1) of the same content. For
     /// example, three EXT-X-MEDIA tags can be used to identify audio-only
     /// Media Playlists that contain English, French and Spanish Renditions
     /// of the same presentation. Or two EXT-X-MEDIA tags can be used to
     /// identify video-only Media Playlists that show two different camera
     /// angles.
     /// Its format is:
-    /// #EXT-X-MEDIA:<attribute-list>
+    /// #EXT-X-MEDIA:&lt;attribute-list&gt;
     /// </summary>
     public class ExtMedia : ISerializable
     {
@@ -138,6 +138,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// </summary>
         /// <param name="content">The content.</param>
         /// <param name="version">The version.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="content"/> is <b>null</b>.</exception>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
         public void Deserialize(string content, int version)
         {

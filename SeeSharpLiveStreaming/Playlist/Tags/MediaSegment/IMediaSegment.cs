@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace SeeSharpLiveStreaming.Playlist
+namespace SeeSharpLiveStreaming.Playlist.Tags.MediaSegment
 {
+    /// <summary>
+    /// Represents the media segment interface.
+    /// </summary>
     public interface IMediaSegment
     {
 

@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace SeeSharpLiveStreaming.Playlist
 {
+    /// <summary>
+    /// Represents interface for HTTP Live Streaming playlist wrappers.
+    /// </summary>
     public interface IHlsPlaylist
     {
 

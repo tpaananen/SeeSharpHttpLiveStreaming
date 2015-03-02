@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace SeeSharpLiveStreaming.Playlist
+namespace SeeSharpLiveStreaming.Playlist.Tags.MediaSegment
 {
     /// <summary>
     /// Represents a media segment.

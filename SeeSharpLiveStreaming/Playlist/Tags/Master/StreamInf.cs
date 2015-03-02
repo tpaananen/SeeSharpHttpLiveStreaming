@@ -11,7 +11,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
     /// The EXT-X-STREAM-INF tag identifies the next URI line in the Playlist
     /// as a Rendition of the Variant Stream.
     /// Its format is:
-    /// #EXT-X-STREAM-INF:<attribute-list>
+    /// #EXT-X-STREAM-INF:&lt;attribute-list&gt;
     /// </summary>
     public class StreamInf : BaseTag
     {

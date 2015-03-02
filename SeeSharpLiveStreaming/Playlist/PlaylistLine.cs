@@ -3,6 +3,9 @@ using SeeSharpLiveStreaming.Utils;
 
 namespace SeeSharpLiveStreaming.Playlist
 {
+    /// <summary>
+    /// Reprents the playlist line having the tag and the whole line.
+    /// </summary>
     public struct PlaylistLine : IEquatable<PlaylistLine>
     {
 
@@ -45,12 +48,26 @@ namespace SeeSharpLiveStreaming.Playlist
 
         #region Equality members
 
+        /// <summary>
+        /// Compares the <paramref name="other"/> to this instance.
+        /// </summary>
+        /// <param name="other">The other.</param>
+        /// <returns>
+        /// True if they are equal; otherwise, false.
+        /// </returns>
         public bool Equals(PlaylistLine other)
         {
             return string.Equals(Tag, other.Tag) && 
                    string.Equals(Line, other.Line);
         }
 
+        /// <summary>
+        /// Compares the <paramref name="obj"/> to this instance.
+        /// </summary>
+        /// <param name="obj">The object to be compared.</param>
+        /// <returns>
+        /// True if they are equal; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -60,6 +77,12 @@ namespace SeeSharpLiveStreaming.Playlist
             return obj is PlaylistLine && Equals((PlaylistLine)obj);
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             unchecked
@@ -68,11 +91,27 @@ namespace SeeSharpLiveStreaming.Playlist
             }
         }
 
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator ==(PlaylistLine left, PlaylistLine right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator !=(PlaylistLine left, PlaylistLine right)
         {
             return !left.Equals(right);

@@ -64,9 +64,21 @@
     /// </summary>
     public static class MediaTypes
     {
+        /// <summary>
+        /// The audio media type.
+        /// </summary>
         public const string Audio = "AUDIO";
+        /// <summary>
+        /// The video media type.
+        /// </summary>
         public const string Video = "VIDEO";
+        /// <summary>
+        /// The subtitles media type.
+        /// </summary>
         public const string Subtitles = "SUBTITLES";
+        /// <summary>
+        /// The closed captions media type.
+        /// </summary>
         public const string ClosedCaptions = "CLOSED-CAPTIONS";
     }
 
@@ -75,6 +87,7 @@
     /// </summary>
     public enum TagType
     {
+        #pragma warning disable 1591
         ExtM3U = 0,
         ExtXVersion = 1,
         ExtInf = 2,
