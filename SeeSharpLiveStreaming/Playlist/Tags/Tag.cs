@@ -163,5 +163,18 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
                    IsBasicTag(tag) ||
                    IsMediaSegmentTag(tag);
         }
+
+        /// <summary>
+        /// Determines whether the tag is followed by URI.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns>
+        /// True if the tag is followed by the URI; otherwise, false.
+        /// </returns>
+        public static bool IsFollowedByUri(string tag)
+        {
+            return tag == "#EXT-X-STREAM-INF" || 
+                   IsMediaSegmentTag(tag);
+        }
     }
 }

@@ -8,7 +8,6 @@ namespace SeeSharpLiveStreaming.Playlist
     /// </summary>
     public struct PlaylistLine : IEquatable<PlaylistLine>
     {
-
         /// <summary>
         /// Gets the tag.
         /// </summary>
@@ -20,7 +19,12 @@ namespace SeeSharpLiveStreaming.Playlist
         public readonly string Line;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlaylistLine"/> struct.
+        /// The optional URI, this should exists on its own line.
+        /// </summary>
+        public readonly Uri Uri;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaylistLine" /> struct.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <param name="line">The line.</param>
@@ -30,6 +34,28 @@ namespace SeeSharpLiveStreaming.Playlist
             line.RequireNotNull("line");
             Tag = tag;
             Line = line;
+            Uri = null;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaylistLine"/> struct.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="line">The line.</param>
+        /// <param name="uri">The URI.</param>
+        /// <exception cref="System.ArgumentException">
+        /// Thrown when the URI could not be created.
+        /// </exception>
+        internal PlaylistLine(string tag, string line, string uri)
+            : this(tag, line)
+        {
+            Uri result;
+
+            if (!Uri.TryCreate(uri, UriKind.Absolute, out result))
+            {
+                throw new ArgumentException("The URI could not be created.", "uri");
+            }
+            Uri = result;
         }
 
         /// <summary>

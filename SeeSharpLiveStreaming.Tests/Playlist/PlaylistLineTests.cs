@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SeeSharpLiveStreaming.Playlist;
 using SeeSharpLiveStreaming.Playlist.Tags;
 
@@ -10,9 +11,10 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
         [Test]
         public void TestPlaylistLineGetParameters()
         {
-            var playlistLine = new PlaylistLine("#EXT-X-STREAM-INF", "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000 http://example.com/low.m3u8");
+            var playlistLine = new PlaylistLine("#EXT-X-STREAM-INF", "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000", " http://example.com/low.m3u8");
             var parameters = playlistLine.GetParameters();
-            Assert.AreEqual("BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000 http://example.com/low.m3u8", parameters);
+            Assert.AreEqual("BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000", parameters);
+            Assert.AreEqual(new Uri("http://example.com/low.m3u8"), playlistLine.Uri);
         }
 
         [Test]

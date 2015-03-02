@@ -71,13 +71,39 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
             {
                 ReadFirstLine(reader);
 
+                bool parseUriNotTag = false;
+
+                string tag = null;
+                string currentLine = null;
+
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    var tag = ParseTag(line);
-                    if (!string.IsNullOrEmpty(tag))
+                    if (parseUriNotTag)
                     {
-                        lines.Add(new PlaylistLine(tag, line));
+                        if (string.IsNullOrWhiteSpace(line))
+                        {
+                            continue;
+                        }
+                        parseUriNotTag = false;
+                        lines.Add(new PlaylistLine(tag, currentLine, line));
+                        currentLine = null;
+                    }
+                    else
+                    {
+                        tag = ParseTag(line);
+                        if (Tag.IsFollowedByUri(tag))
+                        {
+                            // Media segment tags are followed by uri
+                            currentLine = line;
+                            parseUriNotTag = true;
+                            continue;
+                        }
+
+                        if (!string.IsNullOrEmpty(tag))
+                        {
+                            lines.Add(new PlaylistLine(tag, line));
+                        }
                     }
                 }
             }

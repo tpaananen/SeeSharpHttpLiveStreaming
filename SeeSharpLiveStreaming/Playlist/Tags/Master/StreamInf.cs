@@ -146,5 +146,19 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
                 throw new SerializationException("Failed to deserialize EXT-X-STREAM-INF tag.", ex);
             }
         }
+
+        private void ParseBandwidth(string content, int version)
+        {
+            const string name = "BANDWITH";
+            var startIndex = content.IndexOf(name, StringComparison.Ordinal);
+            if (startIndex < 0)
+            {
+                throw new SerializationException("The BANDWITH tag is not included.");
+            }
+
+
+
+
+        }
     }
 }
