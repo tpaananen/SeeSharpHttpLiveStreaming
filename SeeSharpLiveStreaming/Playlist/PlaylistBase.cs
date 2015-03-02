@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Playlist.Tags;
+using SeeSharpLiveStreaming.Playlist.Tags.BasicTags;
 using SeeSharpLiveStreaming.Utils;
 
 namespace SeeSharpLiveStreaming.Playlist
@@ -20,6 +21,11 @@ namespace SeeSharpLiveStreaming.Playlist
         /// Gets the tags.
         /// </summary>
         public IReadOnlyCollection<BaseTag> Tags => new ReadOnlyCollection<BaseTag>(_tags);
+
+        /// <summary>
+        /// Gets the compatibility level version number tag.
+        /// </summary>
+        protected ExtXVersion VersionTag { get; private set; }
 
         /// <summary>
         /// Creates a specific playlist depending on content of the <paramref name="playlist" />.
@@ -83,7 +89,18 @@ namespace SeeSharpLiveStreaming.Playlist
         protected void CreateLine(PlaylistLine line)
         {
             var tag = BaseTag.Create(line);
-            _tags.Add(tag);
+            if (tag.TagType != TagType.ExtXVersion)
+            {
+                _tags.Add(tag);
+            }
+            else
+            {
+                if (VersionTag != null)
+                {
+                    throw new SerializationException("The playlist contains multiple EXT-X-VERSION tags.");
+                }
+                VersionTag = (ExtXVersion)tag;
+            }
         }
     }
 }

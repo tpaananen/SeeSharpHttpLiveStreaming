@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Runtime.Serialization;
+using SeeSharpLiveStreaming.Utils;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags.BasicTags
 {
@@ -41,7 +39,20 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.BasicTags
         /// <param name="content"></param>
         public override void Deserialize(string content)
         {
-
+            content.RequireNotNull("content");
+            if (content == string.Empty)
+            {
+                Version = 0;
+            }
+            else
+            {
+                int version;
+                if (!int.TryParse(content, NumberStyles.Integer, CultureInfo.InvariantCulture, out version))
+                {
+                    throw new SerializationException("Faild to parse version number attribute of the EXT-X-VERSION tag.");
+                }
+                Version = version;
+            }
         }
     }
 }
