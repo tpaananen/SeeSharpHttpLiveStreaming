@@ -120,13 +120,22 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// <summary>
         /// Gets or sets a value indicating whether this instance has closed captions.
         /// </summary>
-        public bool HasClosedCaptions => ClosedCaptions == null || 
-                                         ClosedCaptions.Equals("NONE", StringComparison.Ordinal);
+        public bool HasClosedCaptions
+        {
+            get
+            {
+                return ClosedCaptions == null || 
+                       ClosedCaptions.Equals("NONE", StringComparison.Ordinal);
+            }
+        }
 
         /// <summary>
         /// Gets the type of the tag.
         /// </summary>
-        public override TagType TagType => TagType.ExtXStreamInf;
+        public override TagType TagType
+        {
+            get { return TagType.ExtXStreamInf; }
+        }
 
         /// <summary>
         /// Deserializes an object.

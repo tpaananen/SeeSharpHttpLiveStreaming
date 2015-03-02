@@ -24,7 +24,10 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <summary>
         /// Gets the tags.
         /// </summary>
-        public IReadOnlyCollection<BaseTag> Tags => new ReadOnlyCollection<BaseTag>(_tags);
+        public IReadOnlyCollection<BaseTag> Tags
+        {
+            get { return new ReadOnlyCollection<BaseTag>(_tags); }
+        }
 
         /// <summary>
         /// Gets the compatibility level version number tag.

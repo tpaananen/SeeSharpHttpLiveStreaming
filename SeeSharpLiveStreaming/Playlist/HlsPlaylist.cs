@@ -20,7 +20,10 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <summary>
         /// Gets a value indicating whether this playlist is a master playlist.
         /// </summary>
-        public bool IsMaster => Playlist is MasterPlaylist;
+        public bool IsMaster
+        {
+            get { return Playlist is MasterPlaylist; }
+        }
 
         /// <summary>
         /// Gets the playlist type.

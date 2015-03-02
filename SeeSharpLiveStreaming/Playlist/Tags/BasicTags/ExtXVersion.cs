@@ -27,7 +27,10 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.BasicTags
         /// <summary>
         /// Gets the type of the tag.
         /// </summary>
-        public override TagType TagType => TagType.ExtXVersion;
+        public override TagType TagType
+        {
+            get { return TagType.ExtXVersion; }
+        }
 
         /// <summary>
         /// Gets the protocol compatibility level version number.
