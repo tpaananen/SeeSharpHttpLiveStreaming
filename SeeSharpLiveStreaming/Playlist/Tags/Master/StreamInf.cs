@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Utils;
+using SeeSharpLiveStreaming.Utils.ValueParsers;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags.Master
 {
@@ -50,7 +52,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// period of similar content, encoded using the same settings.
         /// The AVERAGE-BANDWIDTH attribute is OPTIONAL.
         /// </summary>
-        public decimal AverageBandwith { get; private set; }
+        public decimal AverageBandwidth { get; private set; }
 
         /// <summary>
         /// The value is a quoted-string containing a comma-separated list of
@@ -61,7 +63,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// "Bucket" Media Types [RFC6381].
         /// Every EXT-X-STREAM-INF tag SHOULD include a CODECS attribute.
         /// </summary>
-        public string Codecs { get; private set; }
+        public IList<string> Codecs { get; private set; }
 
         /// <summary>
         /// The value is a decimal-resolution describing the optimal pixel
@@ -124,8 +126,8 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         {
             get
             {
-                return ClosedCaptions == null || 
-                       ClosedCaptions.Equals("NONE", StringComparison.Ordinal);
+                return ClosedCaptions != null && 
+                       !ClosedCaptions.Equals("NONE", StringComparison.Ordinal);
             }
         }
 
@@ -145,10 +147,18 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
         public override void Deserialize(string content, int version)
         {
+            content.RequireNotNull("content");
+
             try
             {
-                content.RequireNotNull("content");
-                throw new NotImplementedException();
+                ParseBandwidth(content);
+                ParseAverageBandwidth(content);
+                ParseCodecs(content);
+                ParseResolution(content);
+                ParseAudio(content);
+                ParseVideo(content);
+                ParseSubtitles(content);
+                ParseClosedCaptions(content);
             }
             catch (Exception ex)
             {
@@ -156,18 +166,65 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
             }
         }
 
-        private void ParseBandwidth(string content, int version)
+        #region Parsing of attribute list
+
+        private void ParseBandwidth(string content)
         {
-            const string name = "BANDWITH";
-            var startIndex = content.IndexOf(name, StringComparison.Ordinal);
-            if (startIndex < 0)
-            {
-                throw new SerializationException("The BANDWITH tag is not included.");
-            }
-
-
-
-
+            const string name = "BANDWIDTH";
+            Bandwidth = ValueParser.ParseDecimal(name, content, true);
         }
+
+        private void ParseAverageBandwidth(string content)
+        {
+            const string name = "AVERAGE-BANDWIDTH";
+            AverageBandwidth = ValueParser.ParseDecimal(name, content, false);
+        }
+
+        private void ParseCodecs(string content)
+        {
+            const string name = "CODECS";
+            Codecs = ValueParser.ParseCommaSeparatedQuotedString(name, content, false); // SHOULD
+        }
+
+        private void ParseResolution(string content)
+        {
+            const string name = "RESOLUTION";
+            Resolution = ValueParser.ParseDecimal(name, content, false); // RECOMMENDED IF VIDEO
+        }
+
+        private void ParseAudio(string content)
+        {
+            const string name = "AUDIO";
+            Audio = ValueParser.ParseQuotedString(name, content, false);
+        }
+
+        private void ParseVideo(string content)
+        {
+            const string name = "VIDEO";
+            Video = ValueParser.ParseQuotedString(name, content, false);
+        }
+
+        private void ParseSubtitles(string content)
+        {
+            const string name = "SUBTITLES";
+            Subtitles = ValueParser.ParseQuotedString(name, content, false);
+        }
+
+        private void ParseClosedCaptions(string content)
+        {
+            const string name = "CLOSED-CAPTIONS";
+            var value = ValueParser.ParseQuotedString(name, content, false);
+            if (value == string.Empty)
+            {
+                // no quoted string, so lets set to NONE
+                ClosedCaptions = "NONE";
+            }
+            else
+            {
+                ClosedCaptions = value;
+            }
+        }
+
+        #endregion
     }
 }
