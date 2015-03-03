@@ -10,6 +10,7 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
     public class TagParserTests
     {
         [Datapoints]
+        // ReSharper disable once UnusedMember.Local
         private static string[] _lineFeeds = {"\r\n", "\n"};
 
         private static string GetPlaylist(string lineFeed)

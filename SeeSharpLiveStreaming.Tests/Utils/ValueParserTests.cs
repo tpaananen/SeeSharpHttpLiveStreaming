@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using NUnit.Framework;
+using SeeSharpLiveStreaming.Playlist.Tags;
 using SeeSharpLiveStreaming.Utils.ValueParsers;
 
 namespace SeeSharpLiveStreaming.Tests.Utils
@@ -78,13 +79,24 @@ namespace SeeSharpLiveStreaming.Tests.Utils
         }
 
         [Test]
-        public void TestParseDouble()
+        public void TestParseHexadecimal()
         {
-            const double expected = 103443.21;
-            var actual = ValueParser.ParseDouble("ATTRIBUTE", "ATTRIBUTE=103443.21,SECOND=2121", false);
+            const decimal expected = 0x1212;
+            var actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0x1212,SECOND=2121", false);
             Assert.AreEqual(expected, actual);
 
-            actual = ValueParser.ParseDouble("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=103443.21", false);
+            actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=0x1212", false);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void TestParseResolution()
+        {
+            var expected = new Resolution(1920, 1080);
+            var actual = ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTE=1920x1080,SECOND=2121", false);
+            Assert.AreEqual(expected, actual);
+
+            actual = ValueParser.ParseResolution("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=1920x1080", false);
             Assert.AreEqual(expected, actual);
         }
 

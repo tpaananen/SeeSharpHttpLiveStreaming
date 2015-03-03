@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Utils;
+using SeeSharpLiveStreaming.Utils.ValueParsers;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags.Master
 {
@@ -15,7 +18,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
     /// Its format is:
     /// #EXT-X-MEDIA:&lt;attribute-list&gt;
     /// </summary>
-    public class ExtMedia : ISerializable
+    public class ExtMedia : BaseTag
     {
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
 
         /// <summary>
         /// The value is a quoted-string containing one of the standard Tags for
-        /// Identifying Languages[RFC5646], which identifies the primary
+        /// Identifying Languages [RFC5646], which identifies the primary
         /// language used in the Rendition.This attribute is OPTIONAL.
         /// </summary>
         public string Language { get; private set; }
@@ -96,7 +99,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// of NO. The FORCED attribute MUST NOT be present unless the TYPE is
         /// SUBTITLES.
         /// A value of YES indicates that the Rendition contains content which is
-        /// considered essential to play.When selecting a FORCED Rendition, a
+        /// considered essential to play. When selecting a FORCED Rendition, a
         /// client SHOULD choose the one that best matches the current playback
         /// environment (e.g.language).
         /// A value of NO indicates that the Rendition contains content which is
@@ -106,7 +109,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
 
         /// <summary>
         /// The value is a quoted-string that specifies a Rendition within the
-        /// segments in the Media Playlist.This attribute is REQUIRED if the
+        /// segments in the Media Playlist. This attribute is REQUIRED if the
         /// TYPE attribute is CLOSED-CAPTIONS, in which case it MUST have one of
         /// the values: "CC1", "CC2", "CC3", "CC4", or "SERVICEn" where n MUST be
         /// an integer between 1 and 63 (e.g."SERVICE3" or "SERVICE42").
@@ -131,7 +134,15 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// "public.accessibility.describes-video".
         /// The CHARACTERISTICS attribute MAY include private UTIs.
         /// </summary>
-        public string Characteristics { get; private set; }
+        public IReadOnlyCollection<string> Characteristics { get; private set; }
+
+        /// <summary>
+        /// Gets the type of the tag.
+        /// </summary>
+        public override TagType TagType
+        {
+            get { return TagType.ExtXMedia; }
+        }
 
         /// <summary>
         /// Deserializes an object.
@@ -140,17 +151,170 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// <param name="version">The version.</param>
         /// <exception cref="ArgumentNullException">Thrown when the <paramref name="content"/> is <b>null</b>.</exception>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        public void Deserialize(string content, int version)
+        public override void Deserialize(string content, int version)
         {
             content.RequireNotNull("content");
             try
             {
-                throw new NotImplementedException();
+                ParseType(content);
+                ParseUri(content);
+                ParseGroupId(content);
+                ParseLanguage(content);
+                ParseAssocLanguage(content);
+                ParseName(content);
+                ParseDefault(content);
+                ParseAutoSelect(content);
+                ParseForced(content);
+                ParseInstreamId(content);
+                ParseCharacteristics(content);
             }
             catch (Exception ex)
             {
                 throw new SerializationException("Failed to deserialize EXT-X-MEDIA tag.", ex);
             }
+        }
+
+        private void ParseType(string content)
+        {
+            const string name = "TYPE";
+            Type = ValueParser.ParseEnumeratedString(name, content, true);
+
+            if (Type != MediaTypes.Audio &&
+                Type != MediaTypes.Video &&
+                Type != MediaTypes.Subtitles &&
+                Type != MediaTypes.ClosedCaptions)
+            {
+                throw new SerializationException("Failed to parse TYPE attribute.");
+            }
+        }
+
+        private void ParseUri(string content)
+        {
+            const string name = "URI";
+            bool mustNotExists = Type == MediaTypes.ClosedCaptions;
+            var uriString = ValueParser.ParseQuotedString(name, content, false);
+            if (mustNotExists)
+            {
+                if (uriString != string.Empty)
+                {
+                    throw new SerializationException("Failed to parse URI attribute, it must not exists when the TYPE is CLOSED-CAPTIONS.");
+                }
+            }
+
+            if (uriString != string.Empty)
+            {
+                Uri = new Uri(uriString);
+            }
+        }
+
+        private void ParseGroupId(string content)
+        {
+            const string name = "GROUP-ID";
+            GroupId = ValueParser.ParseQuotedString(name, content, true);
+        }
+
+        private void ParseLanguage(string content)
+        {
+            const string name = "LANGUAGE";
+            Language = ValueParser.ParseQuotedString(name, content, false);
+        }
+
+        private void ParseAssocLanguage(string content)
+        {
+            const string name = "ASSOC-LANGUAGE";
+            AssocLanguage = ValueParser.ParseQuotedString(name, content, false);
+        }
+
+        private void ParseName(string content)
+        {
+            const string name = "NAME";
+            Name = ValueParser.ParseQuotedString(name, content, true);
+        }
+
+        private void ParseDefault(string content)
+        {
+            const string name = "DEFAULT";
+            var defaultValue = ValueParser.ParseEnumeratedString(name, content, false);
+            if (defaultValue != string.Empty && !YesNo.IsValid(defaultValue))
+            {
+                throw new SerializationException("Invalid value provided in DEFAULT attribute.");
+            }
+            Default = defaultValue == YesNo.Yes;
+        }
+
+        private void ParseAutoSelect(string content)
+        {
+            const string name = "AUTOSELECT";
+            var value = ValueParser.ParseEnumeratedString(name, content, false);
+            if (value != string.Empty && !YesNo.IsValid(value))
+            {
+                throw new SerializationException("Invalid value provided in AUTOSELECT attribute.");
+            }
+
+            AutoSelect = value == YesNo.Yes;
+            if (value != string.Empty && Default && !AutoSelect)
+            {
+                throw new SerializationException("The AUTOSELECT must be YES when provided and DEFAULT is YES.");
+            }
+        }
+
+        private void ParseForced(string content)
+        {
+            const string name = "FORCED";
+            var value = ValueParser.ParseEnumeratedString(name, content, false);
+            if (value != string.Empty && !YesNo.IsValid(value))
+            {
+                throw new SerializationException("Invalid value provided in FORCED attribute.");
+            }
+            if (value != string.Empty && Type != MediaTypes.Subtitles)
+            {
+                throw new SerializationException("FORCED attribute must not exist when TYPE is not SUBTITLES.");
+            }
+            Forced = value == YesNo.Yes;
+        }
+
+        private void ParseInstreamId(string content)
+        {
+            // see property comments describing the parsing logic
+            const string name = "INSTREAM-ID";
+            var isRequired = Type == MediaTypes.ClosedCaptions;
+            var value = ValueParser.ParseQuotedString(name, content, isRequired);
+
+            if (value == string.Empty && isRequired)
+            {
+                throw new SerializationException("Attribute INSTREAM-ID is required if TYPE is CLOSED-CAPTIONS.");
+            }
+            if (!isRequired)
+            {
+                if (value != string.Empty)
+                {
+                    throw new SerializationException("Attribute INSTREAM-ID must not exist if TYPE is not CLOSED-CAPTIONS.");
+                }
+                return;
+            }
+
+            if (value != "CC1" && value != "CC2" && value != "CC3" && value != "CC4")
+            {
+                // value must be one of the SERVICEn
+                if (!value.StartsWith("SERVICE"))
+                {
+                    throw new SerializationException("Invalid INSTREAM-ID attribute value.");
+                }
+
+                var number = value.Substring("SERVICE".Length);
+                var temp = ValueParser.ParseInt(number);
+                if (temp < 1 || temp > 63)
+                {
+                    throw new SerializationException("Invalid INSTREAM-ID attribute value. The number of the service value is out of range.");
+                }
+            }
+            InstreamId = value;
+        }
+
+        private void ParseCharacteristics(string content)
+        {
+            const string name = "CHARACTERISTICS";
+            Characteristics = new ReadOnlyCollection<string>(ValueParser.ParseCommaSeparatedQuotedString(name, content, false));
         }
     }
 }

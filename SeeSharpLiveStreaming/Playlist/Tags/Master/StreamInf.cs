@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Utils;
 using SeeSharpLiveStreaming.Utils.ValueParsers;
@@ -34,7 +35,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// content, encoded using the same settings.
         /// Every EXT-X-STREAM-INF tag MUST include the BANDWIDTH attribute.
         /// </summary>
-        public decimal Bandwidth { get; private set; }
+        public long Bandwidth { get; private set; }
 
         /// <summary>
         /// The value is a decimal-integer of bits per second. It represents the
@@ -52,7 +53,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// period of similar content, encoded using the same settings.
         /// The AVERAGE-BANDWIDTH attribute is OPTIONAL.
         /// </summary>
-        public decimal AverageBandwidth { get; private set; }
+        public long AverageBandwidth { get; private set; }
 
         /// <summary>
         /// The value is a quoted-string containing a comma-separated list of
@@ -63,7 +64,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// "Bucket" Media Types [RFC6381].
         /// Every EXT-X-STREAM-INF tag SHOULD include a CODECS attribute.
         /// </summary>
-        public IList<string> Codecs { get; private set; }
+        public IReadOnlyCollection<string> Codecs { get; private set; }
 
         /// <summary>
         /// The value is a decimal-resolution describing the optimal pixel
@@ -71,7 +72,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// The RESOLUTION attribute is OPTIONAL but is recommended if the
         /// Variant Stream includes video.
         /// </summary>
-        public decimal Resolution { get; private set; }
+        public Resolution Resolution { get; private set; }
 
         /// <summary>
         /// The value is a quoted-string. It MUST match the value of the GROUP-
@@ -171,25 +172,25 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         private void ParseBandwidth(string content)
         {
             const string name = "BANDWIDTH";
-            Bandwidth = ValueParser.ParseDecimal(name, content, true);
+            Bandwidth = ValueParser.ParseInt(name, content, true);
         }
 
         private void ParseAverageBandwidth(string content)
         {
             const string name = "AVERAGE-BANDWIDTH";
-            AverageBandwidth = ValueParser.ParseDecimal(name, content, false);
+            AverageBandwidth = ValueParser.ParseInt(name, content, false);
         }
 
         private void ParseCodecs(string content)
         {
             const string name = "CODECS";
-            Codecs = ValueParser.ParseCommaSeparatedQuotedString(name, content, false); // SHOULD
+            Codecs = new ReadOnlyCollection<string>(ValueParser.ParseCommaSeparatedQuotedString(name, content, false)); // SHOULD
         }
 
         private void ParseResolution(string content)
         {
             const string name = "RESOLUTION";
-            Resolution = ValueParser.ParseDecimal(name, content, false); // RECOMMENDED IF VIDEO
+            Resolution = ValueParser.ParseResolution(name, content, false); // RECOMMENDED IF VIDEO
         }
 
         private void ParseAudio(string content)
@@ -214,15 +215,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         {
             const string name = "CLOSED-CAPTIONS";
             var value = ValueParser.ParseQuotedString(name, content, false);
-            if (value == string.Empty)
-            {
-                // no quoted string, so lets set to NONE
-                ClosedCaptions = "NONE";
-            }
-            else
-            {
-                ClosedCaptions = value;
-            }
+            ClosedCaptions = value == string.Empty ? "NONE" : value;
         }
 
         #endregion

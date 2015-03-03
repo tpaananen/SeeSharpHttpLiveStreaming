@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
+using SeeSharpLiveStreaming.Playlist.Tags;
 using SeeSharpLiveStreaming.Playlist.Tags.Master;
 
 namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
@@ -14,7 +10,7 @@ namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
     {
         private StreamInf _streamInf;
 
-        private const string ValidStreamInf = "BANDWIDTH=1212121,AVERAGE-BANDWIDTH=434343,CODECS=\"AAC,H264,OGG\",RESOLUTION=1212121.23,AUDIO=\"AUD\",VIDEO=\"VID\",SUBTITLES=\"SUBS\",CLOSED-CAPTIONS=\"CC\"";
+        private const string ValidStreamInf = "BANDWIDTH=1212121,AVERAGE-BANDWIDTH=434343,CODECS=\"AAC,H264,OGG\",RESOLUTION=1920x1080,AUDIO=\"AUD\",VIDEO=\"VID\",SUBTITLES=\"SUBS\",CLOSED-CAPTIONS=\"CC\"";
 
         [SetUp]
         public void Setup()
@@ -29,7 +25,7 @@ namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
             Assert.AreEqual(1212121, _streamInf.Bandwidth);
             Assert.AreEqual(434343, _streamInf.AverageBandwidth);
             CollectionAssert.AreEqual(new List<string> { "AAC", "H264", "OGG" }, _streamInf.Codecs);
-            Assert.AreEqual(1212121.23m, _streamInf.Resolution);
+            Assert.AreEqual(new Resolution(1920, 1080), _streamInf.Resolution);
             Assert.AreEqual("AUD", _streamInf.Audio);
             Assert.AreEqual("VID", _streamInf.Video);
             Assert.AreEqual("SUBS", _streamInf.Subtitles);

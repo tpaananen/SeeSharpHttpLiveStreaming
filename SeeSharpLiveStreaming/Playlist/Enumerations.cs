@@ -83,6 +83,31 @@
     }
 
     /// <summary>
+    /// Defines enumerated strings that represent boolean values.
+    /// </summary>
+    public static class YesNo
+    {
+        /// <summary>
+        /// The yes option, translates to <b>true</b> in <see cref="bool"/>.
+        /// </summary>
+        public const string Yes = "YES";
+
+        /// <summary>
+        /// The no option, translates to <b>false</b> in <see cref="bool"/>.
+        /// </summary>
+        public const string No = "NO";
+
+        /// <summary>
+        /// Determines whether the specified value is valid <see cref="YesNo"/> value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public static bool IsValid(string value)
+        {
+            return value == No || value == Yes;
+        }
+    }
+
+    /// <summary>
     /// Enumerates the tag types.
     /// </summary>
     public enum TagType
@@ -101,9 +126,11 @@
         ExtXDiscontinuitySequence = 10,
         ExtXEndList = 11,
         ExtXPlaylistType = 12,
+        // ReSharper disable once InconsistentNaming
         ExtXIFramesOnly = 13,
         ExtXMedia = 14,
         ExtXStreamInf = 15,
+        // ReSharper disable once InconsistentNaming
         ExtXIFrameStreamInf = 16,
         ExtXSessionData = 17,
         ExtXIndependentSegments = 18,
