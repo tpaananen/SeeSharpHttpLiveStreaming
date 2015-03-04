@@ -43,7 +43,7 @@ namespace SeeSharpLiveStreaming.Utils
             RequireNotNull(instance, name);
             if (instance == string.Empty)
             {
-                throw new ArgumentException("Validation faild: The " + name + " is empty.");
+                throw new ArgumentException("Validation failed: The " + name + " is empty.");
             }
         }
 
@@ -63,7 +63,7 @@ namespace SeeSharpLiveStreaming.Utils
             RequireNotNull(collection, name);
             if (collection.Count == 0)
             {
-                throw new ArgumentException("Validation faild: The collection " + name + " is empty.", name);
+                throw new ArgumentException("Validation failed: The collection " + name + " is empty.", name);
             }
         }
     }
