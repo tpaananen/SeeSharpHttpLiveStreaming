@@ -22,6 +22,14 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Media
     public class TargetDuration : BaseTag
     {
         /// <summary>
+        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// </summary>
+        public override string TagName
+        {
+            get { return "EXT-X-TARGETDURATION"; }
+        }
+
+        /// <summary>
         /// Gets the type of the tag.
         /// </summary>
         public override TagType TagType

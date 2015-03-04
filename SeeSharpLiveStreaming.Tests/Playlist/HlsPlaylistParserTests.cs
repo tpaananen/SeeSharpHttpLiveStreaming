@@ -26,11 +26,11 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
                 "#EXTM3U" + lineFeed +
                 "#EXT-X-TARGETDURATION:10" + lineFeed +
                 "" + lineFeed +
-                "#EXTINF:9.009," + lineFeed +
+                "#EXTINF:9.009,Some info" + lineFeed +
                 "http://media.example.com/first.ts" + lineFeed +
-                "#EXTINF:9.009," + lineFeed +
+                "#EXTINF:9.009,Some other info" + lineFeed +
                 "http://media.example.com/second.ts" + lineFeed +
-                "#EXTINF:3.003," + lineFeed +
+                "#EXTINF:3.003,Some short take" + lineFeed +
                 "http://media.example.com/third.ts" + lineFeed;
         }
 

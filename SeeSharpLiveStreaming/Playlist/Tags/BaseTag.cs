@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Playlist.Tags.BasicTags;
 using SeeSharpLiveStreaming.Playlist.Tags.Master;
 using SeeSharpLiveStreaming.Playlist.Tags.Media;
+using SeeSharpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 
 namespace SeeSharpLiveStreaming.Playlist.Tags
 {
@@ -11,6 +12,10 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
     /// </summary>
     public abstract class BaseTag : ISerializable
     {
+        /// <summary>
+        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// </summary>
+        public abstract string TagName { get; }
 
         /// <summary>
         /// Gets the type of the tag.
@@ -101,7 +106,29 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
 
         private static BaseTag CreateMediaSegment(PlaylistLine line)
         {
-            throw new NotImplementedException();
+            switch (line.Tag)
+            {
+                case "#EXTINF":
+                    return new ExtInf();
+                    
+                case "#EXT-X-BYTERANGE":
+                    throw new NotImplementedException("EXT-X-BYTERANGE");
+
+                case "#EXT-X-DISCONTINUITY":
+                    throw new NotImplementedException("EXT-X-DISCONTINUITY");
+
+                case "#EXT-X-KEY":
+                    throw new NotImplementedException("EXT-X-KEY");
+                    
+                case "#EXT-X-MAP":
+                    throw new NotImplementedException("EXT-X-MAP");
+                    
+                case "#EXT-X-PROGRAM-DATE-TIME":
+                    throw new NotImplementedException("EXT-X-PROGRAM-DATE-TIME");
+
+                default:
+                    throw new SerializationException("Failed to parse Media Segment Tag " + line.Tag);
+            }
         }
     }
 }

@@ -133,6 +133,14 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         }
 
         /// <summary>
+        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// </summary>
+        public override string TagName
+        {
+            get { return "EXT-X-STREAM-INF"; }
+        }
+
+        /// <summary>
         /// Gets the type of the tag.
         /// </summary>
         public override TagType TagType

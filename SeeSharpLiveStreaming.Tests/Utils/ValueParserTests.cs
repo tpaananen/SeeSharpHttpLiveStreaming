@@ -115,13 +115,5 @@ namespace SeeSharpLiveStreaming.Tests.Utils
             var actual = ValueParser.ParseDecimal("103443.21");
             Assert.AreEqual(expected, actual);
         }
-
-        [Test]
-        public void TestParseDoubleValue()
-        {
-            const double expected = 103443.21;
-            var actual = ValueParser.ParseDouble("103443.21");
-            Assert.AreEqual(expected, actual);
-        }
     }
 }

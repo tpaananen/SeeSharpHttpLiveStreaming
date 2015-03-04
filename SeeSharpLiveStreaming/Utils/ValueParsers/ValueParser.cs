@@ -31,7 +31,7 @@ namespace SeeSharpLiveStreaming.Utils.ValueParsers
             var position = line.IndexOf(attribute + "=", StringComparison.Ordinal);
             if (requireExists && position < 0)
             {
-                throw new SerializationException("Could not locate the attribute " + attribute);
+                throw new SerializationException("Could not locate the attribute " + attribute + " from line '" + line + "'.");
             }
             if (position < 0)
             {
@@ -209,7 +209,7 @@ namespace SeeSharpLiveStreaming.Utils.ValueParsers
             {
                 if (requireExists)
                 {
-                    throw new SerializationException("Failed to parse resolution value.");
+                    throw new SerializationException("Failed to parse resolution value from " + value);
                 }
                 return Resolution.Default;
             }
@@ -221,7 +221,7 @@ namespace SeeSharpLiveStreaming.Utils.ValueParsers
             }
             catch (Exception ex)
             {
-                throw new SerializationException("Failed to parse resolution value.", ex);
+                throw new SerializationException("Failed to parse resolution value from " + line, ex);
             }
         }
 
@@ -240,7 +240,7 @@ namespace SeeSharpLiveStreaming.Utils.ValueParsers
             int value;
             if (!int.TryParse(line, NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
             {
-                throw new SerializationException("Failed to parse attribute value.");
+                throw new SerializationException("Failed to parse attribute value " + line);
             }
             return value;
         }
@@ -260,27 +260,7 @@ namespace SeeSharpLiveStreaming.Utils.ValueParsers
             decimal value;
             if (!decimal.TryParse(line, DecimalParsingNumberStyles, CultureInfo.InvariantCulture, out value))
             {
-                throw new SerializationException("Failed to parse attribute value.");
-            }
-            return value;
-        }
-
-        /// <summary>
-        /// Parses the specified attribute value.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <exception cref="SerializationException">
-        /// Thrown when the line cannot be parsed as an integer.
-        /// </exception>
-        /// <returns>
-        /// <see cref="Double"/> parsed from the <paramref name="line"/>.
-        /// </returns>
-        public static double ParseDouble(string line)
-        {
-            double value;
-            if (!double.TryParse(line, DecimalParsingNumberStyles, CultureInfo.InvariantCulture, out value))
-            {
-                throw new SerializationException("Failed to parse attribute value.");
+                throw new SerializationException("Failed to parse attribute value " + line);
             }
             return value;
         }

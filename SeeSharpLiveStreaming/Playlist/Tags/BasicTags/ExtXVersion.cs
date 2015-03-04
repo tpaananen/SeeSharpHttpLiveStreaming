@@ -25,6 +25,14 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.BasicTags
     public class ExtXVersion : BaseTag
     {
         /// <summary>
+        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// </summary>
+        public override string TagName
+        {
+            get { return "EXT-X-VERSION"; }
+        }
+
+        /// <summary>
         /// Gets the type of the tag.
         /// </summary>
         public override TagType TagType

@@ -137,6 +137,14 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         public IReadOnlyCollection<string> Characteristics { get; private set; }
 
         /// <summary>
+        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// </summary>
+        public override string TagName
+        {
+            get { return "EXT-X-MEDIA"; }
+        }
+
+        /// <summary>
         /// Gets the type of the tag.
         /// </summary>
         public override TagType TagType

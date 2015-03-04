@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using SeeSharpLiveStreaming.Playlist.Tags;
+using SeeSharpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 
 namespace SeeSharpLiveStreaming.Playlist
 {
@@ -10,6 +11,8 @@ namespace SeeSharpLiveStreaming.Playlist
     /// </summary>
     public sealed class MediaPlaylist : PlaylistBase
     {
+
+        private readonly List<MediaSegment> _mediaSegments = new List<MediaSegment>(); 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaPlaylist"/> class.
@@ -37,13 +40,24 @@ namespace SeeSharpLiveStreaming.Playlist
                 // 2.3 When media segment rejects to parse tag, add media segment to the list of media segments and create a new media segment and go to 2.1
                 // 3. Add media segment to the list of media segments if it was created and has child tags
 
+                MediaSegment mediaSegment = null;
                 foreach (var line in content)
                 {
-                    if (Tag.IsMasterTag(line.Tag))
+                    if (!Tag.IsMasterTag(line.Tag))
+                    {
+                        if (Tag.IsMediaSegmentTag(line.Tag))
+                        {
+                            ProcessMediaSegment(line, ref mediaSegment);
+                        }
+                        else
+                        {
+                            ProcessSingleLine(line);
+                        }
+                    }
+                    else
                     {
                         throw new SerializationException("The tag " + line.Tag + " is a master playlist tag. Media playlist tag must not contain master playlist tags.");
                     }
-                    ProcessSingleLine(line);
                 }
             }
             catch (SerializationException)
@@ -53,6 +67,26 @@ namespace SeeSharpLiveStreaming.Playlist
             catch (Exception ex)
             {
                 throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MediaPlaylist).Name), ex);
+            }
+        }
+
+        private void ProcessMediaSegment(PlaylistLine line, ref MediaSegment mediaSegment)
+        {
+            if (mediaSegment == null)
+            {
+                mediaSegment = new MediaSegment();
+                if (!mediaSegment.ReadTag(line, Version))
+                {
+                    throw new InvalidOperationException("Media segment did not accept tag even though the segment was empty.");
+                }
+                return;
+            }
+
+            if (!mediaSegment.ReadTag(line, Version))
+            {
+                _mediaSegments.Add(mediaSegment);
+                mediaSegment = null;
+                ProcessMediaSegment(line, ref mediaSegment);
             }
         }
     }
