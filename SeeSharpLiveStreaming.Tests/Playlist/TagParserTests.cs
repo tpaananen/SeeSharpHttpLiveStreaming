@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 using SeeSharpLiveStreaming.Playlist.Tags;
@@ -84,19 +85,19 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
             Assert.IsNotNull(list);
             Assert.AreEqual(4, list.Count);
             
-            Assert.AreEqual("#EXT-X-STREAM-INF", list[0].Tag);
-            Assert.AreEqual("#EXT-X-STREAM-INF", list[1].Tag);
-            Assert.AreEqual("#EXT-X-STREAM-INF", list[2].Tag);
-            Assert.AreEqual("#EXT-X-STREAM-INF", list[3].Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(0).Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(1).Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(2).Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(3).Tag);
 
-            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000", list[0].Line);
-            Assert.AreEqual(new Uri("http://example.com/low.m3u8"), list[0].Uri);
-            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000", list[1].Line);
-            Assert.AreEqual(new Uri("http://example.com/mid.m3u8"), list[1].Uri);
-            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000", list[2].Line);
-            Assert.AreEqual(new Uri("http://example.com/hi.m3u8"), list[2].Uri);
-            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"", list[3].Line);
-            Assert.AreEqual(new Uri("http://example.com/audio-only.m3u8"), list[3].Uri);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000", list.ElementAt(0).Line);
+            Assert.AreEqual(new Uri("http://example.com/low.m3u8"), list.ElementAt(0).Uri);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000", list.ElementAt(1).Line);
+            Assert.AreEqual(new Uri("http://example.com/mid.m3u8"), list.ElementAt(1).Uri);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000", list.ElementAt(2).Line);
+            Assert.AreEqual(new Uri("http://example.com/hi.m3u8"), list.ElementAt(2).Uri);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"", list.ElementAt(3).Line);
+            Assert.AreEqual(new Uri("http://example.com/audio-only.m3u8"), list.ElementAt(3).Uri);
         }
     }
 }

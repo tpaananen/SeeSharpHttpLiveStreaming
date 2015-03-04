@@ -52,6 +52,7 @@
     <Compile Include="Playlist\Tags\BasicTags\ExtXVersion.cs" />
     <Compile Include="Playlist\MasterPlaylist.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMedia.cs" />
+    <Compile Include="Playlist\Tags\Master\RenditionGroup.cs" />
     <Compile Include="Playlist\Tags\MediaSegment\IMediaSegment.cs" />
     <Compile Include="Playlist\Tags\MediaSegment\MediaSegment.cs" />
     <Compile Include="Playlist\MediaPlaylist.cs" />

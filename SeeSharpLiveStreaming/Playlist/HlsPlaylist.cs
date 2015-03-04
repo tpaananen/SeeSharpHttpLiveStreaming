@@ -63,7 +63,7 @@ namespace SeeSharpLiveStreaming.Playlist
             }
             try
             {
-                IList<PlaylistLine> playlist = TagParser.ReadLines(content);
+                IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content);
                 Playlist = PlaylistBase.Create(playlist);
             }
             catch (Exception ex)

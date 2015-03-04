@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization;
 
@@ -63,7 +64,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="playlist">The playlist.</param>
         /// <returns></returns>
-        internal static IList<PlaylistLine> ReadLines(string playlist)
+        internal static IReadOnlyCollection<PlaylistLine> ReadLines(string playlist)
         {
             var lines = new List<PlaylistLine>();
             using (var reader = new StringReader(playlist))
@@ -92,7 +93,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags
 
                 }
             }
-            return lines;
+            return new ReadOnlyCollection<PlaylistLine>(lines);
         }
 
         private static string ReadUri(TextReader reader)

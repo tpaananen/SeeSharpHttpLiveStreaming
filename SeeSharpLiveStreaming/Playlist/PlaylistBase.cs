@@ -42,7 +42,7 @@ namespace SeeSharpLiveStreaming.Playlist
         /// The <see cref="PlaylistBase" /> instance.
         /// </returns>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        internal static PlaylistBase Create(IList<PlaylistLine> playlist)
+        internal static PlaylistBase Create(IReadOnlyCollection<PlaylistLine> playlist)
         {
             playlist.RequireNotEmpty("playlist");
 
@@ -70,7 +70,7 @@ namespace SeeSharpLiveStreaming.Playlist
         /// <exception cref="System.ArgumentException">
         /// Thrown when the second tag is invalid. The playlist cannot be parsed.
         /// </exception>
-        private static PlaylistBase CreatePlaylistByTag(string tag, IList<PlaylistLine> playlist)
+        private static PlaylistBase CreatePlaylistByTag(string tag, IReadOnlyCollection<PlaylistLine> playlist)
         {
             if (Tag.IsMasterTag(tag))
             {
@@ -85,16 +85,10 @@ namespace SeeSharpLiveStreaming.Playlist
         }
 
         /// <summary>
-        /// When overridden in a derived class deserializes an instance of <see cref="PlaylistBase"/>.
-        /// </summary>
-        /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        protected abstract void Parse(IList<PlaylistLine> playlist);
-
-        /// <summary>
         /// Processes the playlist line.
         /// </summary>
         /// <param name="line">The line.</param>
-        protected void CreateLine(PlaylistLine line)
+        protected void ProcessSingleLine(PlaylistLine line)
         {
             var tag = BaseTag.Create(line, Version);
             if (tag.TagType != TagType.ExtXVersion)

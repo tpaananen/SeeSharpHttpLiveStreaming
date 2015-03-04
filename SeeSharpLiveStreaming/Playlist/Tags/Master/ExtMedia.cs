@@ -20,7 +20,7 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
     /// </summary>
     public class ExtMedia : BaseTag
     {
-
+        
         /// <summary>
         /// The value is an enumerated-string; valid strings are AUDIO, VIDEO,
         /// SUBTITLES and CLOSED-CAPTIONS.If the value is AUDIO, the Playlist
@@ -28,8 +28,8 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
         /// VIDEO, the Playlist MUST contain video media. If the value is
         /// SUBTITLES, the Playlist MUST contain subtitle media. If the value is
         /// CLOSED-CAPTIONS, the Media Segments for the video Renditions can
-        /// include closed captions.Specifying a Playlist that does not contain
-        /// the appropriate media type can lead to client playback errors.This
+        /// include closed captions. Specifying a Playlist that does not contain
+        /// the appropriate media type can lead to client playback errors. This
         /// attribute is REQUIRED.
         /// </summary>
         public string Type { get; private set; }
@@ -316,5 +316,6 @@ namespace SeeSharpLiveStreaming.Playlist.Tags.Master
             const string name = "CHARACTERISTICS";
             Characteristics = new ReadOnlyCollection<string>(ValueParser.ParseCommaSeparatedQuotedString(name, content, false));
         }
+
     }
 }
