@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
-using SeeSharpLiveStreaming.Playlist;
-using SeeSharpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
 
-namespace SeeSharpLiveStreaming.Tests.Playlist
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist
 {
     [TestFixture]
     public class PlaylistLineTests

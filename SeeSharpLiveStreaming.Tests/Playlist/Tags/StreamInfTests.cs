@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SeeSharpLiveStreaming.Playlist.Tags;
-using SeeSharpLiveStreaming.Playlist.Tags.Master;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
 
-namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
     [TestFixture]
     public class StreamInfTests

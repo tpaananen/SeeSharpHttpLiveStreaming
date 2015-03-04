@@ -49,13 +49,13 @@
     <Compile Include="Utils\ValueParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SeeSharpLiveStreaming\SeeSharpLiveStreaming.csproj">
-      <Project>{6135d041-13bd-4faf-ad5b-51564b962bf1}</Project>
-      <Name>SeeSharpLiveStreaming</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\SeeSharpHttpLiveStreaming\SeeSharpHttpLiveStreaming.csproj">
+      <Project>{4d076cbf-b5f1-44f8-98c0-f2358b864154}</Project>
+      <Name>SeeSharpHttpLiveStreaming</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

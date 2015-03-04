@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SeeSharpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist;
 
-namespace SeeSharpLiveStreaming.Tests.Playlist
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist
 {
     /// <summary>
     /// Playlist examples: https://tools.ietf.org/html/draft-pantos-http-live-streaming-14#section-8
@@ -69,6 +69,8 @@ namespace SeeSharpLiveStreaming.Tests.Playlist
             Assert.That(playlistObject is HlsPlaylist);
             Assert.IsNotNull(playlistObject.Playlist);
             Assert.That(playlistObject.Playlist is MediaPlaylist);
+            var mediaPlaylist = (MediaPlaylist)playlistObject.Playlist;
+            Assert.AreEqual(3, mediaPlaylist.MediaSegments.Count );
         }
     }
 }

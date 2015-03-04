@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using SeeSharpLiveStreaming.Utils;
+using SeeSharpHttpLiveStreaming.Utils;
 
-namespace SeeSharpLiveStreaming.Tests.Utils
+namespace SeeSharpHttpLiveStreaming.Tests.Utils
 {
     [TestFixture]
     public class RequireTests

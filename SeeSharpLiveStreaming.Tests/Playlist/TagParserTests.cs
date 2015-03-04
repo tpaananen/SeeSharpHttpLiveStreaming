@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using NUnit.Framework;
-using SeeSharpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
 
-namespace SeeSharpLiveStreaming.Tests.Playlist
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist
 {
     [TestFixture]
     public class TagParserTests

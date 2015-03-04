@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using NUnit.Framework;
-using SeeSharpLiveStreaming.Playlist.Tags.BasicTags;
+using SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags;
 
-namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
     [TestFixture]
     public class ExtXversionTagTests

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using NUnit.Framework;
-using SeeSharpLiveStreaming.Playlist.Tags;
-using SeeSharpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 
-namespace SeeSharpLiveStreaming.Tests.Utils
+namespace SeeSharpHttpLiveStreaming.Tests.Utils
 {
     [TestFixture]
     public class ValueParserTests
