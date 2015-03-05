@@ -36,6 +36,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
             foreach (var type in types)
             {
                 var instance = (BaseTag)Activator.CreateInstance(type);
+                if (!Tag.IsValid(instance.TagName))
+                {
+                    throw new InvalidOperationException("The tag " + instance.TagName + " is invalid.");
+                }
                 TypeMapping[instance.TagName] = type;
             }
         }
