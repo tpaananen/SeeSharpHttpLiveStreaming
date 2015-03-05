@@ -29,6 +29,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
             var assembly = Assembly.GetAssembly(typeof (BaseTag));
             var types = assembly.GetTypes()
                                 .Where(t => !t.IsAbstract &&
+                                            !t.IsInterface &&
                                             typeof(BaseTag).IsAssignableFrom(t))
                                 .ToList();
             
@@ -40,11 +41,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         }
 
         /// <summary>
-        /// Creates the specified name.
+        /// Creates a new instance of a tag based on its name.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        /// <exception cref="NotSupportedException">The tag  + name +  is not supported.</exception>
+        /// <exception cref="NotSupportedException">
+        /// Thrown when the tag with the <paramref name="name"/> does not exist.
+        /// </exception>
         internal static BaseTag Create(string name)
         {
             Type type;
