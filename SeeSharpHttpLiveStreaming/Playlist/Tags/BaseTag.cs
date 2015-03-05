@@ -101,6 +101,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 
         private static BaseTag CreateBasicTag(PlaylistLine line)
         {
+            if (line.Tag != "#EXT-X-VERSION")
+            {
+                throw new NotSupportedException("The basic tag " + line.Tag + " is not supported at this point.");
+            }
             return new ExtXVersion();
         }
 
@@ -112,7 +116,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                     return new ExtInf();
                     
                 case "#EXT-X-BYTERANGE":
-                    throw new NotImplementedException("EXT-X-BYTERANGE");
+                    return new ExtXByteRange();
 
                 case "#EXT-X-DISCONTINUITY":
                     throw new NotImplementedException("EXT-X-DISCONTINUITY");
@@ -127,7 +131,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                     throw new NotImplementedException("EXT-X-PROGRAM-DATE-TIME");
 
                 default:
-                    throw new SerializationException("Failed to parse Media Segment Tag " + line.Tag);
+                    throw new NotSupportedException("Tag " + line.Tag + " is not supported as Media Segment tag.");
             }
         }
     }
