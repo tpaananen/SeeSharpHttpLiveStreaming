@@ -57,7 +57,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [Test]
         public void TestRequireStringNotEmptyThrowsArgumentExceptionForEmptyParameter()
         {
-            string empty = string.Empty;
+            string empty = string.Empty; 
             Assert.Throws<ArgumentException>(() => empty.RequireNotEmpty("empty"));
         }
 
