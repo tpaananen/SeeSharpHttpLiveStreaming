@@ -81,7 +81,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
 
         private void ProcessMediaSegment(PlaylistLine line, ref MediaSegment mediaSegment)
         {
-
             if (mediaSegment == null)
             {
                 mediaSegment = new MediaSegment();

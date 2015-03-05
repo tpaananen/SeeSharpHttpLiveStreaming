@@ -29,7 +29,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
         /// </summary>
         public override string TagName
         {
-            get { return "EXT-X-VERSION"; }
+            get { return "#EXT-X-VERSION"; }
         }
 
         /// <summary>

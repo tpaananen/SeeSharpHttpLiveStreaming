@@ -31,7 +31,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// </summary>
         public override string TagName
         {
-            get { return "EXTINF"; }
+            get { return "#EXTINF"; }
         }
 
         /// <summary>

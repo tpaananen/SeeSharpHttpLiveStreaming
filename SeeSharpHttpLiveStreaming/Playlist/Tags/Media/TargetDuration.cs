@@ -26,7 +26,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         /// </summary>
         public override string TagName
         {
-            get { return "EXT-X-TARGETDURATION"; }
+            get { return "#EXT-X-TARGETDURATION"; }
         }
 
         /// <summary>

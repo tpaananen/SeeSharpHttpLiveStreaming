@@ -137,7 +137,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// </summary>
         public override string TagName
         {
-            get { return "EXT-X-STREAM-INF"; }
+            get { return "#EXT-X-STREAM-INF"; }
         }
 
         /// <summary>
