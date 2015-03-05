@@ -19,7 +19,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             return
                 "#EXTM3U" + lineFeed +
                 "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + "http://example.com/low.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000" + lineFeed + "http://example.com/mid.m3u8" + lineFeed + lineFeed + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000" + lineFeed + lineFeed + "http://example.com/mid.m3u8" + lineFeed + lineFeed + lineFeed +
                 "#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000" + lineFeed + "http://example.com/hi.m3u8" + lineFeed +
                 "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"" + lineFeed + "http://example.com/audio-only.m3u8" + lineFeed;
         }

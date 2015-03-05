@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using SeeSharpHttpLiveStreaming.Utils;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 {
@@ -32,16 +33,42 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                                             !t.IsInterface &&
                                             typeof(BaseTag).IsAssignableFrom(t))
                                 .ToList();
-            
+            FillDictionary(types);
+        }
+
+        /// <summary>
+        /// Fills the dictionary.
+        /// </summary>
+        /// <param name="types">The types.</param>
+        /// <exception cref="InvalidOperationException">The tag  + instance.TagName +  is invalid.</exception>
+        private static void FillDictionary(IEnumerable<Type> types)
+        {
+            types.RequireNotNull("types");
+
             foreach (var type in types)
             {
                 var instance = (BaseTag)Activator.CreateInstance(type);
-                if (!Tag.IsValid(instance.TagName))
-                {
-                    throw new InvalidOperationException("The tag " + instance.TagName + " is invalid.");
-                }
-                TypeMapping[instance.TagName] = type;
+                ValidateAndAddTag(instance.TagName, type);
             }
+        }
+
+        /// <summary>
+        /// Validates and adds tag if it is valid.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="type">The type.</param>
+        /// <exception cref="InvalidOperationException">The tag  + instance.TagName +  is invalid.</exception>
+        internal static void ValidateAndAddTag(string name, Type type)
+        {
+            if (!Tag.IsValid(name))
+            {
+                throw new InvalidOperationException("The tag " + name + " is invalid.");
+            }
+            if (TypeMapping.ContainsKey(name))
+            {
+                throw new InvalidOperationException("The tag " + name + " already exists.");
+            }
+            TypeMapping[name] = type;
         }
 
         /// <summary>

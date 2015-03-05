@@ -99,7 +99,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         private static string ReadUri(TextReader reader)
         {
             string line;
-            while (string.IsNullOrWhiteSpace(line = reader.ReadLine())) {}
+            while (string.IsNullOrWhiteSpace(line = reader.ReadLine()))
+            {
+            }
             return line;
         }
     }

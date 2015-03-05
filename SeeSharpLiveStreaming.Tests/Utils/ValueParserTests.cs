@@ -28,7 +28,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [Test]
         public void TestParseQuotedStringReturnsEmptyStringWhenNoEndQuote()
         {
-            const string quotedString = "ATTRIBUTET=\"VALUE";
+            const string quotedString = "ATTRIBUTE=\"VALUE";
             var value = ValueParser.ParseQuotedString("ATTRIBUTE", quotedString, false);
             Assert.AreEqual(string.Empty, value);
         }
@@ -101,6 +101,15 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
+        public void TestParseResolutionWithRequiredAndNotExists()
+        {
+            Assert.Throws<SerializationException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTET=1920x1080,SECOND=2121", true));
+            Assert.Throws<SerializationException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTE=1920-1080,SECOND=2121", true));
+            Assert.Throws<SerializationException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTE=abcxdef,SECOND=2121", true));
+
+        }
+
+        [Test]
         public void TestParseIntValue()
         {
             const int expected = 103443;
@@ -114,6 +123,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
             const decimal expected = 103443.21m;
             var actual = ValueParser.ParseDecimal("103443.21");
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void TestParseDecimalValueFails()
+        {
+            Assert.Throws<SerializationException>(() => ValueParser.ParseDecimal("123x1080"));
         }
     }
 }

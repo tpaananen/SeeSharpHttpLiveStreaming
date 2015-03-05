@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags;
 
-namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
     [TestFixture]
     public class TagFactoryTests
@@ -23,5 +24,22 @@ namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
             Assert.AreNotEqual(tag, tag2);
         }
 
+        [Test]
+        public void TestTagFactoryThrowsIfTagNameDoesNotExist()
+        {
+            Assert.Throws<NotSupportedException>(() => TagFactory.Create("INVALID-TAG"));
+        }
+
+        [Test]
+        public void TestTagFactoryThrowsIfInvalidTagNameProvided()
+        {
+            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#INVALID-TAG", typeof(BaseTag)));
+        }
+
+        [Test]
+        public void TestTagFactoryThrowsIfTheSameTagNameExistsTwice()
+        {
+            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#EXT-X-VERSION", typeof(ExtXVersion)));
+        }
     }
 }

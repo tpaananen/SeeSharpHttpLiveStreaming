@@ -5,7 +5,7 @@ using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 using SeeSharpHttpLiveStreaming.Utils;
 
-namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
     [TestFixture]
     public class ExtXByteRangeTests

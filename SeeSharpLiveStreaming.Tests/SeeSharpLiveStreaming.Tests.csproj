@@ -7,8 +7,8 @@
     <ProjectGuid>{C36037CA-1F7C-451F-B3E4-E1B69EEC225F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SeeSharpLiveStreaming.Tests</RootNamespace>
-    <AssemblyName>SeeSharpLiveStreaming.Tests</AssemblyName>
+    <RootNamespace>SeeSharpHttpLiveStreaming.Tests</RootNamespace>
+    <AssemblyName>SeeSharpHttpLiveStreaming.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -42,6 +42,7 @@
     <Compile Include="Playlist\PlaylistLineTests.cs" />
     <Compile Include="Playlist\TagParserTests.cs" />
     <Compile Include="Playlist\TagsTests.cs" />
+    <Compile Include="Playlist\Tags\BaseTagTests.cs" />
     <Compile Include="Playlist\Tags\ExtXByteRangeTests.cs" />
     <Compile Include="Playlist\Tags\ExtXTargetDurationTests.cs" />
     <Compile Include="Playlist\Tags\ExtXversionTagTests.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="Playlist\Tags\TagFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\RequireTests.cs" />
+    <Compile Include="Utils\ResolutionTests.cs" />
     <Compile Include="Utils\ValueParserTests.cs" />
   </ItemGroup>
   <ItemGroup>

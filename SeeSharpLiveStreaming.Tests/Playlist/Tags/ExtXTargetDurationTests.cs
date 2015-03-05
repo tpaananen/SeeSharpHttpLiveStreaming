@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media;
 
-namespace SeeSharpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
     [TestFixture]
     public class ExtXTargetDurationTests
