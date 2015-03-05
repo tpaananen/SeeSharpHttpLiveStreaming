@@ -32,7 +32,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets the compatibility level version number tag.
         /// </summary>
-        protected int Version { get; private set; }
+        public int Version { get; private set; }
 
         /// <summary>
         /// Creates a specific playlist depending on content of the <paramref name="playlist" />.

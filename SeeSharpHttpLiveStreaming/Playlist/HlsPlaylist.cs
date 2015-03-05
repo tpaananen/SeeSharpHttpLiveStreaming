@@ -26,11 +26,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         }
 
         /// <summary>
-        /// Gets the playlist type.
-        /// </summary>
-        public PlaylistType PlaylistType { get; private set; }
-
-        /// <summary>
         /// Gets the content type.
         /// </summary>
         public ContentType ContentType { get; private set; }
@@ -38,7 +33,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets the version.
         /// </summary>
-        public int Version { get; private set; }
+        public int Version 
+        {
+            get
+            {
+                if (Playlist == null)
+                {
+                    throw new InvalidOperationException("The playlist has not been parsed.");
+                }
+                return Playlist.Version;
+            }
+        }
 
         /// <summary>
         /// Parses an object from the string content.

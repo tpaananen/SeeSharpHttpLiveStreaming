@@ -122,8 +122,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 
         /// <summary>
         /// The value is a quoted-string containing one or more Uniform Type
-        /// Identifiers[UTI] separated by comma(,) characters.This attribute
-        /// is OPTIONAL.Each UTI indicates an individual characteristic of the
+        /// Identifiers [UTI] separated by comma(,) characters. This attribute
+        /// is OPTIONAL. Each UTI indicates an individual characteristic of the
         /// Rendition.
         /// A SUBTITLES Rendition MAY include the following characteristics:
         /// "public.accessibility.transcribes-spoken-dialog";
@@ -161,7 +161,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
         public override void Deserialize(string content, int version)
         {
-            content.RequireNotNull("content");
+            content.RequireNotEmpty("content");
             try
             {
                 ParseType(content);
