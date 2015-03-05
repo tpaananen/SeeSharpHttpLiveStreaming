@@ -41,7 +41,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         /// <summary>
         /// Gets the duration.
         /// </summary>
-        public decimal Duration { get; private set; }
+        public long Duration { get; private set; }
 
         /// <summary>
         /// Deserializes an object.
@@ -50,18 +50,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         /// <param name="version">The version.</param>
         public override void Deserialize(string content, int version)
         {
-            content.RequireNotNull("content");
+            content.RequireNotEmpty("content");
             try
             {
-                Duration = ValueParser.ParseDecimal(content);
+                Duration = ValueParser.ParseInt(content);
                 if (Duration == 0)
                 {
-                    throw new SerializationException("The EXT-X-TARGETDURATION is required.");
+                    throw new SerializationException("Non zero value is required.");
                 }
-            }
-            catch (SerializationException)
-            {
-                throw;
             }
             catch (Exception ex)
             {
