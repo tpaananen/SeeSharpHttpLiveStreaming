@@ -42,6 +42,7 @@
     <Compile Include="Playlist\PlaylistLineTests.cs" />
     <Compile Include="Playlist\TagParserTests.cs" />
     <Compile Include="Playlist\TagsTests.cs" />
+    <Compile Include="Playlist\Tags\ExtXByteRangeTests.cs" />
     <Compile Include="Playlist\Tags\ExtXversionTagTests.cs" />
     <Compile Include="Playlist\Tags\StreamInfTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

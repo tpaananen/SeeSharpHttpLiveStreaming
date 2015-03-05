@@ -57,12 +57,14 @@
     <Compile Include="Playlist\Tags\Master\RenditionGroup.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInf.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ExtInf.cs" />
+    <Compile Include="Playlist\Tags\Media\MediaSegment\ExtXByteRange.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\Media\TargetDuration.cs" />
     <Compile Include="Playlist\Tags\Resolution.cs" />
     <Compile Include="Playlist\Tags\Tag.cs" />
     <Compile Include="Playlist\Tags\TagParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\IncompatibleVersionException.cs" />
     <Compile Include="Utils\Require.cs" />
     <Compile Include="Utils\ValueParsers\ValueParser.cs" />
   </ItemGroup>
