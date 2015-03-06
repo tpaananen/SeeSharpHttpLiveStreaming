@@ -153,7 +153,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         }
 
         /// <summary>
-        /// Deserializes an object.
+        /// Deserializes the tag from the <paramref name="content"/>..
         /// </summary>
         /// <param name="content">The content.</param>
         /// <param name="version">The version.</param>
