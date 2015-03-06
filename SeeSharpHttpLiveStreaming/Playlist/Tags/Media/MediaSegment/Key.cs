@@ -69,7 +69,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         public EncryptionMethod Method { get; private set; }
 
         /// <summary>
-        /// 
+        /// The value is a quoted-string containing a URI that specifies how to
+        /// obtain the key. This attribute is REQUIRED unless the METHOD is NONE.
         /// </summary>
         public Uri Uri { get; private set; }
 

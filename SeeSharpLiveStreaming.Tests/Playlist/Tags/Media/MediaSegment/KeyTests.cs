@@ -48,7 +48,6 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
 
             if (_key.Method == EncryptionMethod.None)
             {
-                AssertMethodIsNone();
                 return;
             }
 
@@ -93,13 +92,6 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
             var ex = (IncompatibleVersionException) exception.InnerException;
             Assert.AreEqual("KEYFORMATVERSIONS", ex.Attribute);
             Assert.AreEqual(_key.TagName, ex.TagName);
-        }
-
-        private void AssertMethodIsNone()
-        {
-            Assert.IsNull(_key.Uri);
-
-
         }
 
         [Test]
