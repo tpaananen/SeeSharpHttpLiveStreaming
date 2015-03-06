@@ -167,25 +167,32 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         }
 
         /// <summary>
-        /// Parses the specified attribute value.
+        /// Parses the specified attribute value which is assumed to be a 128-bit unsigned integer.
         /// </summary>
         /// <param name="attribute">The attribute.</param>
         /// <param name="line">The line.</param>
-        /// <param name="requireExists">
-        /// If set to <c>true</c> the <paramref name="attribute"/> is 
-        /// required to exist in the <paramref name="line"/>.
-        /// </param>
+        /// <param name="requireExists">If set to <c>true</c> the <paramref name="attribute" /> is
+        /// required to exist in the <paramref name="line" />.</param>
+        /// <param name="bits">Number of bits. It is assumed that each 8 bits forms a byte.</param>
         /// <returns>
         /// The parsed value or default value of zero (0x0).
         /// </returns>
         /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
-        public static long ParseHexadecimal(string attribute, string line, bool requireExists)
+        public static string ParseHexadecimal(string attribute, string line, bool requireExists, int bits)
         {
+            const int sizeOfByte = 8; // bits
+            if (bits < sizeOfByte)
+            {
+                throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than 8.");
+            }
             string value = ParseEnumeratedString(attribute, line, requireExists);
+            if (value.StartsWith("0x"))
+            {
+                value = value.Substring(2);
+            }
 
-            return value != string.Empty
-                ? Convert.ToInt64(value, 16)
-                : 0;
+            value = value.PadLeft(bits / sizeOfByte, '0');
+            return value;
         }
 
         /// <summary>

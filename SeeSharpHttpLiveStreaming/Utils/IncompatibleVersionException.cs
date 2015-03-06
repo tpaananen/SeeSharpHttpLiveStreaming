@@ -8,6 +8,10 @@ namespace SeeSharpHttpLiveStreaming.Utils
     /// </summary>
     public class IncompatibleVersionException : Exception
     {
+        /// <summary>
+        /// Gets the name of the tag.
+        /// </summary>
+        public string TagName { get; private set; }
 
         /// <summary>
         /// Gets the current version.
@@ -20,6 +24,29 @@ namespace SeeSharpHttpLiveStreaming.Utils
         public int RequiredVersion { get; private set; }
 
         /// <summary>
+        /// Gets the attribute name.
+        /// </summary>
+        public string Attribute { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncompatibleVersionException" /> class.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="attribute">The attribute.</param>
+        /// <param name="version">The version.</param>
+        /// <param name="requiredVersion">The required version.</param>
+        public IncompatibleVersionException(BaseTag tag, string attribute, int version, int requiredVersion)
+            : base ("Tag " + tag.TagName + " could not be parsed, current version " + version 
+                    + " is incompatible with required version " + requiredVersion 
+                    + " while parsing attribute " + attribute + ".")
+        {
+            TagName = tag.TagName;
+            CurrentVersion = version;
+            RequiredVersion = requiredVersion;
+            Attribute = attribute;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IncompatibleVersionException" /> class.
         /// </summary>
         /// <param name="tag">The tag.</param>
@@ -29,6 +56,9 @@ namespace SeeSharpHttpLiveStreaming.Utils
             : base ("Tag " + tag.TagName + " could not be parsed, current version " + version 
                     + " is incompatible with required version " + requiredVersion + ".")
         {
+            TagName = tag.TagName;
+            CurrentVersion = version;
+            RequiredVersion = requiredVersion;
         }
 
     }

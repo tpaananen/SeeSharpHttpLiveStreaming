@@ -2,19 +2,19 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using NUnit.Framework;
-using SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags;
+using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
     [TestFixture]
-    public class ExtXversionTagTests
+    public class VersionTagTests
     {
-        private ExtXVersion _tag;
+        private Version _tag;
 
         [SetUp]
         public void SetUp()
         {
-            _tag = new ExtXVersion();
+            _tag = new Version();
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         {
             string parameters = version.ToString(CultureInfo.InvariantCulture);
             _tag.Deserialize(parameters, 0);
-            Assert.AreEqual(version, _tag.Version);
+            Assert.AreEqual(version, _tag.VersionNumber);
         }
 
         [Test]

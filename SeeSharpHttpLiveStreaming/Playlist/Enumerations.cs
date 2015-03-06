@@ -1,4 +1,7 @@
-﻿namespace SeeSharpHttpLiveStreaming.Playlist
+﻿using System;
+using SeeSharpHttpLiveStreaming.Utils;
+
+namespace SeeSharpHttpLiveStreaming.Playlist
 {
     /// <summary>
     /// Enumerates the valid playlist types for HLS.
@@ -59,6 +62,8 @@
         SampleAes = 2
     }
 
+    
+
     /// <summary>
     /// Defines enumerated strings of media types used in master playlist tag EXT-X-MEDIA.
     /// </summary>
@@ -104,6 +109,35 @@
         public static bool IsValid(string value)
         {
             return value == No || value == Yes;
+        }
+    }
+
+    /// <summary>
+    /// Encryption method extension methods.
+    /// </summary>
+    public static class EncryptionMethodExtensions
+    {
+        /// <summary>
+        /// Converts the <paramref name="method"/> to the <see cref="EncryptionMethod"/> enumeration value.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <returns>The <see cref="EncryptionMethod"/> value.</returns>
+        /// <exception cref="ArgumentException">Thrown when the <paramref name="method"/> is invalid.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="method"/> is <b>null</b>.</exception>
+        public static EncryptionMethod ToEncryptionMethod(this string method)
+        {
+            method.RequireNotNull("method");
+            switch (method)
+            {
+                case "NONE":
+                    return EncryptionMethod.None;
+                case "AES-128":
+                    return EncryptionMethod.Aes128;
+                case "SAMPLE-AES":
+                    return EncryptionMethod.SampleAes;
+                default:
+                    throw new ArgumentException("Invalid encryption method value " + method + ".");
+            }
         }
     }
 

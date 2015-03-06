@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
-using SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags;
+using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
@@ -13,7 +13,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         public void TestTagFactoryCreatesTag()
         {
             var tag = TagFactory.Create("#EXT-X-VERSION");
-            Assert.AreEqual(typeof(ExtXVersion), tag.GetType());
+            Assert.AreEqual(typeof(Version), tag.GetType());
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         [Test]
         public void TestTagFactoryThrowsIfTheSameTagNameExistsTwice()
         {
-            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#EXT-X-VERSION", typeof(ExtXVersion)));
+            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#EXT-X-VERSION", typeof(Version)));
         }
     }
 }

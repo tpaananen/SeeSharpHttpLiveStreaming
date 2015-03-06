@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
-using SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags;
 using SeeSharpHttpLiveStreaming.Utils;
+using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
 namespace SeeSharpHttpLiveStreaming.Playlist
 {
@@ -96,8 +96,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             }
             else
             {
-                var versionTag = (ExtXVersion) tag;
-                Version = versionTag.Version;
+                var versionTag = (Version) tag;
+                Version = versionTag.VersionNumber;
             }
         }
     }

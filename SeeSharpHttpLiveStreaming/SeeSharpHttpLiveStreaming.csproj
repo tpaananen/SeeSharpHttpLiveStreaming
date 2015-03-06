@@ -52,13 +52,14 @@
     <Compile Include="Playlist\PlaylistBase.cs" />
     <Compile Include="Playlist\PlaylistLine.cs" />
     <Compile Include="Playlist\Tags\BaseTag.cs" />
-    <Compile Include="Playlist\Tags\BasicTags\ExtXVersion.cs" />
+    <Compile Include="Playlist\Tags\BasicTags\Version.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMedia.cs" />
     <Compile Include="Playlist\Tags\Master\RenditionGroup.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInf.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\Discontinuity.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ExtInf.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ByteRange.cs" />
+    <Compile Include="Playlist\Tags\Media\MediaSegment\Key.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\Media\TargetDuration.cs" />
     <Compile Include="Playlist\Tags\Resolution.cs" />

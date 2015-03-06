@@ -32,6 +32,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             tag.RequireNotNull("tag");
             line.RequireNotNull("line");
+
+            if (!line.StartsWith(tag))
+            {
+                throw new ArgumentException("Line parameter does not start with the tag.");
+            }
+
             Tag = tag;
             Line = line;
             Uri = null;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
@@ -81,12 +82,23 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [Test]
         public void TestParseHexadecimal()
         {
-            const decimal expected = 0x1212;
-            var actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0x1212,SECOND=2121", false);
-            Assert.AreEqual(expected, actual);
+            var actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0x1212,SECOND=2121", false, 128);
+            Assert.AreEqual("1212".PadLeft(16, '0'), actual);
 
-            actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=0x1212", false);
-            Assert.AreEqual(expected, actual);
+            actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=0x1212", false, 128);
+            Assert.AreEqual("1212".PadLeft(16, '0'), actual);
+
+            actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0x0", false, 128);
+            Assert.AreEqual("0".PadLeft(16, '0'), actual);
+
+            actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", false, 128);
+            Assert.AreEqual("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", actual);
+        }
+
+        [Test]
+        public void TestParseHexadecimalThrowsIfNumberOfBitsIsLessThanSizeOfByte()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0x0", true, sizeof (byte) - 1));
         }
 
         [Test]

@@ -22,7 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
     /// a client encounters a Playlist with multiple EXT-X-VERSION tags, it
     /// SHOULD fail to parse it.
     /// </summary>
-    public class ExtXVersion : BaseTag
+    public class Version : BaseTag
     {
         /// <summary>
         /// Gets the name of the tag, for example EXT-X-MEDIA.
@@ -43,7 +43,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
         /// <summary>
         /// Gets the protocol compatibility level version number.
         /// </summary>
-        public int Version { get; private set; }
+        public int VersionNumber { get; private set; }
 
         /// <summary>
         /// Deserializes the tag from the <paramref name="content"/>..
@@ -66,7 +66,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
             content.RequireNotNull("content");
             if (content == string.Empty)
             {
-                Version = 0;
+                VersionNumber = 0;
             }
             else
             {
@@ -74,7 +74,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
                 {
                     throw new SerializationException("Faild to parse version number attribute of the EXT-X-VERSION tag.");
                 }
-                Version = version;
+                VersionNumber = version;
             }
         }
     }
