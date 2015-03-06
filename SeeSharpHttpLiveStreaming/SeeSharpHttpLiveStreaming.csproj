@@ -58,7 +58,7 @@
     <Compile Include="Playlist\Tags\Master\StreamInf.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\Discontinuity.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ExtInf.cs" />
-    <Compile Include="Playlist\Tags\Media\MediaSegment\ExtXByteRange.cs" />
+    <Compile Include="Playlist\Tags\Media\MediaSegment\ByteRange.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\Media\TargetDuration.cs" />
     <Compile Include="Playlist\Tags\Resolution.cs" />

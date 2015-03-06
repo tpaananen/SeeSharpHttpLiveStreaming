@@ -10,12 +10,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
     [TestFixture]
     public class ExtXByteRangeTests
     {
-        private ExtXByteRange _byteRange;
+        private ByteRange _byteRange;
 
         [SetUp]
         public void SetUp()
         {
-            _byteRange = new ExtXByteRange();
+            _byteRange = new ByteRange();
             Assert.AreEqual("#EXT-X-BYTERANGE", _byteRange.TagName);
             Assert.AreEqual(TagType.ExtXByteRange, _byteRange.TagType);
         }
