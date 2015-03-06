@@ -159,7 +159,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             var value = ValueParser.ParseHexadecimal(name, content, false, sizeOfKey);
             if (value != string.Empty && version < requiredVersion)
             {
-                throw new IncompatibleVersionException(this, version, requiredVersion);
+                throw new IncompatibleVersionException(this, name, version, requiredVersion);
             }
             InitializationVector = value;
         }

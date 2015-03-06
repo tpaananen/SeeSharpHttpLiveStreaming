@@ -62,7 +62,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         public void TestKeyCreationFailsIfVersionNumberIsLessThanTwo()
         {
             var value = GetLine("AES-128");
-            Assert.Throws<SerializationException>(() => BaseTag.Create(new PlaylistLine("#EXT-X-KEY", value), 1));
+            var exception = Assert.Throws<SerializationException>(() => BaseTag.Create(new PlaylistLine("#EXT-X-KEY", value), 1));
+            Assert.AreEqual(typeof(IncompatibleVersionException), exception.InnerException.GetType());
+
+            var ex = (IncompatibleVersionException) exception.InnerException;
+            Assert.AreEqual("IV", ex.Attribute);
+            Assert.AreEqual(_key.TagName, ex.TagName);
         }
 
         [Test]
