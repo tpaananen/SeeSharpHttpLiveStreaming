@@ -282,7 +282,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
             }
             catch (Exception ex)
             {
-                throw new SerializationException("Failed to parse resolution value from " + line, ex);
+                throw new FormatException("Failed to parse resolution value from " + line, ex);
             }
         }
 
@@ -290,7 +290,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// Parses the specified attribute value.
         /// </summary>
         /// <param name="line">The line.</param>
-        /// <exception cref="SerializationException">
+        /// <exception cref="FormatException">
         /// Thrown when the line cannot be parsed as an integer.
         /// </exception>
         /// <returns>
@@ -301,7 +301,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
             int value;
             if (!int.TryParse(line, NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
             {
-                throw new SerializationException("Failed to parse attribute value " + line);
+                throw new FormatException("Failed to parse attribute value " + line);
             }
             return value;
         }
@@ -321,7 +321,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
             decimal value;
             if (!decimal.TryParse(line, DecimalParsingNumberStyles, CultureInfo.InvariantCulture, out value))
             {
-                throw new SerializationException("Failed to parse attribute value " + line);
+                throw new FormatException("Failed to parse attribute value " + line);
             }
             return value;
         }

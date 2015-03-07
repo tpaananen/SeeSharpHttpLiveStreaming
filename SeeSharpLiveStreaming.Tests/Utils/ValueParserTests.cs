@@ -131,8 +131,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         {
             Assert.Throws<SerializationException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTET=1920x1080,SECOND=2121", true));
             Assert.Throws<SerializationException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTE=1920-1080,SECOND=2121", true));
-            Assert.Throws<SerializationException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTE=abcxdef,SECOND=2121", true));
+        }
 
+        [Test]
+        public void TestParseResolutionThrowsFormatExceptionIfInputIsInvalid()
+        {
+            Assert.Throws<FormatException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTE=abcxdef,SECOND=2121", true));
         }
 
         [Test]
@@ -154,7 +158,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [Test]
         public void TestParseDecimalValueFails()
         {
-            Assert.Throws<SerializationException>(() => ValueParser.ParseDecimal("123x1080"));
+            Assert.Throws<FormatException>(() => ValueParser.ParseDecimal("123x1080"));
         }
     }
 }
