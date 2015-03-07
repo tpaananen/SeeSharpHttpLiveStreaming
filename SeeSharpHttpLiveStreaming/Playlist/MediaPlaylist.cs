@@ -19,7 +19,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// Initializes a new instance of the <see cref="MediaPlaylist"/> class.
         /// </summary>
         /// <param name="playlist">The playlist.</param>
-        public MediaPlaylist(IReadOnlyCollection<PlaylistLine> playlist)
+        public MediaPlaylist(IEnumerable<PlaylistLine> playlist)
         {
             Parse(playlist);
         }
@@ -37,7 +37,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        private void Parse(IReadOnlyCollection<PlaylistLine> content)
+        private void Parse(IEnumerable<PlaylistLine> content)
         {
             try
             {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -22,16 +20,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     public class MediaSegment
     {
         private readonly List<BaseTag> _tags = new List<BaseTag>();
-
-        /// <summary>
-        /// Gets the URI of the segment.
-        /// </summary>
-        public Uri Uri { get; private set; }
-
-        /// <summary>
-        /// Gets the optional encryption elements.
-        /// </summary>
-        public IEncryption Encryption { get; private set; }
 
         /// <summary>
         /// Gets the tags of the segment.

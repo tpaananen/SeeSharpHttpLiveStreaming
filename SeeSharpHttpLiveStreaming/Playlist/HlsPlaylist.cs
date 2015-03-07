@@ -26,11 +26,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         }
 
         /// <summary>
-        /// Gets the content type.
-        /// </summary>
-        public ContentType ContentType { get; private set; }
-
-        /// <summary>
         /// Gets the version.
         /// </summary>
         public int Version 

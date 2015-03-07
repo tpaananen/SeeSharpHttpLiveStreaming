@@ -71,11 +71,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             ValidateGroups();
         }
 
-        private void ValidateGroups()
+        private static void ValidateGroups()
         {
         }
 
-        private void ReadTags(IReadOnlyCollection<PlaylistLine> content)
+        private void ReadTags(IEnumerable<PlaylistLine> content)
         {
             foreach (var line in content)
             {

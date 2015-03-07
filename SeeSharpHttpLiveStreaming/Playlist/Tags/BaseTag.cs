@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags;
-using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
-using SeeSharpHttpLiveStreaming.Playlist.Tags.Media;
-using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 {
