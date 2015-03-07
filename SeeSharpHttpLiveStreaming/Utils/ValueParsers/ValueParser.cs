@@ -105,20 +105,59 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <summary>
         /// Parses the specified attribute value.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="attribute">The attribute.</param>
         /// <param name="line">The line.</param>
-        /// <param name="requireExists">
-        /// If set to <c>true</c> the <paramref name="attribute"/> is 
-        /// required to exist in the <paramref name="line"/>.
-        /// </param>
+        /// <param name="requireExists">If set to <c>true</c> the <paramref name="attribute" /> is
+        /// required to exist in the <paramref name="line" />.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="parser">The parser of a single value in the list.</param>
         /// <returns>
-        /// The parsed value.
+        /// The parsed value in a list or an empty list.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">Parser type mismatch. Expected typeparameter to be typeof string but was  + typeof(T) + .</exception>
+        /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
+        public static IList<T> ParseSeparatedQuotedString<T>(string attribute, string line, 
+                                                                  bool requireExists,
+                                                                  Func<string, T> parser,
+                                                                  char separator = ',')
+        {
+            parser.RequireNotNull("parser");
+            var substring = ParseQuotedString(attribute, line, requireExists);
+            if (substring == string.Empty)
+            {
+                return new List<T>();
+            }
+            var strings = substring.Split(separator);
+            return strings.Length == 0 ? new List<T>() : strings.Select(parser).ToList();
+        }
+
+        /// <summary>
+        /// Parses the specified attribute value.
+        /// </summary>
+        /// <param name="attribute">The attribute.</param>
+        /// <param name="line">The line.</param>
+        /// <param name="requireExists">If set to <c>true</c> the <paramref name="attribute" /> is
+        /// required to exist in the <paramref name="line" />.</param>
+        /// <param name="separator">The separator.</param>
+        /// <returns>
+        /// The parsed value in a list or an empty list.
         /// </returns>
         /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
-        public static IList<string> ParseCommaSeparatedQuotedString(string attribute, string line, bool requireExists)
+        public static IList<string> ParseSeparatedQuotedString(string attribute, string line, 
+                                                                  bool requireExists, char separator = ',')
         {
             var substring = ParseQuotedString(attribute, line, requireExists);
-            return substring == string.Empty ? new List<string>() : substring.Split(',').ToList();
+            if (substring == string.Empty)
+            {
+                return new List<string>();
+            }
+            var strings = substring.Split(separator);
+            if (strings.Length == 0)
+            {
+                return new List<string>();
+            }
+            return strings.ToList();
         }
 
         /// <summary>
@@ -181,7 +220,12 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// does not exist in the <paramref name="line"/>
         /// and the <paramref name="requireExists"/> is <b>false</b>.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when parsing of the value fails.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when the <paramref name="bits"/> is less than 8.
+        /// </exception>
         public static string ParseHexadecimal(string attribute, string line, bool requireExists, int bits)
         {
             const int sizeOfByte = 8; // bits

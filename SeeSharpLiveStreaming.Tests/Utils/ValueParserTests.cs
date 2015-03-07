@@ -45,7 +45,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         public void TestParseCommaSeparatedQuotedString()
         {
             const string quotedString = "ATTRIBUTE=\"VALUE,VALUE2\"";
-            var actual = ValueParser.ParseCommaSeparatedQuotedString("ATTRIBUTE", quotedString, false);
+            var actual = ValueParser.ParseSeparatedQuotedString("ATTRIBUTE", quotedString, false);
             CollectionAssert.AreEqual(new List<string> { "VALUE", "VALUE2"}, actual);
         }
 
@@ -53,8 +53,16 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         public void TestParseCommaSeparatedQuotedStringReturnsEmptyListIfValueNotFound()
         {
             const string quotedString = "ATTRIBUTET=\"VALUE,VALUE2\"";
-            var actual = ValueParser.ParseCommaSeparatedQuotedString("ATTRIBUTE", quotedString, false);
+            var actual = ValueParser.ParseSeparatedQuotedString("ATTRIBUTE", quotedString, false);
             CollectionAssert.AreEqual(new List<string>(), actual);
+        }
+
+        [Test]
+        public void TestParseCommaSeparatedQuotedStringWithCustomSeparatorAndParser()
+        {
+            const string quotedString = "ATTRIBUTE=\"1/2/3/1002\"";
+            var actual = ValueParser.ParseSeparatedQuotedString("ATTRIBUTE", quotedString, false, int.Parse, '/');
+            CollectionAssert.AreEqual(new List<int> { 1, 2, 3, 1002}, actual);
         }
 
         [Test]

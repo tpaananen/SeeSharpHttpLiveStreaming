@@ -322,7 +322,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseCharacteristics(string content)
         {
             const string name = "CHARACTERISTICS";
-            Characteristics = new ReadOnlyCollection<string>(ValueParser.ParseCommaSeparatedQuotedString(name, content, false));
+            Characteristics = new ReadOnlyCollection<string>(ValueParser.ParseSeparatedQuotedString(name, content, false));
         }
 
     }

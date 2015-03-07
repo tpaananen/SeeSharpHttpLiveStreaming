@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Policy;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 {
@@ -24,6 +25,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <param name="y">The y.</param>
         public Resolution(int x, int y)
         {
+            if (x < 0)
+            {
+                throw new ArgumentOutOfRangeException("x", x, "Parameter x cannot be negative.");
+            }
+            if (y < 0)
+            {
+                throw new ArgumentOutOfRangeException("y", y, "Parameter y cannot be negative.");
+            }
             X = x;
             Y = y;
         }

@@ -192,7 +192,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseCodecs(string content)
         {
             const string name = "CODECS";
-            Codecs = new ReadOnlyCollection<string>(ValueParser.ParseCommaSeparatedQuotedString(name, content, false)); // SHOULD
+            Codecs = new ReadOnlyCollection<string>(ValueParser.ParseSeparatedQuotedString(name, content, false)); // SHOULD
         }
 
         private void ParseResolution(string content)

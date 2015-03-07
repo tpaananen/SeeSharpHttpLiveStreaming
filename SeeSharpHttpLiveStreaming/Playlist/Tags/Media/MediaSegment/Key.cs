@@ -182,16 +182,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         {
             const int requiredVersion = 5;
             const string name = "KEYFORMATVERSIONS";
-            var values = ValueParser.ParseQuotedString(name, content, false);
-            if (values != string.Empty)
+            var values = ValueParser.ParseSeparatedQuotedString(name, content, false, int.Parse, '/');
+            if (values.Count != 0)
             {
                 if (version < requiredVersion)
                 {
                     throw new IncompatibleVersionException(this, name, version, requiredVersion);
                 }
-                var split = values.Split('/');
-                var list = split.Select(ValueParser.ParseInt).ToList();
-                KeyFormatVersions = new ReadOnlyCollection<int>(list);
+                KeyFormatVersions = new ReadOnlyCollection<int>(values);
             }
             else
             {
