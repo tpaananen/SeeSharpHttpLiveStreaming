@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
@@ -189,12 +188,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 {
                     throw new IncompatibleVersionException(this, name, version, requiredVersion);
                 }
-                KeyFormatVersions = new ReadOnlyCollection<int>(values);
             }
-            else
-            {
-                KeyFormatVersions = new ReadOnlyCollection<int>(new int[0]);
-            }
+            KeyFormatVersions = new ReadOnlyCollection<int>(values);
         }
 
         // ReSharper disable once UnusedParameter.Local
