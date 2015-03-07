@@ -60,6 +60,7 @@
     <Compile Include="Playlist\Tags\Media\MediaSegment\ExtInf.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ByteRange.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\Key.cs" />
+    <Compile Include="Playlist\Tags\Media\MediaSegment\Map.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\Media\TargetDuration.cs" />
     <Compile Include="Playlist\Tags\Resolution.cs" />

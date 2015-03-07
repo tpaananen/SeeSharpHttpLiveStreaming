@@ -31,8 +31,26 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// Use of the EXT-X-BYTERANGE tag REQUIRES a compatibility version
     /// number of 4 or greater.
     /// </remarks>
-    public class ByteRange : BaseTag
+    public class ByteRange : BaseTag, IEquatable<ByteRange>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ByteRange"/> class.
+        /// </summary>
+        public ByteRange()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ByteRange"/> class.
+        /// </summary>
+        /// <param name="length">The length.</param>
+        /// <param name="startIndex">The start index.</param>
+        internal ByteRange(long length, long startIndex)
+        {
+            Length = length;
+            StartIndex = startIndex;
+        }
+
         /// <summary>
         /// Gets the name of the tag, for example EXT-X-MEDIA.
         /// </summary>
@@ -88,6 +106,49 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             catch (Exception ex)
             {
                 throw new SerializationException("Failed to parse EXT-X-BYTERANGE tag.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(ByteRange other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Length == other.Length && StartIndex == other.StartIndex;
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// true if the specified object  is equal to the current object; otherwise, false.
+        /// </returns>
+        /// <param name="obj">The object to compare with the current object. </param>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ByteRange) obj);
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type. 
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Length.GetHashCode() * 397) ^ StartIndex.GetHashCode();
             }
         }
     }

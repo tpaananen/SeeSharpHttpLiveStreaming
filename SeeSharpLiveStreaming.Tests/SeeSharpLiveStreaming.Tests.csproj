@@ -46,6 +46,7 @@
     <Compile Include="Playlist\Tags\Master\ExtMediaTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ByteRangeTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\KeyTests.cs" />
+    <Compile Include="Playlist\Tags\Media\MediaSegment\MapTests.cs" />
     <Compile Include="Playlist\Tags\Media\TargetDurationTests.cs" />
     <Compile Include="Playlist\Tags\Basic\VersionTagTests.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInfTests.cs" />
