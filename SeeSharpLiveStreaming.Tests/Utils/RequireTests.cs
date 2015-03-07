@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Utils;
 
+// ReSharper disable ExpressionIsAlwaysNull
 namespace SeeSharpHttpLiveStreaming.Tests.Utils
 {
     [TestFixture]
@@ -21,7 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [Test]
         public void TestRequireDoesNotThrowExceptionForNonNullParameter()
         {
-            object notNull = new object();
+            var notNull = new object();
             notNull.RequireNotNull("notNull");
         }
 

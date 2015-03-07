@@ -15,7 +15,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
             Assert.AreEqual(resolution1.GetHashCode(), resolution2.GetHashCode());
             Assert.That(resolution1 == resolution2);
             Assert.That(resolution1.Equals((object)resolution2));
-            Assert.IsFalse(resolution1.Equals((object)null));
+            Assert.IsFalse(resolution1.Equals(null));
         }
 
         [Test]

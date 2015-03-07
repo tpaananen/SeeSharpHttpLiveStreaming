@@ -1,0 +1,1 @@
+﻿..\..\..\..\packages\ReportGenerator.2.1.2.0\reportgenerator.exe -reports:results.xml -targetdir:coverage
