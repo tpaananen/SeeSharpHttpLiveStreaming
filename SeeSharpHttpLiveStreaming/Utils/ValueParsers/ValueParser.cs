@@ -167,7 +167,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         }
 
         /// <summary>
-        /// Parses the specified attribute value which is assumed to be a 128-bit unsigned integer.
+        /// Parses the specified attribute hexadecimal value. If the parsed value is not long enough, 
+        /// length specified by the <paramref name="bits"/>, zeroes ('0') are padded to the beginning
+        /// of the value. The hex identifier prefix (0x) is removed.
         /// </summary>
         /// <param name="attribute">The attribute.</param>
         /// <param name="line">The line.</param>
@@ -175,7 +177,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// required to exist in the <paramref name="line" />.</param>
         /// <param name="bits">Number of bits. It is assumed that each 8 bits forms a byte.</param>
         /// <returns>
-        /// The parsed value or default value of zero (0x0).
+        /// The parsed value or default value or an empty string if the <paramref name="attribute"/>
+        /// does not exist in the <paramref name="line"/>
+        /// and the <paramref name="requireExists"/> is <b>false</b>.
         /// </returns>
         /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
         public static string ParseHexadecimal(string attribute, string line, bool requireExists, int bits)
@@ -183,7 +187,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
             const int sizeOfByte = 8; // bits
             if (bits < sizeOfByte)
             {
-                throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than 8.");
+                throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than " + sizeOfByte + ".");
             }
             string value = ParseEnumeratedString(attribute, line, requireExists);
             if (value.StartsWith("0x"))
@@ -191,7 +195,13 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 value = value.Substring(2);
             }
 
-            value = value.PadLeft(bits / sizeOfByte, '0');
+            int sizeInBytes = bits / sizeOfByte;
+            if (value.Length > sizeInBytes)
+            {
+                throw new SerializationException("The value to be parsed is longer " + value.Length + " than the number of bits " + bits + ".");
+            }
+
+            value = value.PadLeft(sizeInBytes, '0');
             return value;
         }
 

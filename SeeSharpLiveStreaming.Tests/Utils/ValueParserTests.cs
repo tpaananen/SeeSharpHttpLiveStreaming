@@ -91,8 +91,14 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
             actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0x0", false, 128);
             Assert.AreEqual("0".PadLeft(16, '0'), actual);
 
-            actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", false, 128);
-            Assert.AreEqual("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", actual);
+            actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=FFFFFFFFFFFFFFFF", false, 128);
+            Assert.AreEqual("FFFFFFFFFFFFFFFF", actual);
+        }
+
+        [Test]
+        public void TestParseHexadecimalFailsIfProvidedInputIsLongerThanGivenBits()
+        {
+            Assert.Throws<SerializationException>(() => ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=FFFFFFFFFFFFFFFFF", false, 128));
         }
 
         [Test]
