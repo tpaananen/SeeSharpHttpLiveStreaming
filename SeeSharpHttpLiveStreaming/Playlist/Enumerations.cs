@@ -3,21 +3,6 @@ using SeeSharpHttpLiveStreaming.Utils;
 
 namespace SeeSharpHttpLiveStreaming.Playlist
 {
-    /// <summary>
-    /// Enumerates the valid playlist types for HLS.
-    /// </summary>
-    public enum PlaylistType
-    {
-        /// <summary>
-        /// The .m3u8
-        /// </summary>
-        M3U8 = 0,
-
-        /// <summary>
-        /// The m3u for compatibility.
-        /// </summary>
-        M3U = 1
-    }
 
     /// <summary>
     /// Enumerates the valid contents type for HLS.
@@ -138,6 +123,33 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 default:
                     throw new ArgumentException("Invalid encryption method value " + method + ".");
             }
+        }
+    }
+
+    /// <summary>
+    /// Contanis constants for possible playlist type values.
+    /// </summary>
+    public static class PlaylistType
+    {
+        /// <summary>
+        /// If the EXT-X-PLAYLIST-TYPE value is EVENT, Media Segments can only be
+        /// added to the end of the Media Playlist.
+        /// </summary>
+        public const string Event = "EVENT";
+
+        /// <summary>
+        /// If the EXT-X-PLAYLIST-TYPE
+        /// value is VOD, the Media Playlist cannot change.
+        /// </summary>
+        public const string Vod = "VOD";
+
+        /// <summary>
+        /// Determines whether the specified value is valid <see cref="YesNo"/> value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public static bool IsValid(string value)
+        {
+            return value == Event || value == Vod;
         }
     }
 

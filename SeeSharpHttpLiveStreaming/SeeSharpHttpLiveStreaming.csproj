@@ -61,6 +61,7 @@
     <Compile Include="Playlist\Tags\Media\MediaSegment\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ProgramDateTime.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSequence.cs" />
+    <Compile Include="Playlist\Tags\Media\PlaylistType.cs" />
     <Compile Include="Playlist\Tags\Media\TargetDuration.cs" />
     <Compile Include="Playlist\Tags\Resolution.cs" />
     <Compile Include="Playlist\Tags\Tag.cs" />
