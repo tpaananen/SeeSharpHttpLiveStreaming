@@ -52,6 +52,7 @@
     <Compile Include="Playlist\Tags\Master\RenditionGroup.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInf.cs" />
     <Compile Include="Playlist\Tags\Media\DiscontinuitySequence.cs" />
+    <Compile Include="Playlist\Tags\Media\EndList.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\Discontinuity.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ExtInf.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ByteRange.cs" />
