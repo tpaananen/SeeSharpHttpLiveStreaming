@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using NUnit.Framework;
+using SeeSharpHttpLiveStreaming.Playlist;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
@@ -15,6 +16,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         public void SetUp()
         {
             _tag = new Version();
+            Assert.AreEqual("#EXT-X-VERSION", _tag.TagName);
+            Assert.AreEqual(TagType.ExtXVersion, _tag.TagType);
         }
 
         [Test]
@@ -35,6 +38,19 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         public void ExtXVersionTagThrowsSerializationExceptionIfParsingOfVersioNumberFails()
         {
             Assert.Throws<SerializationException>(() => _tag.Deserialize("NA", 0));
+        }
+
+        [Test]
+        public void TestVersionIsZeroIfNoContent()
+        {
+            _tag.Deserialize("", 0);
+            Assert.AreEqual(0, _tag.VersionNumber);
+        }
+
+        [Test]
+        public void TestVersionNumberThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _tag.Deserialize(null, 0));
         }
 
     }

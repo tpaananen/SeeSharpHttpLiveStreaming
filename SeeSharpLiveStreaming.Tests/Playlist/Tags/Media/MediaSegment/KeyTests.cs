@@ -58,6 +58,19 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
+        public void TestKeyIsCreatedWithOutInitializationVector()
+        {
+            var value = GetLine("AES-128");
+            value = value.Replace(",IV=0x1234", "");
+            _key = (Key)BaseTag.Create(new PlaylistLine("#EXT-X-KEY", value), 5);
+
+            Assert.AreEqual("https://example.com/encryption", _key.Uri.AbsoluteUri);
+            Assert.AreEqual("", _key.InitializationVector);
+            Assert.AreEqual("somevalue", _key.KeyFormat);
+            Assert.AreEqual(new List<int>{1,4,6}, _key.KeyFormatVersions);
+        }
+
+        [Test]
         public void TestKeyCreationFailsIfVersionNumberIsLessThanTwo()
         {
             var value = GetLine("AES-128");
@@ -95,6 +108,15 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
+        public void TestKeyCreationSucceedsEvenWithoutKeFormatVersions()
+        {
+            var value = GetLine("AES-128");
+            value = value.Replace(",KEYFORMATVERSIONS=\"1/4/6\"", "");
+            var key = (Key)BaseTag.Create(new PlaylistLine("#EXT-X-KEY", value), 5);
+            Assert.IsEmpty(key.KeyFormatVersions);
+        }
+
+        [Test]
         public void TestKeyParsingThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => _key.Deserialize(null, 0));
@@ -104,6 +126,27 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         public void TestKeyParsingThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => _key.Deserialize(string.Empty, 0));
+        }
+
+        [Test]
+        public void TestKeyThrowsIfAttributesPresentAndNoEncryptionIsUsed()
+        {
+            var exception = Assert.Throws<SerializationException>(() => _key.Deserialize("METHOD=NONE,KEYFORMAT=\"some\"", 0));
+            Assert.AreEqual(typeof(SerializationException), exception.InnerException.GetType());
+        }
+
+        [Test]
+        public void TestToEncryptionMethodThrowsForInvalidMethod()
+        {
+            Assert.Throws<ArgumentException>(() => "FOO".ToEncryptionMethod());
+        }
+
+        [Test]
+        public void TestToEncryptionMethods()
+        {
+            Assert.AreEqual(EncryptionMethod.None, "NONE".ToEncryptionMethod());
+            Assert.AreEqual(EncryptionMethod.Aes128, "AES-128".ToEncryptionMethod());
+            Assert.AreEqual(EncryptionMethod.SampleAes, "SAMPLE-AES".ToEncryptionMethod());
         }
     }
 }

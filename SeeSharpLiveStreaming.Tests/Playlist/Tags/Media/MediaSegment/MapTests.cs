@@ -41,6 +41,14 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
+        public void TestMapIsParsedWithoutByteRange()
+        {
+            const string value = "URI=\"https://example.com\"";
+            _map.Deserialize(value, 5);
+            Assert.AreEqual(new ByteRange(), _map.ByteRange);
+        }
+
+        [Test]
         public void TestIncompatibleVersionIsDetected()
         {
             Assert.Throws<SerializationException>(() => _map.Deserialize(GetLine(), 4));

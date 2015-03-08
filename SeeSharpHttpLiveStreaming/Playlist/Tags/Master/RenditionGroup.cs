@@ -58,9 +58,26 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 
             GroupId = groupId;
             Type = type;
-            ExtMedias = tags.OfType<ExtMedia>()
-                            .Where(x => x.GroupId == groupId)
-                            .ToList();
+
+            //ExtMedias = tags.OfType<ExtMedia>()
+            //                .Where(x => x.GroupId == groupId)
+            //                .ToList().AsReadOnly();
+            var list = new List<ExtMedia>();
+            foreach (var tag in tags)
+            {
+                var media = tag as ExtMedia;
+                if (media == null)
+                {
+                    continue;
+                }
+
+                if (media.GroupId != groupId)
+                {
+                    continue;
+                }
+                list.Add(media);
+            }
+            ExtMedias = list.AsReadOnly();
 
             ValidateMediaTags(ExtMedias);
         }
@@ -105,7 +122,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             extMedias.RequireNotEmpty("extMedias");
 
             // Check that names are unique
-            if (extMedias.Select(x => x.GroupId).Distinct().Count() != extMedias.Count)
+            if (extMedias.Select(x => x.Name).Distinct().Count() != extMedias.Count)
             {
                 throw new SerializationException("All EXT-X-MEDIA tags in the same rendition group MUST have different NAME attributes.");
             }

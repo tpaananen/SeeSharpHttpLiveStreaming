@@ -42,7 +42,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
-        public void TestParseCommaSeparatedQuotedString()
+        public void TestParseSeparatedQuotedString()
         {
             const string quotedString = "ATTRIBUTE=\"VALUE,VALUE2\"";
             var actual = ValueParser.ParseSeparatedQuotedString("ATTRIBUTE", quotedString, false);
@@ -50,7 +50,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
-        public void TestParseCommaSeparatedQuotedStringReturnsEmptyListIfValueNotFound()
+        public void TestParseSeparatedQuotedStringReturnsEmptyListIfValueNotFound()
         {
             const string quotedString = "ATTRIBUTET=\"VALUE,VALUE2\"";
             var actual = ValueParser.ParseSeparatedQuotedString("ATTRIBUTE", quotedString, false);
@@ -58,11 +58,19 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
-        public void TestParseCommaSeparatedQuotedStringWithCustomSeparatorAndParser()
+        public void TestParseSeparatedQuotedStringWithCustomSeparatorAndParser()
         {
             const string quotedString = "ATTRIBUTE=\"1/2/3/1002\"";
             var actual = ValueParser.ParseSeparatedQuotedString("ATTRIBUTE", quotedString, false, int.Parse, '/');
             CollectionAssert.AreEqual(new List<int> { 1, 2, 3, 1002}, actual);
+        }
+
+        [Test]
+        public void TestParseSeparatedQuotedStringReturnsEmptyList()
+        {
+            const string quotedString = "ATTRIBUTE=12121212";
+            var actual = ValueParser.ParseSeparatedQuotedString("ATTRIBUTE", quotedString, false, int.Parse);
+            CollectionAssert.AreEqual(new List<int>(), actual);
         }
 
         [Test]
@@ -88,6 +96,13 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
+        public void TestParseDecimalWhenDoesNotExist()
+        {
+            var actual = ValueParser.ParseDecimal("ATTRIBUTET", "ATTRIBUTE=103443.21,SECOND=2121", false);
+            Assert.AreEqual(0m, actual);
+        }
+
+        [Test]
         public void TestParseHexadecimal()
         {
             var actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0x1212,SECOND=2121", false, 128);
@@ -95,6 +110,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
 
             actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=0x1212", false, 128);
             Assert.AreEqual("1212".PadLeft(16, '0'), actual);
+
+            actual = ValueParser.ParseHexadecimal("ATTRIBUTET", "ATTRIBUTE=0x0", false, 128);
+            Assert.AreEqual("", actual);
 
             actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0x0", false, 128);
             Assert.AreEqual("0".PadLeft(16, '0'), actual);

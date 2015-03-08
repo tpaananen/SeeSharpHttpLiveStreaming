@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Utils
@@ -26,7 +27,15 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
 
             Assert.AreNotEqual(resolution1.GetHashCode(), resolution2.GetHashCode());
             Assert.That(resolution1 != resolution2);
-            Assert.That(!resolution1.Equals((object)resolution2));
+            Assert.IsFalse(resolution1.Equals((object)resolution2));
+            Assert.IsFalse(resolution1.Equals(new object()));
+        }
+
+        [Test]
+        public void TestResolutionThrowsIfValuesAreNegative()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Resolution(-1, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Resolution(0, -1));
         }
     }
 }

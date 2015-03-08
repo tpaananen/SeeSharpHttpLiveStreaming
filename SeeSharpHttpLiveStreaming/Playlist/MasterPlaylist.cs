@@ -44,19 +44,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         private void Parse(IReadOnlyCollection<PlaylistLine> content)
         {
             content.RequireNotEmpty("content");
-            try
-            {
-                ReadTags(content);
-                CreateRenditionGroups();
-            }
-            catch (SerializationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new SerializationException(string.Format("Failed to deserialize {0} class.", typeof(MasterPlaylist).Name), ex);
-            }
+            ReadTags(content);
+            CreateRenditionGroups();
         }
 
         private void CreateRenditionGroups()
@@ -79,7 +68,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             foreach (var line in content)
             {
-                if (Tag.IsMediaPlaylistTag(line.Tag) || Tag.IsMediaSegmentTag(line.Tag))
+                if (!Tag.IsMasterTag(line.Tag) && !Tag.IsBasicTag(line.Tag))
                 {
                     throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist tag must not contain other than master playlist tags or basic tags.");
                 }

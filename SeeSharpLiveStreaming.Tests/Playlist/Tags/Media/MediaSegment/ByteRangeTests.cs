@@ -63,5 +63,30 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         {
             Assert.Throws<ArgumentNullException>(() => _byteRange.Deserialize(null, 7));
         }
+
+        [Test]
+        public void TestByteRangesAreEqual()
+        {
+            var first = new ByteRange(1, 1);
+            var second = new ByteRange(1, 1);
+            Assert.That(first.Equals(first));
+            Assert.That(first.Equals((object)first));
+            Assert.AreEqual(first, second);
+            Assert.That(first == second);
+            Assert.That(first.Equals((object)second));
+            Assert.AreEqual(first.GetHashCode(), second.GetHashCode());
+        }
+
+        [Test]
+        public void TestByteRangesAreNotEqual()
+        {
+            var first = new ByteRange(1, 2);
+            var second = new ByteRange(2, 1);
+            Assert.AreNotEqual(first, second);
+            Assert.That(first != second);
+            Assert.IsFalse(first.Equals(null));
+            Assert.IsFalse(first.Equals((object)null));
+            Assert.IsFalse(first.Equals(new object()));
+        }
     }
 }

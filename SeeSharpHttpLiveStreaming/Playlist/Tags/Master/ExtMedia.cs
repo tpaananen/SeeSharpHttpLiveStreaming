@@ -258,11 +258,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 throw new SerializationException("Invalid value provided in AUTOSELECT attribute.");
             }
-
             AutoSelect = value == YesNo.Yes;
-            if (value != string.Empty && Default && !AutoSelect)
+            //if (value != string.Empty && Default && !AutoSelect)
+            if (value != string.Empty)
             {
-                throw new SerializationException("The AUTOSELECT must be YES when provided and DEFAULT is YES.");
+                if (Default)
+                {
+                    if (!AutoSelect)
+                    {
+                        throw new SerializationException("The AUTOSELECT must be YES when provided and DEFAULT is YES.");
+                    }
+                }
             }
         }
 

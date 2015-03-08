@@ -127,7 +127,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         {
             get
             {
-                return ClosedCaptions != null && 
+                return ClosedCaptions != null &&
                        !ClosedCaptions.Equals("NONE", StringComparison.Ordinal);
             }
         }

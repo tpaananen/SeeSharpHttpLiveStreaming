@@ -47,6 +47,7 @@
     <Compile Include="Playlist\Tags\BaseTagTests.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMediaTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ByteRangeTests.cs" />
+    <Compile Include="Playlist\Tags\Media\MediaSegment\ExtInfTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\KeyTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\MapTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ProgramDateTimeTests.cs" />
@@ -67,7 +68,11 @@
       <Name>SeeSharpHttpLiveStreaming</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="TestCoverage\coverage.bat" />
+    <None Include="TestCoverage\report.bat" />
+    <None Include="TestCoverage\tests.bat" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

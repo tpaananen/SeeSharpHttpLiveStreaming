@@ -21,7 +21,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
             Assert.AreEqual(TagType.ExtXMedia, _extMedia.TagType);
         }
 
-        private static string GetAttributes(string type)
+        private static string GetAttributes(string type, string instreamId, string defaultAttr, bool forceInstreamId = false)
         {
             string value = 
                    "TYPE=" + type + "," + 
@@ -29,18 +29,21 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
                    "LANGUAGE=\"some-lang1\"," +
                    "ASSOC-LANGUAGE=\"some-lang2\"," + 
                    "NAME=\"My Name\"," + 
-                   "DEFAULT=YES," + 
-                   "AUTOSELECT=YES," + 
+                   "DEFAULT=" + defaultAttr + "," + 
                    "CHARACTERISTICS=\"public.accessibility.transcribes-spoken-dialog,public.accessibility.transcribes-spoken-dialog2\"";
+
+            value += ",AUTOSELECT=" + defaultAttr;
 
             if (type != MediaTypes.ClosedCaptions)
             {
                 value += ",URI=\"https://example.com/video\"";
             }
-            else
+            
+            if (type == MediaTypes.ClosedCaptions || forceInstreamId)
             {
-                value += ",INSTREAM-ID=\"CC1\"";
+                value += ",INSTREAM-ID=\"" + instreamId + "\"";
             }
+
             if (type == MediaTypes.Subtitles)
             {
                 value += ",FORCED=YES";
@@ -61,9 +64,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         }
 
         [Test]
-        public void TestExtMediaIsParsedCorrectly([Values(MediaTypes.Video, MediaTypes.Audio, MediaTypes.Subtitles, MediaTypes.ClosedCaptions)] string mediaType)
+        public void TestExtMediaIsParsedCorrectly(
+            [Values(MediaTypes.Video, MediaTypes.Audio, MediaTypes.Subtitles, MediaTypes.ClosedCaptions)] string mediaType, 
+            [Values("CC1", "CC2", "CC3", "CC4", "SERVICE1", "SERVICE63")] string instreamId,
+            [Values(YesNo.No, YesNo.Yes, "")] string defaultAttr)
         {
-            string input = GetAttributes(mediaType);
+            string input = GetAttributes(mediaType, instreamId, defaultAttr);
             _extMedia.Deserialize(input, 0);
 
             Assert.AreEqual(mediaType, _extMedia.Type);
@@ -71,8 +77,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
             Assert.AreEqual("some-lang1", _extMedia.Language);
             Assert.AreEqual("some-lang2", _extMedia.AssocLanguage);
             Assert.AreEqual("My Name", _extMedia.Name);
-            Assert.AreEqual(true, _extMedia.Default);
-            Assert.AreEqual(true, _extMedia.AutoSelect);
+            Assert.AreEqual(defaultAttr == YesNo.Yes, _extMedia.Default);
+            Assert.AreEqual(defaultAttr == YesNo.Yes, _extMedia.AutoSelect);
             Assert.AreEqual(2, _extMedia.Characteristics.Count);
             Assert.AreEqual("public.accessibility.transcribes-spoken-dialog", _extMedia.Characteristics.ElementAt(0));
             Assert.AreEqual("public.accessibility.transcribes-spoken-dialog2", _extMedia.Characteristics.ElementAt(1));
@@ -83,7 +89,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
             }
             else
             {
-                Assert.AreEqual("CC1", _extMedia.InstreamId);
+                Assert.AreEqual(instreamId, _extMedia.InstreamId);
             }
             if (mediaType == MediaTypes.Subtitles)
             {
@@ -95,6 +101,58 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         public void TestParsingFails()
         {
             Assert.Throws<SerializationException>(() => _extMedia.Deserialize("TYPE=\"asasasasas\"", 0));
+        }
+
+        [Test]
+        public void TestParsingFailsIfInstreamIdIsNotCCxNorServiceN([Values("", "INVALID")] string invalidValue)
+        {
+            string input = GetAttributes(MediaTypes.ClosedCaptions, invalidValue, YesNo.Yes);
+            Assert.Throws<SerializationException>(() => _extMedia.Deserialize(input, 0));
+        }
+
+        [Test]
+        public void TestParsingFailsIfInstreamIdIsNotCCxButServiceNumberIsOutOfRange([Values(0, 64)] int number)
+        {
+            string input = GetAttributes(MediaTypes.ClosedCaptions, "SERVICE" + number, YesNo.Yes);
+            Assert.Throws<SerializationException>(() => _extMedia.Deserialize(input, 0));
+        }
+
+        [Test]
+        public void TestParsingFailsWhenInstreamIdIsPresentButMustNot()
+        {
+            string input = GetAttributes(MediaTypes.Subtitles, "SERVICE1", YesNo.Yes, true);
+            Assert.Throws<SerializationException>(() => _extMedia.Deserialize(input, 0));
+        }
+
+        [Test]
+        public void TestParsingFailsWhenDefaultIsInvalid()
+        {
+            string input = GetAttributes(MediaTypes.Subtitles, "SERVICE1", "FOO");
+            Assert.Throws<SerializationException>(() => _extMedia.Deserialize(input, 0));
+        }
+
+        [Test]
+        public void TestParsingFailsWhenForcedIsPresentWhenTypeIsNotSubtitlesOrInvalidValueProvided([Values(YesNo.Yes, YesNo.No, "FOO")] string value)
+        {
+            string input = GetAttributes(MediaTypes.Audio, "SERVICE1", YesNo.Yes);
+            input += ",FORCED=" + value;
+            Assert.Throws<SerializationException>(() => _extMedia.Deserialize(input, 0));
+        }
+
+        [Test]
+        public void TestParsingFailsWhenAutoSelectHasInvalidValueOrDefaultIsYesAndAutoSelectIsNo([Values(YesNo.No, "FOO")] string value)
+        {
+            string input = GetAttributes(MediaTypes.Audio, "SERVICE1", YesNo.Yes);
+            input = input.Replace("AUTOSELECT=YES,", "AUTOSELECT=" + value + ",");
+            Assert.Throws<SerializationException>(() => _extMedia.Deserialize(input, 0));
+        }
+
+        [Test]
+        public void TestParsingFailsWhenUriIsProvidedAndTypeIsClosedCaptions()
+        {
+            string input = GetAttributes(MediaTypes.ClosedCaptions, "SERVICE1", YesNo.Yes);
+            input += "URI=\"https://example.com\"";
+            Assert.Throws<SerializationException>(() => _extMedia.Deserialize(input, 0));
         }
     }
 }

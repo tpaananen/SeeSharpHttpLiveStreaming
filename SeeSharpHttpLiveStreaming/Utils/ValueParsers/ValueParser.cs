@@ -129,7 +129,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 return new List<T>();
             }
             var strings = substring.Split(separator);
-            return strings.Length == 0 ? new List<T>() : strings.Select(parser).ToList();
+            return strings.Select(parser).ToList();
         }
 
         /// <summary>
@@ -153,10 +153,6 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 return new List<string>();
             }
             var strings = substring.Split(separator);
-            if (strings.Length == 0)
-            {
-                return new List<string>();
-            }
             return strings.ToList();
         }
 
@@ -234,6 +230,12 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than " + sizeOfByte + ".");
             }
             string value = ParseEnumeratedString(attribute, line, requireExists);
+
+            if (value == string.Empty)
+            {
+                return string.Empty;
+            }
+            
             if (value.StartsWith("0x"))
             {
                 value = value.Substring(2);

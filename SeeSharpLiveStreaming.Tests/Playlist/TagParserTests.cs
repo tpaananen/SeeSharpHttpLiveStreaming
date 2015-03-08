@@ -99,5 +99,22 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"", list.ElementAt(3).Line);
             Assert.AreEqual(new Uri("http://example.com/audio-only.m3u8"), list.ElementAt(3).Uri);
         }
+
+        [Test]
+        public void TestTagParserParsesDiscontinuityTag()
+        {
+            const string line = "#EXT-X-DISCONTINUITY";
+            Assert.AreEqual(line, TagParser.ParseTag(line));
+        }
+
+        [Test]
+        public void TestTagParserReturnEmptyStringIfNotValidTagWithoutEndMarker()
+        {
+            string line = "#EXT-X-DISCONTI";
+            Assert.AreEqual(string.Empty, TagParser.ParseTag(line));
+
+            line = "EXT-X-DISCONTI";
+            Assert.AreEqual(string.Empty, TagParser.ParseTag(line));
+        }
     }
 }

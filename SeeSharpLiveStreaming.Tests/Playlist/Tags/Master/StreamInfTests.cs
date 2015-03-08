@@ -49,5 +49,20 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
             Assert.Throws<SerializationException>(() => _streamInf.Deserialize(invalid, 0));
         }
 
+        [Test]
+        public void TestHasNotClosedCaptions()
+        {
+            string validStreamInf = "BANDWIDTH=1212121,AVERAGE-BANDWIDTH=434343,CODECS=\"AAC,H264,OGG\",RESOLUTION=1920x1080,AUDIO=\"AUD\",VIDEO=\"VID\",SUBTITLES=\"SUBS\",CLOSED-CAPTIONS=\"NONE\"";
+            _streamInf.Deserialize(validStreamInf, 0);
+            Assert.IsFalse(_streamInf.HasClosedCaptions);
+
+            validStreamInf = "BANDWIDTH=1212121,AVERAGE-BANDWIDTH=434343,CODECS=\"AAC,H264,OGG\",RESOLUTION=1920x1080,AUDIO=\"AUD\",VIDEO=\"VID\",SUBTITLES=\"SUBS\"";
+            _streamInf.Deserialize(validStreamInf, 0);
+            Assert.IsFalse(_streamInf.HasClosedCaptions);
+
+            _streamInf = new StreamInf();
+            Assert.IsFalse(_streamInf.HasClosedCaptions);
+        }
+
     }
 }

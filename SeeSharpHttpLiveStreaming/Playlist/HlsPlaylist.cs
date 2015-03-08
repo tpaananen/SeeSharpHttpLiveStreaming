@@ -55,12 +55,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </exception>
         public void Parse(string content)
         {
-            content.RequireNotNull("content");
+            content.RequireNotEmpty("content");
 
             if (Playlist != null)
             {
                 throw new InvalidOperationException("The playlist is already deserialized.");
             }
+            
             try
             {
                 IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content);
@@ -72,7 +73,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 {
                     throw;
                 }
-                throw new SerializationException("Failed to deserialize HlsPlaylist.", ex);
+                throw new SerializationException("Failed to parse playlist file.", ex);
             }
         }
     }

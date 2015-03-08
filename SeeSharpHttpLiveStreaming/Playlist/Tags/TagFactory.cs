@@ -28,11 +28,22 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         {
             // Fill the dictionary using reflection, done only once
             var assembly = Assembly.GetAssembly(typeof (BaseTag));
-            var types = assembly.GetTypes()
-                                .Where(t => !t.IsAbstract &&
-                                            !t.IsInterface &&
-                                            typeof(BaseTag).IsAssignableFrom(t))
-                                .ToList();
+            var types = new List<Type>();
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsAbstract)
+                {
+                    continue;
+                }
+                if (typeof (BaseTag).IsAssignableFrom(type))
+                {
+                    types.Add(type);
+                }
+            }
+            //var types = assembly.GetTypes()
+            //                    .Where(t => t.IsAbstract == false)
+            //                    .Where(t => typeof(BaseTag).IsAssignableFrom(t))
+            //                    .ToList();
             FillDictionary(types);
         }
 

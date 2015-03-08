@@ -33,6 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// </remarks>
     public class ByteRange : BaseTag, IEquatable<ByteRange>
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ByteRange"/> class.
         /// </summary>
@@ -93,7 +94,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             try
             {
                 var split = content.Split('@');
-                if (split.Length == 0 || split.Length > 2)
+                if (split.Length > 2)
                 {
                     throw new FormatException("Invalid format in EXT-X-BYTERANGE value.");
                 }
@@ -118,8 +119,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(ByteRange other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
             return Length == other.Length && StartIndex == other.StartIndex;
         }
 
@@ -132,9 +139,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// <param name="obj">The object to compare with the current object. </param>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
             return Equals((ByteRange) obj);
         }
 
@@ -150,6 +166,22 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             {
                 return (Length.GetHashCode() * 397) ^ StartIndex.GetHashCode();
             }
+        }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        public static bool operator ==(ByteRange left, ByteRange right)
+        {
+            return Equals(left, right);
+        }
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        public static bool operator !=(ByteRange left, ByteRange right)
+        {
+            return !Equals(left, right);
         }
     }
 }

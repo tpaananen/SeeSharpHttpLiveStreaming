@@ -20,6 +20,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         PlaylistBase Playlist { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the <see cref="Playlist"/> is a master playlist.
+        /// </summary>
+        bool IsMaster { get; }
+
+        /// <summary>
         /// Parses an object from the string content.
         /// </summary>
         /// <param name="content"></param>

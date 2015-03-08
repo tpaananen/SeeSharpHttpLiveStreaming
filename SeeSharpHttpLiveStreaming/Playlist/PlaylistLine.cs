@@ -89,8 +89,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </returns>
         public bool Equals(PlaylistLine other)
         {
-            return string.Equals(Tag, other.Tag) && 
-                   string.Equals(Line, other.Line);
+            return GetHashCode() == other.GetHashCode();
         }
 
         /// <summary>
@@ -119,7 +118,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             unchecked
             {
-                return (Tag.GetHashCode() * 397) ^ Line.GetHashCode();
+                var value = (Tag.GetHashCode() * 397) ^ Line.GetHashCode();
+                if (Uri != null)
+                {
+                    value ^= Uri.GetHashCode();
+                }
+                return value;
             }
         }
 

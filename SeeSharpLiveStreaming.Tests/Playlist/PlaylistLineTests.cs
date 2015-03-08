@@ -25,5 +25,61 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.AreEqual(string.Empty, parameters);
         }
 
+        [Test]
+        public void TestPlaylistLineCreationFailsIfTheLineDoesNotStartWithTheTag()
+        {
+            Assert.Throws<ArgumentException>(() => new PlaylistLine("#EXT-X-INF", "onlyvalue"));
+        }
+
+        [Test]
+        public void TestPlaylistLineCreationFailsIfUriCannotBeParsed()
+        {
+            Assert.Throws<ArgumentException>(() => new PlaylistLine("#EXT-X-INF", "#EXT-X-INF:value", "baduri"));
+        }
+
+        [Test]
+        public void TestPlaylistLinesAreEqualNoUri()
+        {
+            var first = new PlaylistLine("1234", "1234");
+            var second = new PlaylistLine("1234", "1234");
+            Assert.AreEqual(first, second);
+            Assert.That(first == second);
+        }
+
+        [Test]
+        public void TestPlaylistLinesAreEqualWithUri()
+        {
+            var first = new PlaylistLine("1234", "1234", "http://example.com");
+            var second = new PlaylistLine("1234", "1234", "http://example.com");
+            Assert.AreEqual(first, second);
+            Assert.That(first == second);
+            Assert.That(first.Equals((object)second));
+        }
+
+        [Test]
+        public void TestPlaylistLinesAreNotEqualNoUri()
+        {
+            var first = new PlaylistLine("1234", "123433");
+            var second = new PlaylistLine("1234", "12343");
+            Assert.That(first != second);
+            Assert.That(!first.Equals((object)second));
+        }
+
+        [Test]
+        public void TestPlaylistLinesAreNotEqualWithUri()
+        {
+            var first = new PlaylistLine("1234", "1234", "http://example.com");
+            var second = new PlaylistLine("1234", "1234", "http://exdample.com");
+            Assert.That(first != second);
+        }
+
+        [Test]
+        public void TestPlaylistLineDoesNotEqualToNull()
+        {
+            var first = new PlaylistLine("1234", "1234", "http://example.com");
+            Assert.IsFalse(first.Equals(null));
+            Assert.IsFalse(first.Equals(new object()));
+        }
+
     }
 }
