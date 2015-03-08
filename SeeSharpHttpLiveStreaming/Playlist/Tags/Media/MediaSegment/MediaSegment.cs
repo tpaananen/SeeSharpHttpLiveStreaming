@@ -24,13 +24,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         private readonly List<BaseTag> _tags = new List<BaseTag>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MediaSegment"/> class.
-        /// </summary>
-        public MediaSegment()
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="MediaSegment" /> class.
         /// </summary>
         /// <param name="line">The line.</param>
@@ -71,10 +64,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             // 2. revision, change segment when discontinuity appears
             // 3. revision, refactor when tests are passing
 
-            /*Each Media Segment is specified by a series of Media Segment tags
-              followed by a URI.  Some Media Segment tags apply to just the next
-              segment; others apply to all subsequent segments until another
-              instance of the same tag.*/
+            /* TODO: Current parsing implementetation does not satisfy statement below:
+              
+             * Each Media Segment is specified by a series of Media Segment tags
+               followed by a URI.  Some Media Segment tags apply to just the next
+               segment; 
+               others apply to all subsequent segments until another
+               instance of the same tag.*/
 
             if (line.Tag == Discontinuity)
             {

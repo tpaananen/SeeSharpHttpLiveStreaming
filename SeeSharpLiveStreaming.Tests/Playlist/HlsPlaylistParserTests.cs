@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
@@ -246,6 +247,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.That(playlistObject.Playlist is MediaPlaylist);
             var mediaPlaylist = (MediaPlaylist)playlistObject.Playlist;
             Assert.AreEqual(3, mediaPlaylist.MediaSegments.Count );
+            Assert.That(mediaPlaylist.MediaSegments.All(x => x.Tags != null)); // parsing not proper yet
             Assert.AreEqual(6, playlistObject.Version);
             Assert.AreEqual(1, playlistObject.Playlist.Tags.Count);
         }
