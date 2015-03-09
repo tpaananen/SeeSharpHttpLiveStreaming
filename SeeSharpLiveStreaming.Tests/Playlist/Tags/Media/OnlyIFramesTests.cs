@@ -19,10 +19,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
         }
 
         [Test]
-        public void TestOnlyIFramesTagIsCreated()
+        public void TestOnlyIFramesTagIsCreated([Values((string)null, "")] string value)
         {
+            _frames.Deserialize(value, 4);
             Assert.AreEqual("#EXT-X-I-FRAMES-ONLY", _frames.TagName);
-            Assert.AreEqual(TagType.ExtXIFramesOnly, _frames.TagType);        
+            Assert.AreEqual(TagType.ExtXIFramesOnly, _frames.TagType);
         }
 
         [Test]
