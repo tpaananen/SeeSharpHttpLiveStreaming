@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
 
-namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
 {
     [TestFixture]
     public class StreamInfTests

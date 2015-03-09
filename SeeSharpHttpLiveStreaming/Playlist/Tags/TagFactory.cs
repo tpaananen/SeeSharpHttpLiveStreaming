@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using SeeSharpHttpLiveStreaming.Utils;
 
@@ -29,6 +28,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
             // Fill the dictionary using reflection, done only once
             var assembly = Assembly.GetAssembly(typeof (BaseTag));
             var types = new List<Type>();
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var type in assembly.GetTypes())
             {
                 if (type.IsAbstract)
@@ -40,10 +40,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                     types.Add(type);
                 }
             }
-            //var types = assembly.GetTypes()
-            //                    .Where(t => t.IsAbstract == false)
-            //                    .Where(t => typeof(BaseTag).IsAssignableFrom(t))
-            //                    .ToList();
             FillDictionary(types);
         }
 

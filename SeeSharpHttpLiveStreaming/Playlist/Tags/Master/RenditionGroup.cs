@@ -58,11 +58,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 
             GroupId = groupId;
             Type = type;
+            ExtMedias = GetMediaTags(groupId, tags);
 
-            //ExtMedias = tags.OfType<ExtMedia>()
-            //                .Where(x => x.GroupId == groupId)
-            //                .ToList().AsReadOnly();
+            ValidateMediaTags(ExtMedias);
+        }
+
+        private static IReadOnlyCollection<ExtMedia> GetMediaTags(string groupId, IEnumerable<BaseTag> tags)
+        {
             var list = new List<ExtMedia>();
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var tag in tags)
             {
                 var media = tag as ExtMedia;
@@ -77,9 +81,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
                 }
                 list.Add(media);
             }
-            ExtMedias = list.AsReadOnly();
-
-            ValidateMediaTags(ExtMedias);
+            return list.AsReadOnly();
         }
 
         /// <summary>

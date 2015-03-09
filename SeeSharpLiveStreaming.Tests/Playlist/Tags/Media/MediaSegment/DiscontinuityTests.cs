@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 
-namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
 {
     [TestFixture]
     public class TestExtXDiscontinuity

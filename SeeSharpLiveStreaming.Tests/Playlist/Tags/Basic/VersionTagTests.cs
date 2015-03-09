@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
-namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
 {
     [TestFixture]
     public class VersionTagTests

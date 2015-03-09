@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
 
-namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
+namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
 {
     [TestFixture]
     public class ExtMediaTests
