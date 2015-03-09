@@ -1,6 +1,7 @@
 language: csharp
 solution: SeeSharpLiveStreaming.sln
 install:
+  - export MONO_INTEGRATION_MODE=True
   - nuget restore SeeSharpLiveStreaming.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
