@@ -13,6 +13,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// It is OPTIONAL. Its format is:
     ///
     /// #EXT-X-PLAYLIST-TYPE:&lt;EVENT|VOD&gt;
+    /// 
+    /// If the EXT-X-PLAYLIST-TYPE value is EVENT, Media Segments can only be
+    /// added to the end of the Media Playlist.  If the EXT-X-PLAYLIST-TYPE
+    /// value is VOD, the Media Playlist cannot change.
     /// </remarks>
     public class PlaylistType : BaseTag
     {
