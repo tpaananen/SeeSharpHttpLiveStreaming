@@ -1,0 +1,1 @@
+packages\NUnit.Runners.2.6.4\tools\nunit-console.exe SeeSharpLiveStreaming.Tests\bin\Release\SeeSharpHttpLiveStreaming.Tests.dll /noshadow /framework:net-4.5
