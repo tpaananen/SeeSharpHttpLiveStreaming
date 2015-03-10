@@ -50,8 +50,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXTM3U" + lineFeed +
                 "#EXT-X-VERSION:6" + lineFeed + 
                 "#EXT-X-TARGETDURATION:10" + lineFeed +
-                "" + lineFeed +
+                "" + lineFeed + 
+                "     " + lineFeed + 
                 "#EXTINF:9.009,Some info" + lineFeed +
+                "" + lineFeed + 
+                "     " + lineFeed + 
                 "http://media.example.com/first.ts" + lineFeed +
                 "#EXTINF:9.009,Some other info" + lineFeed +
                 "http://media.example.com/second.ts" + lineFeed +
