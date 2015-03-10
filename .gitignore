@@ -189,3 +189,7 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 coverage
+
+# Code coverage results
+coverage/*
+/coverals.ps1
