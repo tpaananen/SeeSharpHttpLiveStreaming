@@ -33,7 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
             var indexOfEndMarker = line.IndexOf(Tag.TagEndMarker, StringComparison.Ordinal);
             if (indexOfEndMarker <= 1)
             {
-                if (line.StartsWith("#") && Tag.IsValid(line))
+                if (line.StartsWith("#") && !Tag.HasAttributes(line))
                 {
                     // some tags do not have anything but name
                     return line;
@@ -44,7 +44,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 return string.Empty;
             }
 
-            // tag is reprented without the end marker.
+            // tag has no end marker.
             var tag = line.Substring(0, indexOfEndMarker);
             return Tag.IsValid(tag) ? tag : string.Empty;
         }

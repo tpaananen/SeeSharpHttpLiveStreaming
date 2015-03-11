@@ -54,9 +54,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         }
 
         [Test]
-        public void TestParseTagReturnEmptyStringIfNoTagEndMarkerIsFound()
+        public void TestParseTagReturnEmptyStringIfNoTagEndMarkerIsFoundForTagWithAttributes()
         {
-            var tag = TagParser.ParseTag("#EXT-X-STREAM-INF;BANDWIT");
+            var tag = TagParser.ParseTag("#EXT-X-STREAM-INF");
             Assert.AreEqual(string.Empty, tag);
         }
 
@@ -115,6 +115,16 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
 
             line = "EXT-X-DISCONTI";
             Assert.AreEqual(string.Empty, TagParser.ParseTag(line));
+        }
+
+        [Test]
+        public void TestTagParserReturnsTagIfTagWithoutAttributesIsFound()
+        {
+            foreach (var tag in Tag.HasNoAttributes)
+            {
+                var parsed = TagParser.ParseTag(tag);
+                Assert.AreEqual(parsed, tag);
+            }
         }
     }
 }

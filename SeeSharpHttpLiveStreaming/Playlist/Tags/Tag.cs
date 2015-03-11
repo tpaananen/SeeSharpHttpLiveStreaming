@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 {
@@ -27,7 +29,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <remarks>
         /// 4.3.1. Basic Tags > https://tools.ietf.org/html/draft-pantos-http-live-streaming-14#section-4.3.1
         /// </remarks>
-        private static readonly ICollection<string> BasicTags = new []
+        internal static readonly IReadOnlyCollection<string> BasicTags = new []
             {
                 StartLine,
                 "#EXT-X-VERSION"
@@ -39,7 +41,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <remarks>
         /// See: 4.3.2. Media Segment Tags > https://tools.ietf.org/html/draft-pantos-http-live-streaming-14#section-4.3.2
         /// </remarks>
-        private static readonly ICollection<string> MediaSegmentTags = new HashSet<string>(
+        internal static readonly IReadOnlyCollection<string> MediaSegmentTags = 
             new[]
             {
                 "#EXTINF",
@@ -48,7 +50,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 "#EXT-X-KEY",
                 "#EXT-X-MAP",
                 "#EXT-X-PROGRAM-DATE-TIME"
-            });
+            };
 
         /// <summary>
         /// The media playlist tags
@@ -56,7 +58,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <remarks>
         /// 4.3.3 Media Playlist Tags > https://tools.ietf.org/html/draft-pantos-http-live-streaming-14#section-4.3.3
         /// </remarks>
-        private static readonly ICollection<string> MediaPlaylistTags = new HashSet<string>(
+        internal static readonly IReadOnlyCollection<string> MediaPlaylistTags = new ReadOnlyCollection<string>(
             new[]
             {
                 "#EXT-X-TARGETDURATION",
@@ -73,7 +75,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <remarks>
         /// 4.3.4. Master Playlist Tags > https://tools.ietf.org/html/draft-pantos-http-live-streaming-14#section-4.3.4
         /// </remarks>
-        private static readonly ICollection<string> MasterPlaylistTags = new[]
+        internal static readonly IReadOnlyCollection<string> MasterPlaylistTags = new[]
             {
                 "#EXT-X-MEDIA",
                 "#EXT-X-STREAM-INF",
@@ -87,10 +89,20 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <remarks>
         /// 4.3.5. Media or Master Playlist Tags > https://tools.ietf.org/html/draft-pantos-http-live-streaming-14#section-4.3.5
         /// </remarks>
-        private static readonly ICollection<string> MasterOrMediaPlaylistTags = new[]
+        internal static readonly IReadOnlyCollection<string> MasterOrMediaPlaylistTags = new[]
             {
                 "#EXT-X-INDEPENDENT-SEGMENTS",
                 "#EXT-X-START"
+            };
+
+        /// <summary>
+        /// The following tags have no attributes specified and therefore should not have the end marker prefixed.
+        /// </summary>
+        internal static readonly IReadOnlyCollection<string> HasNoAttributes = new[]
+            {
+                "#EXT-X-DISCONTINUITY",
+                "#EXT-X-I-FRAMES-ONLY",
+                "#EXT-X-ENDLIST"
             };
 
         /// <summary>
@@ -175,6 +187,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         {
             return tag == "#EXT-X-STREAM-INF" || 
                    IsMediaSegmentTag(tag);
+        }
+
+        /// <summary>
+        /// Determines whether the tag has attributes.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns></returns>
+        public static bool HasAttributes(string tag)
+        {
+            return !HasNoAttributes.Contains(tag);
         }
     }
 }
