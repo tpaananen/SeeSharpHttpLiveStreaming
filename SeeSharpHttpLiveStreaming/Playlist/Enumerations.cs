@@ -70,6 +70,22 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// The closed captions media type.
         /// </summary>
         public const string ClosedCaptions = "CLOSED-CAPTIONS";
+
+        /// <summary>
+        /// Determines whether the specified <paramref name="value"/> is valid.
+        /// </summary>
+        /// <param name="value">The type.</param>
+        /// <returns>
+        /// <b>True</b> if the <paramref name="value"/> is one of the constants in this class.
+        /// </returns>
+        public static bool IsValid(string value)
+        {
+            return
+                value == Audio ||
+                value == Video ||
+                value == Subtitles ||
+                value == ClosedCaptions;
+        }
     }
 
     /// <summary>

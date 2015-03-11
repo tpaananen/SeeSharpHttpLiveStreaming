@@ -8,7 +8,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
     public abstract class BaseTag : ISerializable
     {
         /// <summary>
-        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// Gets the name of the tag.
         /// </summary>
         public abstract string TagName { get; }
 

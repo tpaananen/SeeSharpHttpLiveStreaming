@@ -33,7 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     public class Map : BaseTag
     {
         /// <summary>
-        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// Gets the name of the tag.
         /// </summary>
         public override string TagName
         {

@@ -15,7 +15,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     public class EndList : BaseTag
     {
         /// <summary>
-        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// Gets the name of the tag.
         /// </summary>
         public override string TagName
         {

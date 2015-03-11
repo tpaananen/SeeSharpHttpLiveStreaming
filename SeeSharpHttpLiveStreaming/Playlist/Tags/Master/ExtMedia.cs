@@ -137,7 +137,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         public IReadOnlyCollection<string> Characteristics { get; private set; }
 
         /// <summary>
-        /// Gets the name of the tag, for example EXT-X-MEDIA.
+        /// Gets the name of the tag.
         /// </summary>
         public override string TagName
         {
@@ -187,10 +187,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             const string name = "TYPE";
             Type = ValueParser.ParseEnumeratedString(name, content, true);
 
-            if (Type != MediaTypes.Audio &&
-                Type != MediaTypes.Video &&
-                Type != MediaTypes.Subtitles &&
-                Type != MediaTypes.ClosedCaptions)
+            if (!MediaTypes.IsValid(Type))
             {
                 throw new SerializationException("Failed to parse TYPE attribute.");
             }

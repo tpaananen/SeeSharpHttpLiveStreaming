@@ -46,6 +46,7 @@
     <Compile Include="Playlist\TagParserTests.cs" />
     <Compile Include="Playlist\TagsTests.cs" />
     <Compile Include="Playlist\Tags\BaseTagTests.cs" />
+    <Compile Include="Playlist\Tags\Master\ExtIFrameStreamInfTests.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMediaTests.cs" />
     <Compile Include="Playlist\Tags\Media\DiscontinuitySequenceTests.cs" />
     <Compile Include="Playlist\Tags\Media\EndListTests.cs" />

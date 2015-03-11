@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using NUnit.Framework;
+using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
 
@@ -17,6 +19,20 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         public void Setup()
         {
             _streamInf = new StreamInf();
+            Assert.AreEqual("#EXT-X-STREAM-INF", _streamInf.TagName);
+            Assert.AreEqual(TagType.ExtXStreamInf, _streamInf.TagType);
+        }
+
+        [Test]
+        public void TestStreamInfThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _streamInf.Deserialize(null, 0));
+        }
+
+        [Test]
+        public void TestStreamInfThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _streamInf.Deserialize(string.Empty, 0));
         }
 
         [Test]
