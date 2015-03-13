@@ -48,6 +48,7 @@
     <Compile Include="Playlist\Tags\BaseTagTests.cs" />
     <Compile Include="Playlist\Tags\Master\ExtIFrameStreamInfTests.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMediaTests.cs" />
+    <Compile Include="Playlist\Tags\Master\SessionDataTests.cs" />
     <Compile Include="Playlist\Tags\Media\DiscontinuitySequenceTests.cs" />
     <Compile Include="Playlist\Tags\Media\EndListTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ByteRangeTests.cs" />

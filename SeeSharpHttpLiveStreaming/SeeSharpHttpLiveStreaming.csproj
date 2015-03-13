@@ -51,6 +51,7 @@
     <Compile Include="Playlist\Tags\Master\ExtIFrameStreamInf.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMedia.cs" />
     <Compile Include="Playlist\Tags\Master\RenditionGroup.cs" />
+    <Compile Include="Playlist\Tags\Master\SessionData.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInf.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInfBaseTag.cs" />
     <Compile Include="Playlist\Tags\Media\DiscontinuitySequence.cs" />
