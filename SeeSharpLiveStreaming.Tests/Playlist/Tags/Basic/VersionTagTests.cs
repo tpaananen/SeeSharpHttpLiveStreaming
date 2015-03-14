@@ -58,6 +58,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
         }
 
         [Test]
+        public void TestVersionNumberSerializationThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _tag.Serialize(null));
+        }
+
+        [Test]
         public void TestVersionNumberIsSerializedCorrectly()
         {
             var sb = new StringBuilder();
