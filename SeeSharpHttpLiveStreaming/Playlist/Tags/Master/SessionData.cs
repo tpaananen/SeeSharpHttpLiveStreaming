@@ -88,11 +88,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         {
             if (Uri == null && Value == null)
             {
-                throw new InvalidOperationException("URI or VALUE attribute is required.");
+                throw new InvalidOperationException("Either URI or VALUE attribute is required.");
             }
             if (Uri != null && Value != null)
             {
-                throw new InvalidOperationException("URI or VALUE attribute is required, but not both.");
+                throw new InvalidOperationException("Either URI or VALUE attribute is required, but not both.");
             }
         }
 

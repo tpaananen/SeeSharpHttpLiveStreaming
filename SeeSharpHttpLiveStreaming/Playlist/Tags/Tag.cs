@@ -102,7 +102,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
             {
                 "#EXT-X-DISCONTINUITY",
                 "#EXT-X-I-FRAMES-ONLY",
-                "#EXT-X-ENDLIST"
+                "#EXT-X-ENDLIST",
+                "#EXT-X-INDEPENDENT-SEGMENTS"
             };
 
         /// <summary>

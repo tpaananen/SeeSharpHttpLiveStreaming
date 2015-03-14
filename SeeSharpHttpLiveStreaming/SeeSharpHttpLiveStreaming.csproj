@@ -48,6 +48,7 @@
     <Compile Include="Playlist\PlaylistLine.cs" />
     <Compile Include="Playlist\Tags\BaseTag.cs" />
     <Compile Include="Playlist\Tags\BasicTags\Version.cs" />
+    <Compile Include="Playlist\Tags\MasterOrMedia\IndependentSegments.cs" />
     <Compile Include="Playlist\Tags\Master\ExtIFrameStreamInf.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMedia.cs" />
     <Compile Include="Playlist\Tags\Master\RenditionGroup.cs" />

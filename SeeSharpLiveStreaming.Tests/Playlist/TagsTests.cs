@@ -88,5 +88,14 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.IsFalse(Tag.IsMasterTag("EXT-X-I-FRAME-STREAM-INF"));
             Assert.IsFalse(Tag.IsMasterTag("EXT-X-SESSION-DATA"));
         }
+
+        [Test]
+        public void TestHasNoAttributes()
+        {
+            Assert.IsFalse(Tag.HasAttributes("#EXT-X-INDEPENDENT-SEGMENTS"));
+            Assert.IsFalse(Tag.HasAttributes("#EXT-X-DISCONTINUITY"));
+            Assert.IsFalse(Tag.HasAttributes("#EXT-X-I-FRAMES-ONLY"));
+            Assert.IsFalse(Tag.HasAttributes("#EXT-X-ENDLIST"));
+        }
     }
 }
