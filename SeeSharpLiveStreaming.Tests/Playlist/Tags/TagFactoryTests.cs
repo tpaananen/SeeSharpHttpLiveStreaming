@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
@@ -33,13 +34,15 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         [Test]
         public void TestTagFactoryThrowsIfInvalidTagNameProvided()
         {
-            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#INVALID-TAG", typeof(BaseTag)));
+            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#INVALID-TAG", typeof(BaseTag), new Dictionary<string, Type>()));
         }
 
         [Test]
         public void TestTagFactoryThrowsIfTheSameTagNameExistsTwice()
         {
-            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#EXT-X-VERSION", typeof(Version)));
+            var container = new Dictionary<string, Type>();
+            TagFactory.ValidateAndAddTag("#EXT-X-VERSION", typeof(Version), container);
+            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#EXT-X-VERSION", typeof(Version), container));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reflection;
 using SeeSharpHttpLiveStreaming.Utils;
 
@@ -10,20 +11,20 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
     /// </summary>
     internal static class TagFactory
     {
-        private static readonly IDictionary<string, Type> TypeMapping = new Dictionary<string, Type>();
+        internal static readonly IReadOnlyDictionary<string, Type> TypeMapping;
 
         /// <summary>
         /// Initializes the <see cref="TagFactory"/> class.
         /// </summary>
         static TagFactory()
         {
-            FillDictionary();
+            TypeMapping = new ReadOnlyDictionary<string, Type>(FillDictionary());
         }
 
         /// <summary>
         /// Fills the dictionary with tag names and types for later use.
         /// </summary>
-        private static void FillDictionary()
+        private static IDictionary<string, Type> FillDictionary()
         {
             // Fill the dictionary using reflection, done only once
             var assembly = Assembly.GetAssembly(typeof (BaseTag));
@@ -40,7 +41,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                     types.Add(type);
                 }
             }
-            FillDictionary(types);
+            return FillDictionary(types);
         }
 
         /// <summary>
@@ -48,15 +49,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="types">The types.</param>
         /// <exception cref="InvalidOperationException">The tag  + instance.TagName +  is invalid.</exception>
-        private static void FillDictionary(IEnumerable<Type> types)
+        private static IDictionary<string, Type> FillDictionary(IEnumerable<Type> types)
         {
             types.RequireNotNull("types");
-
+            var dictionary = new Dictionary<string, Type>();
             foreach (var type in types)
             {
                 var instance = (BaseTag)Activator.CreateInstance(type);
-                ValidateAndAddTag(instance.TagName, type);
+                ValidateAndAddTag(instance.TagName, type, dictionary);
             }
+            return dictionary;
         }
 
         /// <summary>
@@ -64,18 +66,22 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="type">The type.</param>
-        /// <exception cref="InvalidOperationException">The tag  + instance.TagName +  is invalid.</exception>
-        internal static void ValidateAndAddTag(string name, Type type)
+        /// <param name="container">The container.</param>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the tag with the <paramref name="name"/> already exists in the <paramref name="container"/>.
+        /// </exception>
+        internal static void ValidateAndAddTag(string name, Type type, IDictionary<string, Type> container)
         {
+            container.RequireNotNull("container");
             if (!Tag.IsValid(name))
             {
                 throw new InvalidOperationException("The tag " + name + " is invalid.");
             }
-            if (TypeMapping.ContainsKey(name))
+            if (container.ContainsKey(name))
             {
                 throw new InvalidOperationException("The tag " + name + " already exists.");
             }
-            TypeMapping[name] = type;
+            container[name] = type;
         }
 
         /// <summary>

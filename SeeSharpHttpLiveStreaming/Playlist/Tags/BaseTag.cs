@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.Serialization;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 {
@@ -18,11 +20,23 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         public abstract TagType TagType { get; }
 
         /// <summary>
-        /// Deserializes the tag from the <paramref name="content"/>.
+        /// When overridden in a derived class deserializes the tag from the <paramref name="content" />.
         /// </summary>
         /// <param name="content">The content.</param>
         /// <param name="version">The version.</param>
+        /// <exception cref="SerializationException">Thrown when the deserialization fails.</exception>
         public abstract void Deserialize(string content, int version);
+
+        /// <summary>
+        /// When overridden in a derived class serializes the tag to the <paramref name="writer"/>.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
+        public virtual void Serialize(IPlaylistWriter writer)
+        {
+            // TODO: change to abstract when all classes implements
+            throw new NotImplementedException("The Serialize method has not yet been implemented in " + TagName + " tag.");
+        }
 
         /// <summary>
         /// Creates the specified content.
