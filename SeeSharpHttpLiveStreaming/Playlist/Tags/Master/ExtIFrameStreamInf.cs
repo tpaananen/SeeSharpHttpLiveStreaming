@@ -52,7 +52,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <param name="version">The version.</param>
         public override void Deserialize(string content, int version)
         {
-            content.RequireNotEmpty(content);
+            content.RequireNotEmpty("content");
             try
             {
                 base.Deserialize(content, version);
