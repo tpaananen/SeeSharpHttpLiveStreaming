@@ -77,6 +77,8 @@
     <Compile Include="Utils\IncompatibleVersionException.cs" />
     <Compile Include="Utils\Require.cs" />
     <Compile Include="Utils\ValueParsers\ValueParser.cs" />
+    <Compile Include="Utils\Writers\IPlaylistWriter.cs" />
+    <Compile Include="Utils\Writers\PlaylistWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
