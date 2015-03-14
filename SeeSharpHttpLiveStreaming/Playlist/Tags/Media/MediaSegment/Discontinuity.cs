@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -45,6 +46,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         public override TagType TagType
         {
             get { return TagType.ExtXDiscontinuity; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this tag has attributes.
+        /// </summary>
+        public override bool HasAttributes
+        {
+            get { return false; }
         }
 
         /// <summary>

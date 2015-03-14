@@ -111,6 +111,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             return value == No || value == Yes;
         }
+
+        /// <summary>
+        /// Returns either <see cref="Yes"/> or <see cref="No"/> depending on the <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <returns>
+        /// If the <paramref name="value"/> is <b>true</b>, returns <see cref="Yes"/>; otherwise, <see cref="No"/>.
+        /// </returns>
+        public static string FromBoolean(bool value)
+        {
+            return value ? Yes : No;
+        }
     }
 
     /// <summary>

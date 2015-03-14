@@ -25,12 +25,21 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
         /// <summary>
         /// Writes the line.
         /// </summary>
-        /// <param name="line">The line to be write to the writer.</param>
-        public void WriteLine(string line)
+        /// <param name="value">The value to be written to the current line.</param>
+        public void Write(string value)
         {
-            line.RequireNotNull("line");
+            value.RequireNotNull("line");
             ThrowIfDisposedOf();
-            TextWriter.WriteLine(line);
+            TextWriter.Write(value);
+        }
+
+        /// <summary>
+        /// Writes the line end.
+        /// </summary>
+        public void WriteLineEnd()
+        {
+            ThrowIfDisposedOf();
+            TextWriter.WriteLine();
         }
 
         [DebuggerStepThrough]
@@ -66,5 +75,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
             }
             _disposed = true;
         }
+
+        
     }
 }

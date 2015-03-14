@@ -97,14 +97,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
         }
 
         /// <summary>
-        /// Serializes the tag to the <paramref name="writer"/>.
+        /// Serializes the attributes.
         /// </summary>
-        /// <param name="writer">The writer.</param>
-        public override void Serialize(IPlaylistWriter writer)
+        protected override void SerializeAttributes(IPlaylistWriter writer)
         {
-            writer.RequireNotNull("writer");
-            var line = TagName + Tag.TagEndMarker + VersionNumber.ToString(CultureInfo.InvariantCulture);
-            writer.WriteLine(line);
+            writer.Write(VersionNumber.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

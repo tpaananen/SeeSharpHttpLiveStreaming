@@ -8,7 +8,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
     public interface IPlaylistWriter : IDisposable
     {
         /// <summary>
-        /// Writes the line.
+        /// Writes to the line.
         /// </summary>
         /// <param name="line">The line to be write to the writer.</param>
         /// <exception cref="ObjectDisposedException">
@@ -17,6 +17,11 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="line"/> is <b>null</b>.
         /// </exception>
-        void WriteLine(string line);
+        void Write(string line);
+
+        /// <summary>
+        /// Writes the line end.
+        /// </summary>
+        void WriteLineEnd();
     }
 }

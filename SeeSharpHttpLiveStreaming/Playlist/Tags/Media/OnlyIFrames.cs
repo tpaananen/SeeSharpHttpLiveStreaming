@@ -55,6 +55,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         }
 
         /// <summary>
+        /// Gets a value indicating whether this tag has attributes.
+        /// </summary>
+        public override bool HasAttributes
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Deserializes the tag from the <paramref name="content"/>.
         /// </summary>
         /// <param name="content">The content.</param>

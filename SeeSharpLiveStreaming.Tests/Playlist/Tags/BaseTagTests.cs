@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
@@ -11,6 +15,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
     [TestFixture]
     public class BaseTagTests
     {
+        [Datapoints]
+        public IEnumerable<string> Tags = TagFactory.TypeMapping.Keys.ToList();
 
         [Test]
         public void TestBaseTagCreateThrowsIfStartTagIsTriedToCreate()
@@ -19,32 +25,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
             Assert.Throws<InvalidOperationException>(() => BaseTag.Create(line, 0));
         }
 
-        // TODO: remove test when Serialize is abstract
-        [Test]
-        public void TestBaseTagThrowsNotImplementedExceptionIfDerivedClassDoesNotImplementSerialize()
+        [Theory]
+        public void TestTagsReportsHasAttributesCorrectly(string tagName)
         {
-            var tags = TagFactory.TypeMapping;
-
-            foreach (var tagName in tags.Keys)
-            {
-                var tag = TagFactory.Create(tagName);
-                var methodInfo = tag.GetType().GetMethod("Serialize");
-                
-                if (methodInfo.DeclaringType != tag.GetType())
-                {
-                    using (var writer = new PlaylistWriter(new StringWriter(new StringBuilder())))
-                    {
-                        Assert.Throws<NotImplementedException>(() => tag.Serialize(writer), "BaseTag must throw NotImplementedException.");
-                    }
-                }
-                else
-                {
-                    using (var writer = new PlaylistWriter(new StringWriter(new StringBuilder())))
-                    {
-                        Assert.DoesNotThrow(() => tag.Serialize(writer), "Tag " + tagName + " throws exception from Serialize.");
-                    }
-                }
-            }
+            var tag = TagFactory.Create(tagName);
+            Assert.AreEqual(Tag.HasAttributes(tagName), tag.HasAttributes);
         }
 
     }

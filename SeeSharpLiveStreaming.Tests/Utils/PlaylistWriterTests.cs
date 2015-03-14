@@ -36,16 +36,17 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
-        public void TestPlaylistWriterThrowsArgumentNullExceptionForNullLine()
+        public void TestPlaylistWriterThrowsArgumentNullExceptionForNullValue()
         {
-            Assert.Throws<ArgumentNullException>(() => _playlistWriter.WriteLine(null));
+            Assert.Throws<ArgumentNullException>(() => _playlistWriter.Write(null));
         }
 
         [Test]
         public void TestPlaylistWriterWritesThelines()
         {
             const string line = "Hey there.";
-            _playlistWriter.WriteLine(line);
+            _playlistWriter.Write(line);
+            _playlistWriter.WriteLineEnd();
             Assert.AreEqual(_stringBuilder.ToString(), line + Environment.NewLine);
         }
 
@@ -53,12 +54,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         public void TestPlaylistWriterIsDisposedProperly()
         {
             _playlistWriter.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => _playlistWriter.WriteLine("You should be disposed of!"));
+            Assert.Throws<ObjectDisposedException>(() => _playlistWriter.Write("You should be disposed of!"));
 
             var playlistWriter = new PlaylistWriter(new StringWriter(_stringBuilder));
             playlistWriter.Dispose(false);
             playlistWriter.Dispose(true);
-            Assert.Throws<ObjectDisposedException>(() => playlistWriter.WriteLine("You should be disposed of!"));
+            Assert.Throws<ObjectDisposedException>(playlistWriter.WriteLineEnd);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
 {
@@ -16,6 +18,25 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
     /// </summary>
     public class StartTag : BaseTag
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StartTag"/> class.
+        /// </summary>
+        public StartTag()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StartTag"/> class.
+        /// </summary>
+        /// <param name="timeOffset">The time offset.</param>
+        /// <param name="precise">if set to <c>true</c> [precise].</param>
+        internal StartTag(decimal timeOffset, bool precise = false)
+        {
+            TimeOffset = timeOffset;
+            Precise = precise;
+        }
+
         /// <summary>
         /// Gets the name of the tag.
         /// </summary>
@@ -51,12 +72,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
         public decimal TimeOffset { get; private set; }
 
         /// <summary>
-        /// The value is an enumerated-string; valid strings are YES and NO.  If
+        /// The value is an enumerated-string; valid strings are YES and NO. If
         /// the value is YES, clients SHOULD start playback at the Media Segment
         /// containing the TIME-OFFSET, but SHOULD NOT render media samples in
         /// that segment whose presentation times are prior to the TIME-OFFSET.
         /// If the value is NO, clients SHOULD attempt to render every media
-        /// sample in that segment.  This attribute is OPTIONAL. If it is
+        /// sample in that segment. This attribute is OPTIONAL. If it is
         /// missing, its value should be treated as NO.
         /// </summary>
         public bool Precise { get; private set; }
@@ -78,6 +99,20 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
             {
                 throw new SerializationException("Failed to parse " + TagName + " tag.", ex);
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <returns>
+        /// String representation of the attributes.
+        /// </returns>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            writer.Write("TIME-OFFSET=");
+            writer.Write(FormatDecimal(TimeOffset));
+            writer.Write(",PRECISE=");
+            writer.Write(YesNo.FromBoolean(Precise));
         }
 
         private void ParseTimeOffset(string content)

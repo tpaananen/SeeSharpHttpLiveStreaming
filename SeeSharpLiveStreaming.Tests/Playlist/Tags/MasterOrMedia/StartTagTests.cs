@@ -1,8 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.MasterOrMedia
 {
@@ -65,6 +69,17 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.MasterOrMedia
         public void TestStartTagIsNotCreatedIfPreciseHasInvalidValue()
         {
             Assert.Throws<SerializationException>(() => _startTag.Deserialize(string.Format(ValidAttributes, "232"), 0));
+        }
+
+        [Test]
+        public void TestStartTagIsSerialized([Values(true, false)] bool precise)
+        {
+            _startTag = new StartTag(3456.45m, precise);
+            var sb = new StringBuilder();
+            var writer = new PlaylistWriter(new StringWriter(sb));
+            _startTag.Serialize(writer);
+            Assert.AreEqual(_startTag.TagName + Tag.TagEndMarker + "TIME-OFFSET=3456.45,PRECISE=" + YesNo.FromBoolean(precise) + Environment.NewLine, 
+                sb.ToString());
         }
     }
 }
