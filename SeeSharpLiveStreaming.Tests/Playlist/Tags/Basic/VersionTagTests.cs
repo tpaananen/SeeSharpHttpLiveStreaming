@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
@@ -41,10 +45,10 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
         }
 
         [Test]
-        public void TestVersionIsZeroIfNoContent()
+        public void TestVersionIsOneIfNoContent()
         {
             _tag.Deserialize("", 0);
-            Assert.AreEqual(0, _tag.VersionNumber);
+            Assert.AreEqual(1, _tag.VersionNumber);
         }
 
         [Test]
@@ -53,5 +57,14 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
             Assert.Throws<ArgumentNullException>(() => _tag.Deserialize(null, 0));
         }
 
+        [Test]
+        public void TestVersionNumberIsSerializedCorrectly()
+        {
+            var sb = new StringBuilder();
+            var writer = new PlaylistWriter(new StringWriter(sb));
+            _tag = new Version(7);
+            _tag.Serialize(writer);
+            Assert.AreEqual(_tag.TagName + Tag.TagEndMarker + 7.ToString(CultureInfo.InvariantCulture) + Environment.NewLine, sb.ToString());
+        }
     }
 }

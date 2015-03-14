@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
 {
@@ -24,6 +25,23 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
     /// </summary>
     public class Version : BaseTag
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Version"/> class.
+        /// </summary>
+        public Version()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Version"/> class.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        internal Version(int version)
+        {
+            VersionNumber = version;
+        }
+
         /// <summary>
         /// Gets the name of the tag.
         /// </summary>
@@ -66,7 +84,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
             content.RequireNotNull("content");
             if (content == string.Empty)
             {
-                VersionNumber = 0;
+                VersionNumber = 1;
             }
             else
             {
@@ -76,6 +94,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
                 }
                 VersionNumber = version;
             }
+        }
+
+        /// <summary>
+        /// Serializes the tag to the <paramref name="writer"/>.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public override void Serialize(IPlaylistWriter writer)
+        {
+            var line = TagName + Tag.TagEndMarker + VersionNumber.ToString(CultureInfo.InvariantCulture);
+            writer.WriteLine(line);
         }
     }
 }

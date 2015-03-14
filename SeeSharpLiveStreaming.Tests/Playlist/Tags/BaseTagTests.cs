@@ -28,7 +28,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
             foreach (var tagName in tags.Keys)
             {
                 var tag = TagFactory.Create(tagName);
-                var methodInfo = tag.GetType().GetMethod("Serialize").GetBaseDefinition();
+                var methodInfo = tag.GetType().GetMethod("Serialize");
                 
                 if (methodInfo.DeclaringType != tag.GetType())
                 {
