@@ -12,6 +12,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
     public abstract class BaseTag : ISerializable
     {
         /// <summary>
+        /// The attribute separator.
+        /// </summary>
+        protected const string AttributeSeparator = ",";
+        
+        /// <summary>
         /// The decimal format specifier.
         /// </summary>
         protected const string DecimalFormatSpecifier = "F2";
@@ -103,6 +108,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         protected virtual string FormatDecimal(decimal value)
         {
             return value.ToString(DecimalFormatSpecifier, CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Writes the attribute separator.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="hasPreviousAttributes">if set to <c>true</c> has previous attributes.</param>
+        protected static void WriteAttributeSeparator(IPlaylistWriter writer, bool hasPreviousAttributes)
+        {
+            if (hasPreviousAttributes)
+            {
+                writer.Write(AttributeSeparator);
+            }
         }
     }
 }

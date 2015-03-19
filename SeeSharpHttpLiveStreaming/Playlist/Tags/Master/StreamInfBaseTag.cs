@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
@@ -11,6 +13,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// </summary>
     public abstract class StreamInfBaseTag : BaseTag
     {
+        // ReSharper disable once InconsistentNaming
+        /// <summary>
+        /// The codec list.
+        /// </summary>
+        protected readonly List<string> _codecs = new List<string>(); 
+
         /// <summary>
         /// The value is a quoted-string. It MUST match the value of the GROUP-
         /// ID attribute of an EXT-X-MEDIA tag elsewhere in the Master Playlist
@@ -19,7 +27,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// Section 4.3.4.2.1. of the specification.
         /// The VIDEO attribute is OPTIONAL.
         /// </summary>
-        public string Video { get; private set; }
+        public string Video { get; protected set; }
 
         /// <summary>
         /// The value is a decimal-integer of bits per second. It represents the
@@ -66,7 +74,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// "Bucket" Media Types [RFC6381].
         /// Every EXT-X-STREAM-INF tag SHOULD include a CODECS attribute.
         /// </summary>
-        public IReadOnlyCollection<string> Codecs { get; protected set; }
+        public IReadOnlyCollection<string> Codecs 
+        {
+            get
+            {
+                return new ReadOnlyCollection<string>(_codecs);
+            } 
+        }
 
         /// <summary>
         /// The value is a decimal-resolution describing the optimal pixel
@@ -90,6 +104,80 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             ParseAverageBandwidth(content);
             ParseCodecs(content);
             ParseResolution(content);
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="hasPreviousAttributes">if set to <c>true</c> has previous attributes.</param>
+        protected void SerializeBaseAttributes(IPlaylistWriter writer, out bool hasPreviousAttributes)
+        {
+            hasPreviousAttributes = false;
+            WriteVideo(writer, ref hasPreviousAttributes);
+            WriteBandwith(writer, ref hasPreviousAttributes);
+            WriteAverageBandwith(writer, ref hasPreviousAttributes);
+            WriteCodecs(writer, ref hasPreviousAttributes);
+            WriteResolution(writer, ref hasPreviousAttributes);
+        }
+
+        private void WriteVideo(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            if (string.IsNullOrEmpty(Video))
+            {
+                return;
+            }
+            const string name = "VIDEO=\"{0}\"";
+            WriteAttributeSeparator(writer, hasPreviousAttributes);
+            var value = string.Format(name, Video);
+            writer.Write(value);
+            hasPreviousAttributes = true;
+        }
+
+        private void WriteBandwith(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            const string name = "BANDWIDTH=";
+            WriteAttributeSeparator(writer, hasPreviousAttributes);
+            writer.Write(name + Bandwidth.ToString(CultureInfo.InvariantCulture));
+            hasPreviousAttributes = true;
+        }
+
+        private void WriteAverageBandwith(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            if (AverageBandwidth == 0)
+            {
+                return;
+            }
+            const string name = "AVERAGE-BANDWIDTH=";
+            WriteAttributeSeparator(writer, hasPreviousAttributes);
+            writer.Write(name + AverageBandwidth.ToString(CultureInfo.InvariantCulture));
+            hasPreviousAttributes = true;
+        }
+
+        private void WriteCodecs(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            if (_codecs.Count == 0)
+            {
+                return;
+            }
+            const string name = "CODECS=\"{0}\"";
+            WriteAttributeSeparator(writer, hasPreviousAttributes);
+            var value = string.Join(",", _codecs);
+            writer.Write(string.Format(name, value));
+            hasPreviousAttributes = true;
+        }
+
+        private void WriteResolution(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            if (Resolution == Resolution.Default)
+            {
+                return;
+            }
+            const string name = "RESOLUTION={0}x{1}";
+            WriteAttributeSeparator(writer, hasPreviousAttributes);
+            var value = string.Format(name, Resolution.X, Resolution.Y);
+            writer.Write(value);
+            hasPreviousAttributes = true;
         }
 
         /// <summary>
@@ -129,7 +217,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         protected virtual void ParseCodecs(string content)
         {
             const string name = "CODECS";
-            Codecs = new ReadOnlyCollection<string>(ValueParser.ParseSeparatedQuotedString(name, content, false)); // SHOULD
+            _codecs.AddRange(ValueParser.ParseSeparatedQuotedString(name, content, false)); // SHOULD
         }
 
         /// <summary>

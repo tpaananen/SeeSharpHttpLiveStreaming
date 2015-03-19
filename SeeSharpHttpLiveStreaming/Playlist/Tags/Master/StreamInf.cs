@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
@@ -16,6 +19,41 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// </summary>
     public class StreamInf : StreamInfBaseTag
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StreamInf"/> class.
+        /// </summary>
+        public StreamInf()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StreamInf"/> class.
+        /// </summary>
+        /// <param name="bandwidth">The bandwidth.</param>
+        /// <param name="averageBandwidth">The average bandwidth.</param>
+        /// <param name="codecs">The codecs.</param>
+        /// <param name="resolution">The resolution.</param>
+        /// <param name="audio">The audio.</param>
+        /// <param name="video">The video.</param>
+        /// <param name="subtitles">The subtitles.</param>
+        /// <param name="closedCaptions">The closed captions.</param>
+        public StreamInf(long bandwidth, long averageBandwidth, IEnumerable<string> codecs,
+                         Resolution resolution, string audio, string video, string subtitles, string closedCaptions)
+        {
+            Bandwidth = bandwidth;
+            AverageBandwidth = averageBandwidth;
+            Resolution = resolution;
+            Audio = audio ?? string.Empty;
+            Video = video ?? string.Empty;
+            Subtitles = subtitles ?? string.Empty;
+            ClosedCaptions = string.IsNullOrEmpty(closedCaptions) ? "NONE" : closedCaptions;
+            if (codecs != null)
+            {
+                _codecs.AddRange(codecs);
+            }
+        }
+
         /// <summary>
         /// The value is a quoted-string. It MUST match the value of the GROUP-
         /// ID attribute of an EXT-X-MEDIA tag elsewhere in the Master Playlist
@@ -99,6 +137,54 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             catch (Exception ex)
             {
                 throw new SerializationException("Failed to deserialize EXT-X-STREAM-INF tag.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            bool hasPreviousAttributes;
+            SerializeBaseAttributes(writer, out hasPreviousAttributes);
+            WriteAudio(writer, ref hasPreviousAttributes);
+            WriteSubtitles(writer, ref hasPreviousAttributes);
+            WriteClosedCaptions(writer, ref hasPreviousAttributes);
+        }
+
+        private void WriteAudio(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            const string template = "AUDIO=\"{0}\"";
+            if (!string.IsNullOrEmpty(Audio))
+            {
+                WriteAttributeSeparator(writer, hasPreviousAttributes);
+                writer.Write(string.Format(template, Audio));
+            }
+        }
+
+        private void WriteSubtitles(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            const string template = "SUBTITLES=\"{0}\"";
+            if (!string.IsNullOrEmpty(Subtitles))
+            {
+                WriteAttributeSeparator(writer, hasPreviousAttributes);
+                writer.Write(string.Format(template, Subtitles));
+            }
+        }
+
+        private void WriteClosedCaptions(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            WriteAttributeSeparator(writer, hasPreviousAttributes);
+            if (ClosedCaptions != "NONE")
+            {
+                const string template = "CLOSED-CAPTIONS=\"{0}\"";
+                writer.Write(string.Format(template, ClosedCaptions));
+            }
+            else
+            {
+                const string value = "CLOSED-CAPTIONS=NONE";
+                writer.Write(value);
             }
         }
 

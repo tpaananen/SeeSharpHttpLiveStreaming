@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
 {
@@ -78,6 +83,61 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
 
             _streamInf = new StreamInf();
             Assert.IsFalse(_streamInf.HasClosedCaptions);
+        }
+
+        [Test]
+        public void TestStreamInfSerialization()
+        {
+            var sb = new StringBuilder();
+            var codecArray = "AAC,OGG".Split(',');
+            var streamInf = new StreamInf(1212121, 121212, codecArray, new Resolution(1920, 1080), 
+                                          "AUD", "VID", "SUBS", "CC");
+            var writer = new PlaylistWriter(new StringWriter(sb));
+            streamInf.Serialize(writer);
+
+            _streamInf.Deserialize(sb.ToString(), 0);
+            
+            Assert.AreEqual(streamInf.Video, _streamInf.Video);
+            Assert.AreEqual(streamInf.Audio, _streamInf.Audio);
+            Assert.AreEqual(streamInf.AverageBandwidth, _streamInf.AverageBandwidth);
+            Assert.AreEqual(streamInf.Bandwidth, _streamInf.Bandwidth);
+            Assert.AreEqual(streamInf.ClosedCaptions, _streamInf.ClosedCaptions);
+            Assert.AreEqual(streamInf.Codecs, _streamInf.Codecs);
+            Assert.AreEqual(streamInf.Resolution, _streamInf.Resolution);
+            Assert.AreEqual(streamInf.Subtitles, _streamInf.Subtitles);
+        }
+
+        [Test]
+        public void TestStreamInfSerializationWithNullEmptyOrDefaultValues(
+            [Values(null, "")] string codecs,
+            [Values(null, "")] string audio,
+            [Values(null, "")] string video,
+            [Values(null, "")] string subtitles,
+            [Values(null, "")] string closedCaptions)
+        {
+            var sb = new StringBuilder();
+            var codecArray = codecs == null ? null : new string[0];
+            var streamInf = new StreamInf(1212121, 0, codecArray, Resolution.Default, 
+                                          audio, video, subtitles, closedCaptions);
+            var writer = new PlaylistWriter(new StringWriter(sb));
+            streamInf.Serialize(writer);
+
+            _streamInf.Deserialize(sb.ToString(), 0);
+            
+            Assert.AreEqual(streamInf.Video, _streamInf.Video);
+            Assert.AreEqual(streamInf.Audio, _streamInf.Audio);
+            Assert.AreEqual(streamInf.AverageBandwidth, _streamInf.AverageBandwidth);
+            Assert.AreEqual(streamInf.Bandwidth, _streamInf.Bandwidth);
+            Assert.AreEqual(streamInf.ClosedCaptions, _streamInf.ClosedCaptions);
+            Assert.AreEqual(streamInf.Codecs, _streamInf.Codecs);
+            Assert.AreEqual(streamInf.Resolution, _streamInf.Resolution);
+            Assert.AreEqual(streamInf.Subtitles, _streamInf.Subtitles);
+        }
+
+        [Test]
+        public void TestStreamInfSerializeWithNullWriter()
+        {
+            Assert.Throws<ArgumentNullException>(() => _streamInf.Serialize(null));
         }
 
     }
