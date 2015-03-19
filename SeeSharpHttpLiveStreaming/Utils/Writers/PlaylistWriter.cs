@@ -67,7 +67,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
         /// <c>true</c> to release both managed and unmanaged resources; <c>false</c> 
         /// to release only unmanaged resources.
         /// </param>
-        internal virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing && !_disposed)
             {
@@ -76,6 +76,16 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
             _disposed = true;
         }
 
-        
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        /// <c>true</c> to release both managed and unmanaged resources; <c>false</c> 
+        /// to release only unmanaged resources.
+        /// </param>
+        internal void Close(bool disposing)
+        {
+            Dispose(disposing);
+        }
     }
 }
