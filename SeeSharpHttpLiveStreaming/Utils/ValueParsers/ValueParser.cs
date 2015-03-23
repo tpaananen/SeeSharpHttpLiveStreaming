@@ -116,7 +116,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// The parsed value in a list or an empty list.
         /// </returns>
         /// <exception cref="InvalidOperationException">Parser type mismatch. Expected typeparameter to be typeof string but was  + typeof(T) + .</exception>
-        /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">Thrown when reading of the input string fails.</exception>
         public static IList<T> ParseSeparatedQuotedString<T>(string attribute, string line, 
                                                                   bool requireExists,
                                                                   Func<string, T> parser,
@@ -143,7 +143,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value in a list or an empty list.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">Thrown when reading of the input string fails.</exception>
         public static IList<string> ParseSeparatedQuotedString(string attribute, string line, 
                                                                   bool requireExists, char separator = ',')
         {
@@ -168,7 +168,8 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value or default value of zero.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">Thrown when reading of the input string fails.</exception>
+        /// <exception cref="FormatException">Thrown when parsing of the value fails.</exception>
         public static long ParseInt(string attribute, string line, bool requireExists)
         {
             var stringValue = ParseEnumeratedString(attribute, line, requireExists);
@@ -191,7 +192,8 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value or default value of zero.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">Thrown when reading of the input string fails.</exception>
+        /// <exception cref="FormatException">Thrown when parsing of the value fails.</exception>
         public static decimal ParseDecimal(string attribute, string line, bool requireExists)
         {
             string value = ParseEnumeratedString(attribute, line, requireExists);
@@ -263,7 +265,8 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value (format ZZxYY or default value of <see cref="string.Empty" />.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">Thrown when value is required to exist but does not exist.</exception>
+        /// <exception cref="FormatException">Thrown when parsing fails.</exception>
         public static Resolution ParseResolution(string attribute, string line, bool requireExists)
         {
             string value = ParseEnumeratedString(attribute, line, requireExists);
@@ -289,7 +292,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         }
 
         /// <summary>
-        /// Parses the specified attribute value.
+        /// Parses the specified integer value.
         /// </summary>
         /// <param name="line">The line.</param>
         /// <exception cref="FormatException">
@@ -309,10 +312,10 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         }
 
         /// <summary>
-        /// Parses the specified attribute value.
+        /// Parses the specified decimal value.
         /// </summary>
         /// <param name="line">The line.</param>
-        /// <exception cref="SerializationException">
+        /// <exception cref="FormatException">
         /// Thrown when the line cannot be parsed as an integer.
         /// </exception>
         /// <returns>
