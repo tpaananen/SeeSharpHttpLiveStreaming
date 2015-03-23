@@ -24,7 +24,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <param name="attribute">The attribute.</param>
         /// <param name="line">The line.</param>
         /// <param name="requireExists">If set to <c>true</c> the attribute is required to exist in the <paramref name="line"/>.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Start position of the attribute or -1 if attribute is not found and is not required.
+        /// </returns>
         // ReSharper disable once UnusedParameter.Local
         private static int StartPosition(string attribute, string line, bool requireExists)
         {
@@ -50,6 +52,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// If set to <c>true</c> the <paramref name="attribute"/> 
         /// is required to exist in the <paramref name="line"/>.
         /// </param>
+        /// <exception cref="SerializationException">
+        /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
+        /// </exception>
         /// <returns></returns>
         public static string ParseEnumeratedString(string attribute, string line, bool requireExists)
         {
@@ -82,7 +87,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
+        /// </exception>
         public static string ParseQuotedString(string attribute, string line, bool requireExists)
         {
             var position = StartPosition(attribute, line, requireExists);
@@ -115,12 +122,16 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value in a list or an empty list.
         /// </returns>
-        /// <exception cref="InvalidOperationException">Parser type mismatch. Expected typeparameter to be typeof string but was  + typeof(T) + .</exception>
-        /// <exception cref="SerializationException">Thrown when reading of the input string fails.</exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="parser"/> is <b>null</b>.
+        /// </exception>
         public static IList<T> ParseSeparatedQuotedString<T>(string attribute, string line, 
-                                                                  bool requireExists,
-                                                                  Func<string, T> parser,
-                                                                  char separator = ',')
+                                                             bool requireExists,
+                                                             Func<string, T> parser,
+                                                             char separator = ',')
         {
             parser.RequireNotNull("parser");
             var substring = ParseQuotedString(attribute, line, requireExists);
@@ -143,9 +154,11 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value in a list or an empty list.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when reading of the input string fails.</exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
+        /// </exception>
         public static IList<string> ParseSeparatedQuotedString(string attribute, string line, 
-                                                                  bool requireExists, char separator = ',')
+                                                               bool requireExists, char separator = ',')
         {
             var substring = ParseQuotedString(attribute, line, requireExists);
             if (substring == string.Empty)
@@ -168,8 +181,12 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value or default value of zero.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when reading of the input string fails.</exception>
-        /// <exception cref="FormatException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// Thrown when parsing of the value fails.
+        /// </exception>
         public static long ParseInt(string attribute, string line, bool requireExists)
         {
             var stringValue = ParseEnumeratedString(attribute, line, requireExists);
@@ -192,8 +209,12 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value or default value of zero.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when reading of the input string fails.</exception>
-        /// <exception cref="FormatException">Thrown when parsing of the value fails.</exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// Thrown when parsing of the value fails.
+        /// </exception>
         public static decimal ParseDecimal(string attribute, string line, bool requireExists)
         {
             string value = ParseEnumeratedString(attribute, line, requireExists);
@@ -219,7 +240,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// and the <paramref name="requireExists"/> is <b>false</b>.
         /// </returns>
         /// <exception cref="SerializationException">
-        /// Thrown when parsing of the value fails.
+        /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when the <paramref name="bits"/> is less than 8.
@@ -265,8 +286,12 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// <returns>
         /// The parsed value (format ZZxYY or default value of <see cref="string.Empty" />.
         /// </returns>
-        /// <exception cref="SerializationException">Thrown when value is required to exist but does not exist.</exception>
-        /// <exception cref="FormatException">Thrown when parsing fails.</exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// Thrown when parsing fails.
+        /// </exception>
         public static Resolution ParseResolution(string attribute, string line, bool requireExists)
         {
             string value = ParseEnumeratedString(attribute, line, requireExists);

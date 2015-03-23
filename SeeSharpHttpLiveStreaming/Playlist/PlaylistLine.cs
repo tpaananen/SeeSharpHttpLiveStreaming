@@ -19,7 +19,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         public readonly string Line;
 
         /// <summary>
-        /// The optional URI, this should exists on its own line.
+        /// The optional URI, this should exist on its own line.
         /// </summary>
         public readonly Uri Uri;
 

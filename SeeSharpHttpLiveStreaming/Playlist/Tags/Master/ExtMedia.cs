@@ -196,13 +196,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseUri(string content)
         {
             const string name = "URI";
-            bool mustNotExists = Type == MediaTypes.ClosedCaptions;
+            bool mustNotExist = Type == MediaTypes.ClosedCaptions;
             var uriString = ValueParser.ParseQuotedString(name, content, false);
-            if (mustNotExists)
+            if (mustNotExist)
             {
                 if (uriString != string.Empty)
                 {
-                    throw new SerializationException("Failed to parse URI attribute, it must not exists when the TYPE is CLOSED-CAPTIONS.");
+                    throw new SerializationException("Failed to parse URI attribute, it must not exist when the TYPE is CLOSED-CAPTIONS.");
                 }
             }
 
@@ -256,7 +256,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
                 throw new SerializationException("Invalid value provided in AUTOSELECT attribute.");
             }
             AutoSelect = value == YesNo.Yes;
-            //if (value != string.Empty && Default && !AutoSelect)
             if (value != string.Empty)
             {
                 if (Default)

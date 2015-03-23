@@ -35,7 +35,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
-        public void TestParseQuotedStringThrowsExceptionIfAttributeNotExistsAndIsRequired()
+        public void TestParseQuotedStringThrowsExceptionIfAttributeNotExistAndIsRequired()
         {
             const string quotedString = "ATTRIBUTET=\"VALUE\"";
             Assert.Throws<SerializationException>(() => ValueParser.ParseQuotedString("ATTRIBUTE", quotedString, true));
@@ -145,7 +145,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
-        public void TestParseResolutionWithRequiredAndNotExists()
+        public void TestParseResolutionWithRequiredAndNotExist()
         {
             Assert.Throws<SerializationException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTET=1920x1080,SECOND=2121", true));
             Assert.Throws<SerializationException>(() => ValueParser.ParseResolution("ATTRIBUTE", "ATTRIBUTE=1920-1080,SECOND=2121", true));

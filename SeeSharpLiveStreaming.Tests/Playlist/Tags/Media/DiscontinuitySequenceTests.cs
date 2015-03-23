@@ -32,7 +32,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
         }
 
         [Test]
-        public void TestDeserializationFailes()
+        public void TestDeserializationFails()
         {
             var exception = Assert.Throws<SerializationException>(() => _discSeq.Deserialize("sdsdsd", 0));
             Assert.That(exception.InnerException is FormatException);
