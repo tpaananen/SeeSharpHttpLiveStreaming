@@ -41,6 +41,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\TestPlaylistWriterFactory.cs" />
     <Compile Include="Playlist\HlsPlaylistParserTests.cs" />
     <Compile Include="Playlist\PlaylistLineTests.cs" />
     <Compile Include="Playlist\TagParserTests.cs" />

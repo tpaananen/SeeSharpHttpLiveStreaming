@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
@@ -23,6 +25,39 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// </remarks>
     public class ExtIFrameStreamInf : StreamInfBaseTag
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StreamInf"/> class.
+        /// </summary>
+        public ExtIFrameStreamInf()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtIFrameStreamInf" /> class.
+        /// </summary>
+        /// <param name="bandwidth">The bandwidth.</param>
+        /// <param name="averageBandwidth">The average bandwidth.</param>
+        /// <param name="codecs">The codecs.</param>
+        /// <param name="resolution">The resolution.</param>
+        /// <param name="uri">The URI.</param>
+        /// <param name="video">The video.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="uri" /> is <b>null</b>.</exception>
+        public ExtIFrameStreamInf(long bandwidth, long averageBandwidth, IEnumerable<string> codecs,
+                         Resolution resolution, Uri uri, string video)
+        {
+            uri.RequireNotNull("uri");
+            Bandwidth = bandwidth;
+            AverageBandwidth = averageBandwidth;
+            Resolution = resolution;
+            Video = video ?? string.Empty;
+            Uri = uri;
+            if (codecs != null)
+            {
+                _codecs.AddRange(codecs);
+            }
+        }
+
         /// <summary>
         /// Gets the name of the tag.
         /// </summary>
@@ -62,6 +97,25 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 throw new SerializationException("Failed to parse EXT-X-I-FRAME-STREAM-INF tag.", ex);
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            bool hasPreviousAttributes;
+            SerializeBaseAttributes(writer, out hasPreviousAttributes);
+            WriteUri(writer, ref hasPreviousAttributes);
+        }
+
+        private void WriteUri(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            const string template = "URI=\"{0}\"";
+            WriteAttributeSeparator(writer, hasPreviousAttributes);
+            writer.Write(string.Format(template, Uri.AbsoluteUri));
+            hasPreviousAttributes = true;
         }
 
         private void ParseUri(string content)

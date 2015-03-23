@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
@@ -86,11 +87,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         [Test]
         public void TestStreamInfSerialization()
         {
-            var sb = new StringBuilder();
             var codecArray = "AAC,OGG".Split(',');
             var streamInf = new StreamInf(1212121, 121212, codecArray, new Resolution(1920, 1080), 
                                           "AUD", "VID", "SUBS", "CC");
-            var writer = new PlaylistWriter(new StringWriter(sb));
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
             streamInf.Serialize(writer);
 
             _streamInf.Deserialize(sb.ToString(), 0);
@@ -113,11 +114,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
             [Values(null, "")] string subtitles,
             [Values(null, "")] string closedCaptions)
         {
-            var sb = new StringBuilder();
+            StringBuilder sb;
             var codecArray = codecs == null ? null : new string[0];
             var streamInf = new StreamInf(1212121, 0, codecArray, Resolution.Default, 
                                           audio, video, subtitles, closedCaptions);
-            var writer = new PlaylistWriter(new StringWriter(sb));
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
             streamInf.Serialize(writer);
 
             _streamInf.Deserialize(sb.ToString(), 0);
