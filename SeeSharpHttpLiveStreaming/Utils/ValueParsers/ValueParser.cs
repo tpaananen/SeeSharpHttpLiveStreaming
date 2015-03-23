@@ -248,6 +248,8 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         public static string ParseHexadecimal(string attribute, string line, bool requireExists, int bits)
         {
             const int sizeOfByte = 8; // bits
+            const string hexPrefixIdentifier = "0x";
+
             if (bits < sizeOfByte)
             {
                 throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than " + sizeOfByte + ".");
@@ -259,15 +261,15 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 return string.Empty;
             }
             
-            if (value.StartsWith("0x"))
+            if (value.StartsWith(hexPrefixIdentifier))
             {
-                value = value.Substring(2);
+                value = value.Substring(hexPrefixIdentifier.Length);
             }
 
             int sizeInBytes = bits / sizeOfByte;
             if (value.Length > sizeInBytes)
             {
-                throw new SerializationException("The value to be parsed is longer " + value.Length + " than the number of bits " + bits + ".");
+                throw new SerializationException("The value " + value + " to be parsed is longer than the number of bits " + bits + ".");
             }
 
             value = value.PadLeft(sizeInBytes, '0');
@@ -284,7 +286,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// required to exist in the <paramref name="line"/>.
         /// </param>
         /// <returns>
-        /// The parsed value (format ZZxYY or default value of <see cref="string.Empty" />.
+        /// The parsed value as a <see cref="Resolution"/> instance or <see cref="Resolution.Default" /> in case of missing attribute.
         /// </returns>
         /// <exception cref="SerializationException">
         /// Thrown when <paramref name="requireExists"/> is <b>true</b> and attribute is not found.
@@ -295,7 +297,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         public static Resolution ParseResolution(string attribute, string line, bool requireExists)
         {
             string value = ParseEnumeratedString(attribute, line, requireExists);
-            var xPosition = value.IndexOf("x", StringComparison.Ordinal);
+            var xPosition = value.IndexOf(Resolution.SeparatorChar, StringComparison.Ordinal);
             if (xPosition < 0)
             {
                 if (requireExists)
@@ -312,7 +314,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
             }
             catch (Exception ex)
             {
-                throw new FormatException("Failed to parse resolution value from " + line, ex);
+                throw new FormatException("Failed to parse resolution value from " + value, ex);
             }
         }
 

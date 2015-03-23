@@ -37,5 +37,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
             Assert.Throws<ArgumentOutOfRangeException>(() => new Resolution(-1, 0));
             Assert.Throws<ArgumentOutOfRangeException>(() => new Resolution(0, -1));
         }
+
+        [Test]
+        public void TestResolutionStringRepresentation()
+        {
+            Assert.AreEqual("0" + Resolution.SeparatorChar + "0", Resolution.Default.ToString());
+            Assert.AreEqual("1920" + Resolution.SeparatorChar + "1080", new Resolution(1920, 1080).ToString());
+        }
     }
 }

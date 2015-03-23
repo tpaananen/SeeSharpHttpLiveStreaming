@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 {
@@ -7,6 +8,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
     /// </summary>
     public struct Resolution : IEquatable<Resolution>
     {
+        /// <summary>
+        /// The separator character in a string representation.
+        /// </summary>
+        public const string SeparatorChar = "x";
+
         /// <summary>
         /// The x component.
         /// </summary>
@@ -42,6 +48,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         public static Resolution Default
         {
             get { return new Resolution(0, 0); }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return X.ToString(CultureInfo.InvariantCulture) + SeparatorChar + 
+                   Y.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
