@@ -316,7 +316,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// </summary>
         /// <param name="line">The line.</param>
         /// <exception cref="FormatException">
-        /// Thrown when the line cannot be parsed as an integer.
+        /// Thrown when the line cannot be parsed as a decimal.
         /// </exception>
         /// <returns>
         /// <see cref="Decimal"/> parsed from the <paramref name="line"/>.
