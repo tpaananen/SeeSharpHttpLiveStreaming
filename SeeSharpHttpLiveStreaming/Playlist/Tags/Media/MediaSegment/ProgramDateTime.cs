@@ -27,6 +27,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     public class ProgramDateTime : BaseTag
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ProgramDateTime"/> class.
+        /// </summary>
+        internal ProgramDateTime()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName

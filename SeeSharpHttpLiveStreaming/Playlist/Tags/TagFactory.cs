@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using System.Reflection;
 using SeeSharpHttpLiveStreaming.Utils;
 
@@ -11,20 +12,22 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
     /// </summary>
     internal static class TagFactory
     {
-        internal static readonly IReadOnlyDictionary<string, Type> TypeMapping;
+        private const BindingFlags BindingFlag = BindingFlags.CreateInstance | BindingFlags.NonPublic | BindingFlags.Instance;
+
+        internal static readonly IReadOnlyDictionary<string, Func<BaseTag>> TypeMapping;
 
         /// <summary>
         /// Initializes the <see cref="TagFactory"/> class.
         /// </summary>
         static TagFactory()
         {
-            TypeMapping = new ReadOnlyDictionary<string, Type>(FillDictionary());
+            TypeMapping = new ReadOnlyDictionary<string, Func<BaseTag>>(FillDictionary());
         }
 
         /// <summary>
         /// Fills the dictionary with tag names and types for later use.
         /// </summary>
-        private static IDictionary<string, Type> FillDictionary()
+        private static IDictionary<string, Func<BaseTag>> FillDictionary()
         {
             // Fill the dictionary using reflection, done only once
             var assembly = Assembly.GetAssembly(typeof (BaseTag));
@@ -49,14 +52,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="types">The types.</param>
         /// <exception cref="InvalidOperationException">The tag  + instance.TagName +  is invalid.</exception>
-        private static IDictionary<string, Type> FillDictionary(IEnumerable<Type> types)
+        private static IDictionary<string, Func<BaseTag>> FillDictionary(IEnumerable<Type> types)
         {
             types.RequireNotNull("types");
-            var dictionary = new Dictionary<string, Type>();
+            var dictionary = new Dictionary<string, Func<BaseTag>>();
+            // We'll take only internal parameterless constructors
+            
             foreach (var type in types)
             {
-                var instance = (BaseTag)Activator.CreateInstance(type);
-                ValidateAndAddTag(instance.TagName, type, dictionary);
+                var instanceCreator = CreateConstructor(type);
+                var instance = instanceCreator();
+                ValidateAndAddTag(instance.TagName, instanceCreator, dictionary);
             }
             return dictionary;
         }
@@ -65,12 +71,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// Validates and adds tag if it is valid.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="type">The type.</param>
+        /// <param name="creator">The creator.</param>
         /// <param name="container">The container.</param>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown if the tag with the <paramref name="name"/> already exists in the <paramref name="container"/>.
-        /// </exception>
-        internal static void ValidateAndAddTag(string name, Type type, IDictionary<string, Type> container)
+        /// <exception cref="InvalidOperationException">Thrown if the tag with the <paramref name="name" /> already exists in the <paramref name="container" />.</exception>
+        internal static void ValidateAndAddTag(string name, Func<BaseTag> creator, IDictionary<string, Func<BaseTag>> container)
         {
             container.RequireNotNull("container");
             if (!Tag.IsValid(name))
@@ -81,7 +85,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
             {
                 throw new InvalidOperationException("The tag " + name + " already exists.");
             }
-            container[name] = type;
+            container[name] = creator;
         }
 
         /// <summary>
@@ -94,17 +98,24 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </exception>
         internal static BaseTag Create(string name)
         {
-            Type type;
-            if (!TypeMapping.TryGetValue(name, out type))
+            Func<BaseTag> creator;
+            if (!TypeMapping.TryGetValue(name, out creator))
             {
                 throw new NotSupportedException("The tag " + name + " is not supported.");
             }
-
-            // Use reflection, this will cache simple constructor 
-            // calls so will be fast enough for this purpose
-            // since in filling method each tag has been created.
-            return (BaseTag)Activator.CreateInstance(type);
+            return creator();
         }
 
+        /// <summary>
+        /// Creates the constructor.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        internal static Func<BaseTag> CreateConstructor(Type type)
+        {
+            var creator = type.GetConstructor(BindingFlag, null, CallingConventions.Any, new Type[0], null);
+            var lambda = Expression.Lambda<Func<BaseTag>>(Expression.New(creator));
+            return lambda.Compile();
+        } 
     }
 }

@@ -21,6 +21,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     public class PlaylistType : BaseTag
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="PlaylistType"/> class.
+        /// </summary>
+        internal PlaylistType()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName

@@ -37,7 +37,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// <summary>
         /// Initializes a new instance of the <see cref="ByteRange"/> class.
         /// </summary>
-        public ByteRange()
+        internal ByteRange()
         {
         }
 
@@ -46,7 +46,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// </summary>
         /// <param name="length">The length.</param>
         /// <param name="startIndex">The start index.</param>
-        internal ByteRange(long length, long startIndex)
+        public ByteRange(long length, long startIndex)
         {
             Length = length;
             StartIndex = startIndex;

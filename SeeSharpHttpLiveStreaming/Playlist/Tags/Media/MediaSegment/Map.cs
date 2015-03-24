@@ -33,6 +33,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     public class Map : BaseTag
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Map"/> class.
+        /// </summary>
+        internal Map()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName

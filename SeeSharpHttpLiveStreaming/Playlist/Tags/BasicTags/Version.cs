@@ -29,7 +29,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
         /// <summary>
         /// Initializes a new instance of the <see cref="Version"/> class.
         /// </summary>
-        public Version()
+        internal Version()
         {
         }
 

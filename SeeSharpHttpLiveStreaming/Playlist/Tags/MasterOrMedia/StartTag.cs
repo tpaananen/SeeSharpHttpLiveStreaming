@@ -21,7 +21,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
         /// <summary>
         /// Initializes a new instance of the <see cref="StartTag"/> class.
         /// </summary>
-        public StartTag()
+        internal StartTag()
         {
         }
 
@@ -30,7 +30,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
         /// </summary>
         /// <param name="timeOffset">The time offset.</param>
         /// <param name="precise">if set to <c>true</c> [precise].</param>
-        internal StartTag(decimal timeOffset, bool precise = false)
+        public StartTag(decimal timeOffset, bool precise = false)
         {
             TimeOffset = timeOffset;
             Precise = precise;

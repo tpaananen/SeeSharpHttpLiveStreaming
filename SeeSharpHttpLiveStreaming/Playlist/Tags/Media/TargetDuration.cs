@@ -21,6 +21,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// </remarks>
     public class TargetDuration : BaseTag
     {
+        internal TargetDuration()
+        {
+        }
+
         /// <summary>
         /// Gets the name of the tag.
         /// </summary>

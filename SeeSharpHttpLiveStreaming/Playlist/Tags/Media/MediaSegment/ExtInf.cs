@@ -27,6 +27,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     public class ExtInf : BaseTag
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ExtInf"/> class.
+        /// </summary>
+        internal ExtInf()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName

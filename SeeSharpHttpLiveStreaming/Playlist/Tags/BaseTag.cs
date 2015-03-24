@@ -122,5 +122,35 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 writer.Write(AttributeSeparator);
             }
         }
+
+        /// <summary>
+        /// Writes a quoted string.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="attribute">The attribute.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="hasPreviousAttribute">if set to <c>true</c> [has previous attribute].</param>
+        protected static void WriteQuotedString(IPlaylistWriter writer, string attribute, string value, ref bool hasPreviousAttribute)
+        {
+            const string template = "{0}=\"{1}\"";
+            WriteAttributeSeparator(writer, hasPreviousAttribute);
+            writer.Write(string.Format(template, attribute, value));
+            hasPreviousAttribute = true;
+        }
+
+        /// <summary>
+        /// Writes a quoted string.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="attribute">The attribute.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="hasPreviousAttribute">if set to <c>true</c> [has previous attribute].</param>
+        protected static void WriteEnumeratedString(IPlaylistWriter writer, string attribute, string value, ref bool hasPreviousAttribute)
+        {
+            const string template = "{0}={1}";
+            WriteAttributeSeparator(writer, hasPreviousAttribute);
+            writer.Write(string.Format(template, attribute, value));
+            hasPreviousAttribute = true;
+        }
     }
 }

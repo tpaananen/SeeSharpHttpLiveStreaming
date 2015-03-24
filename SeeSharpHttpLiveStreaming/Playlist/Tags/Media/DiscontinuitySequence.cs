@@ -33,6 +33,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// </remarks>
     public class DiscontinuitySequence : BaseTag
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DiscontinuitySequence"/> class.
+        /// </summary>
+        internal DiscontinuitySequence()
+        {
+        }
+
         /// <summary>
         /// Gets the name of the tag.
         /// </summary>

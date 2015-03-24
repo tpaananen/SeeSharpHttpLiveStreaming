@@ -22,6 +22,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// </remarks>
     public class Key : BaseTag
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Key"/> class.
+        /// </summary>
+        internal Key()
+        {
+        }
 
         /// <summary>
         /// Gets the name of the tag.

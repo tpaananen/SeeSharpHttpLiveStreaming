@@ -22,7 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamInf"/> class.
         /// </summary>
-        public StreamInf()
+        internal StreamInf()
         {
         }
 
@@ -154,21 +154,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 
         private void WriteAudio(IPlaylistWriter writer, ref bool hasPreviousAttributes)
         {
-            const string template = "AUDIO=\"{0}\"";
+            const string name = "AUDIO";
             if (!string.IsNullOrEmpty(Audio))
             {
-                WriteAttributeSeparator(writer, hasPreviousAttributes);
-                writer.Write(string.Format(template, Audio));
+                WriteQuotedString(writer, name, Audio, ref hasPreviousAttributes);
             }
         }
 
         private void WriteSubtitles(IPlaylistWriter writer, ref bool hasPreviousAttributes)
         {
-            const string template = "SUBTITLES=\"{0}\"";
+            const string name = "SUBTITLES";
             if (!string.IsNullOrEmpty(Subtitles))
             {
-                WriteAttributeSeparator(writer, hasPreviousAttributes);
-                writer.Write(string.Format(template, Subtitles));
+                WriteQuotedString(writer, name, Subtitles, ref hasPreviousAttributes);
             }
         }
 
@@ -177,13 +175,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             WriteAttributeSeparator(writer, hasPreviousAttributes);
             if (ClosedCaptions != "NONE")
             {
-                const string template = "CLOSED-CAPTIONS=\"{0}\"";
-                writer.Write(string.Format(template, ClosedCaptions));
+                const string name = "CLOSED-CAPTIONS";
+                WriteQuotedString(writer, name, ClosedCaptions, ref hasPreviousAttributes);
             }
             else
             {
-                const string value = "CLOSED-CAPTIONS=NONE";
-                writer.Write(value);
+                const string name = "CLOSED-CAPTIONS";
+                WriteEnumeratedString(writer, name, "NONE", ref hasPreviousAttributes);
             }
         }
 

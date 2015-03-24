@@ -31,6 +31,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     public class MediaSequence : BaseTag
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MediaSequence"/> class.
+        /// </summary>
+        internal MediaSequence()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName

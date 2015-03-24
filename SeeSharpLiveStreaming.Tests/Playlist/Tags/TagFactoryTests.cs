@@ -34,15 +34,17 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         [Test]
         public void TestTagFactoryThrowsIfInvalidTagNameProvided()
         {
-            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#INVALID-TAG", typeof(BaseTag), new Dictionary<string, Type>()));
+            var creator = TagFactory.CreateConstructor(typeof (Version));
+            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#INVALID-TAG", creator, new Dictionary<string, Func<BaseTag>>()));
         }
 
         [Test]
         public void TestTagFactoryThrowsIfTheSameTagNameExistsTwice()
         {
-            var container = new Dictionary<string, Type>();
-            TagFactory.ValidateAndAddTag("#EXT-X-VERSION", typeof(Version), container);
-            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#EXT-X-VERSION", typeof(Version), container));
+            var creator = TagFactory.CreateConstructor(typeof (Version));
+            var container = new Dictionary<string, Func<BaseTag>>();
+            TagFactory.ValidateAndAddTag("#EXT-X-VERSION", creator, container);
+            Assert.Throws<InvalidOperationException>(() => TagFactory.ValidateAndAddTag("#EXT-X-VERSION", creator, container));
         }
     }
 }

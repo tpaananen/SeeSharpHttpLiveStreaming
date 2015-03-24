@@ -29,7 +29,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamInf"/> class.
         /// </summary>
-        public ExtIFrameStreamInf()
+        internal ExtIFrameStreamInf()
         {
         }
 
@@ -107,15 +107,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         {
             bool hasPreviousAttributes;
             SerializeBaseAttributes(writer, out hasPreviousAttributes);
-            WriteUri(writer, ref hasPreviousAttributes);
-        }
-
-        private void WriteUri(IPlaylistWriter writer, ref bool hasPreviousAttributes)
-        {
-            const string template = "URI=\"{0}\"";
-            WriteAttributeSeparator(writer, hasPreviousAttributes);
-            writer.Write(string.Format(template, Uri.AbsoluteUri));
-            hasPreviousAttributes = true;
+            WriteQuotedString(writer, "URI", Uri.AbsoluteUri, ref hasPreviousAttributes);
         }
 
         private void ParseUri(string content)

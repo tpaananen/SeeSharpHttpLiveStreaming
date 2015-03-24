@@ -127,19 +127,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 return;
             }
-            const string name = "VIDEO=\"{0}\"";
-            WriteAttributeSeparator(writer, hasPreviousAttributes);
-            var value = string.Format(name, Video);
-            writer.Write(value);
-            hasPreviousAttributes = true;
+            const string name = "VIDEO";
+            WriteQuotedString(writer, name, Video, ref hasPreviousAttributes);
         }
 
         private void WriteBandwith(IPlaylistWriter writer, ref bool hasPreviousAttributes)
         {
-            const string name = "BANDWIDTH=";
-            WriteAttributeSeparator(writer, hasPreviousAttributes);
-            writer.Write(name + Bandwidth.ToString(CultureInfo.InvariantCulture));
-            hasPreviousAttributes = true;
+            const string name = "BANDWIDTH";
+            WriteEnumeratedString(writer, name, Bandwidth.ToString(CultureInfo.InvariantCulture), ref hasPreviousAttributes);
         }
 
         private void WriteAverageBandwith(IPlaylistWriter writer, ref bool hasPreviousAttributes)
@@ -148,10 +143,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 return;
             }
-            const string name = "AVERAGE-BANDWIDTH=";
-            WriteAttributeSeparator(writer, hasPreviousAttributes);
-            writer.Write(name + AverageBandwidth.ToString(CultureInfo.InvariantCulture));
-            hasPreviousAttributes = true;
+            const string name = "AVERAGE-BANDWIDTH";
+            WriteEnumeratedString(writer, name, AverageBandwidth.ToString(CultureInfo.InvariantCulture), ref hasPreviousAttributes);
         }
 
         private void WriteCodecs(IPlaylistWriter writer, ref bool hasPreviousAttributes)
@@ -160,11 +153,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 return;
             }
-            const string name = "CODECS=\"{0}\"";
-            WriteAttributeSeparator(writer, hasPreviousAttributes);
+            const string name = "CODECS";
             var value = string.Join(",", _codecs);
-            writer.Write(string.Format(name, value));
-            hasPreviousAttributes = true;
+            WriteQuotedString(writer, name, value, ref hasPreviousAttributes);
         }
 
         private void WriteResolution(IPlaylistWriter writer, ref bool hasPreviousAttributes)
@@ -173,11 +164,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 return;
             }
-            const string name = "RESOLUTION={0}x{1}";
-            WriteAttributeSeparator(writer, hasPreviousAttributes);
-            var value = string.Format(name, Resolution.X, Resolution.Y);
-            writer.Write(value);
-            hasPreviousAttributes = true;
+            const string name = "RESOLUTION";
+            WriteEnumeratedString(writer, name, Resolution.ToString(), ref hasPreviousAttributes);
         }
 
         /// <summary>

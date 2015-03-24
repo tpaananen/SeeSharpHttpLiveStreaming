@@ -20,6 +20,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// </summary>
     public class ExtMedia : BaseTag
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtMedia"/> class.
+        /// </summary>
+        internal ExtMedia()
+        {
+        }
         
         /// <summary>
         /// The value is an enumerated-string; valid strings are AUDIO, VIDEO,

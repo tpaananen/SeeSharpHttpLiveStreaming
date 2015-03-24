@@ -15,6 +15,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     public class EndList : BaseTag
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="EndList"/> class.
+        /// </summary>
+        internal EndList()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName
