@@ -193,3 +193,4 @@ coverage
 # Code coverage results
 coverage/*
 /coverals.ps1
+/SeeSharpLiveStreaming.Tests/TestCoverage/results.xml
