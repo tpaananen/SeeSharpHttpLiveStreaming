@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
@@ -27,6 +28,74 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         internal ExtMedia()
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtMedia"/> class.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="groupId">The group ID.</param>
+        /// <param name="language">The language.</param>
+        /// <param name="assocLanguage">The assoc language.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="isDefault">if set to <c>true</c> DEFAULT is set to YES; otherwise, DEFAULT is set to NO.</param>
+        /// <param name="autoSelect">if set to <c>true</c> AUTOSELECT is set to YES; otherwise, set to NO.</param>
+        /// <param name="forced">if set to <c>true</c> FORCED is set to YES; otherwise, set to NO.</param>
+        /// <param name="instreamId">The instream ID.</param>
+        /// <param name="characteristics">The characteristics.</param>
+        /// <param name="uri">The URI. If type is CLOSED-CAPTIONS, this property is ignored.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when 
+        /// <paramref name="type"/> or 
+        /// <paramref name="groupId"/> or 
+        /// <paramref name="name"/>
+        /// is <b>null</b>
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="type"/> or 
+        /// <paramref name="groupId"/> or 
+        /// <paramref name="name"/> is empty.
+        /// </exception>
+        public ExtMedia(string type, string groupId, string language, string assocLanguage, string name,
+                        bool isDefault, bool autoSelect, bool forced, string instreamId,
+                        IReadOnlyCollection<string> characteristics, Uri uri = null)
+        {
+            type.RequireNotEmpty("type");
+            groupId.RequireNotEmpty("groupId");
+            name.RequireNotEmpty("name");
+            if (!MediaTypes.IsValid(type))
+            {
+                throw new ArgumentException("The media type is invalid.", "type");
+            }
+
+            if (type == MediaTypes.ClosedCaptions)
+            {
+                instreamId.RequireNotEmpty("instreamId");
+                try
+                {
+                    ValidateInstreamId(instreamId, true);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw new ArgumentException(ex.Message, "instreamId", ex);
+                }
+                InstreamId = instreamId;
+            }
+            else
+            {
+                InstreamId = string.Empty;
+                Uri = uri; // can be null
+            }
+
+            Type = type;
+            GroupId = groupId;
+            Language = language;
+            AssocLanguage = assocLanguage;
+            Name = name;
+            Default = isDefault;
+            AutoSelect = autoSelect || isDefault;
+            Forced = forced;
+            Characteristics = characteristics ?? new ReadOnlyCollection<string>(new string[0]);
+        }
         
         /// <summary>
         /// The value is an enumerated-string; valid strings are AUDIO, VIDEO,
@@ -43,7 +112,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 
         /// <summary>
         /// The value is a quoted-string containing a URI that identifies the
-        /// Playlist file.This attribute is OPTIONAL; see Section 4.3.4.2.1.
+        /// Playlist file. This attribute is OPTIONAL; see Section 4.3.4.2.1.
         /// If the TYPE is CLOSED-CAPTIONS, the URI attribute MUST NOT be
         /// present.
         /// </summary>
@@ -51,7 +120,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 
         /// <summary>
         /// The value is a quoted-string which specifies the group to which the
-        /// Rendition belongs.See Section 4.3.4.1.1. This attribute is
+        /// Rendition belongs. See Section 4.3.4.1.1. This attribute is
         /// REQUIRED.
         /// </summary>
         public string GroupId { get; private set; }
@@ -59,7 +128,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <summary>
         /// The value is a quoted-string containing one of the standard Tags for
         /// Identifying Languages [RFC5646], which identifies the primary
-        /// language used in the Rendition.This attribute is OPTIONAL.
+        /// language used in the Rendition. This attribute is OPTIONAL.
         /// </summary>
         public string Language { get; private set; }
 
@@ -75,7 +144,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <summary>
         /// The value is a quoted-string containing a human-readable description
         /// of the Rendition.If the LANGUAGE attribute is present then this
-        /// description SHOULD be in that language.This attribute is REQUIRED.
+        /// description SHOULD be in that language. This attribute is REQUIRED.
         /// </summary>
         public string Name { get; private set; }
 
@@ -83,14 +152,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// The value to be parsed is an enumerated-string; valid strings are YES and NO. If
         /// the value is YES, then the client SHOULD play this Rendition of the
         /// content in the absence of information from the user indicating a
-        /// different choice.This attribute is OPTIONAL. Its absence indicates
+        /// different choice. This attribute is OPTIONAL. Its absence indicates
         /// an implicit value of NO.
         /// </summary>
         public bool Default { get; private set; }
 
         /// <summary>
         /// The value to be parsed is an enumerated-string; valid strings are YES and NO.
-        /// This attribute is OPTIONAL.Its absence indicates an implicit value
+        /// This attribute is OPTIONAL. Its absence indicates an implicit value
         /// of NO. If the value is YES, then the client MAY choose to play this
         /// Rendition in the absence of explicit user preference because it
         /// matches the current playback environment, such as chosen system
@@ -102,7 +171,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 
         /// <summary>
         /// The value is an enumerated-string; valid strings are YES and NO.
-        /// This attribute is OPTIONAL.Its absence indicates an implicit value
+        /// This attribute is OPTIONAL. Its absence indicates an implicit value
         /// of NO. The FORCED attribute MUST NOT be present unless the TYPE is
         /// SUBTITLES.
         /// A value of YES indicates that the Rendition contains content which is
@@ -188,6 +257,64 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
                 throw new SerializationException("Failed to deserialize EXT-X-MEDIA tag.", ex);
             }
         }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            var hasPreviousAttributes = false;
+            WriteEnumeratedString(writer, "TYPE", Type, ref hasPreviousAttributes);
+            if (Type != MediaTypes.ClosedCaptions)
+            {
+                if (Uri != null)
+                {
+                    WriteQuotedString(writer, "URI", Uri.AbsoluteUri, ref hasPreviousAttributes);
+                }
+            }
+            else
+            {
+                WriteQuotedString(writer, "INSTREAM-ID", InstreamId, ref hasPreviousAttributes);
+            }
+            WriteQuotedString(writer, "GROUP-ID", GroupId, ref hasPreviousAttributes);
+            WriteQuotedString(writer, "LANGUAGE", Language, ref hasPreviousAttributes);
+            WriteQuotedString(writer, "ASSOC-LANGUAGE", AssocLanguage, ref hasPreviousAttributes);
+            WriteQuotedString(writer, "NAME", Name, ref hasPreviousAttributes);
+            WriteEnumeratedString(writer, "DEFAULT", Default ? YesNo.Yes : string.Empty, ref hasPreviousAttributes);
+            WriteForcedAttribute(writer, ref hasPreviousAttributes);
+            WriteAutoSelect(writer, ref hasPreviousAttributes);
+            WriteCharacteristics(writer, ref hasPreviousAttributes);
+        }
+
+        private void WriteCharacteristics(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            var commaSeparatedList = string.Join(",", Characteristics);
+            WriteQuotedString(writer, "CHARACTERISTICS", commaSeparatedList, ref hasPreviousAttributes);
+        }
+
+        private void WriteForcedAttribute(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            if (Type == MediaTypes.Subtitles)
+            {
+                WriteEnumeratedString(writer, "FORCED", Forced ? YesNo.Yes : string.Empty, ref hasPreviousAttributes);
+            }
+        }
+
+        private
+            void WriteAutoSelect(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        {
+            if (Default)
+            {
+                WriteEnumeratedString(writer, "AUTOSELECT", YesNo.Yes, ref hasPreviousAttributes);
+            }
+            else
+            {
+                WriteEnumeratedString(writer, "AUTOSELECT", AutoSelect ? YesNo.Yes : string.Empty, ref hasPreviousAttributes);
+            }
+        }
+
+        #region Parsing
 
         private void ParseType(string content)
         {
@@ -296,35 +423,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             const string name = "INSTREAM-ID";
             var isRequired = Type == MediaTypes.ClosedCaptions;
             var value = ValueParser.ParseQuotedString(name, content, isRequired);
-
-            if (value == string.Empty && isRequired)
-            {
-                throw new SerializationException("Attribute INSTREAM-ID is required if TYPE is CLOSED-CAPTIONS.");
-            }
-            if (!isRequired)
-            {
-                if (value != string.Empty)
-                {
-                    throw new SerializationException("Attribute INSTREAM-ID must not exist if TYPE is not CLOSED-CAPTIONS.");
-                }
-                return;
-            }
-
-            if (value != "CC1" && value != "CC2" && value != "CC3" && value != "CC4")
-            {
-                // value must be one of the SERVICEn
-                if (!value.StartsWith("SERVICE"))
-                {
-                    throw new SerializationException("Invalid INSTREAM-ID attribute value.");
-                }
-
-                var number = value.Substring("SERVICE".Length);
-                var temp = ValueParser.ParseInt(number);
-                if (temp < 1 || temp > 63)
-                {
-                    throw new SerializationException("Invalid INSTREAM-ID attribute value. The number of the service value is out of range.");
-                }
-            }
+            ValidateInstreamId(value, isRequired);
             InstreamId = value;
         }
 
@@ -334,5 +433,40 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             Characteristics = new ReadOnlyCollection<string>(ValueParser.ParseSeparatedQuotedString(name, content, false));
         }
 
+        #endregion
+
+        private static void ValidateInstreamId(string value, bool isRequired)
+        {
+            if (value == string.Empty && isRequired)
+            {
+                throw new InvalidOperationException("Attribute INSTREAM-ID is required if TYPE is CLOSED-CAPTIONS.");
+            }
+            if (!isRequired)
+            {
+                if (value != string.Empty)
+                {
+                    throw new InvalidOperationException("Attribute INSTREAM-ID must not exist if TYPE is not CLOSED-CAPTIONS.");
+                }
+                return;
+            }
+            if (value == "CC1" || value == "CC2" || value == "CC3" || value == "CC4")
+            {
+                return;
+            }
+
+            // value must be one of the SERVICEn
+            if (!value.StartsWith("SERVICE"))
+            {
+                throw new InvalidOperationException("Invalid INSTREAM-ID attribute value.");
+            }
+
+            var number = value.Substring("SERVICE".Length);
+            var temp = ValueParser.ParseInt(number);
+            if (temp < 1 || temp > 63)
+            {
+                throw new InvalidOperationException(
+                    "Invalid INSTREAM-ID attribute value. The number of the service value is out of range.");
+            }
+        }
     }
 }

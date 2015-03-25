@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
 {
@@ -154,5 +158,106 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
             input += "URI=\"https://example.com\"";
             Assert.Throws<SerializationException>(() => _extMedia.Deserialize(input, 0));
         }
+
+        [Test]
+        public void TestExtMediaThrowsArgumentNullExceptionFromConstructor()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ExtMedia(null, "groupId", "lang", "assoc-lang", "name", false, false, false, "instream-id", new string[0]));
+            Assert.Throws<ArgumentNullException>(() => new ExtMedia(MediaTypes.Video, null, "lang", "assoc-lang", "name", false, false, false, "instream-id", new string[0]));
+            Assert.Throws<ArgumentNullException>(() => new ExtMedia(MediaTypes.Video, "groupId", "lang", "assoc-lang", null, false, false, false, "instream-id", new string[0]));
+            Assert.Throws<ArgumentNullException>(() => new ExtMedia(MediaTypes.ClosedCaptions, "groupId", "lang", "assoc-lang", "name", false, false, false, null, new string[0]));
+        }
+
+        [Test]
+        public void TestExtMediaThrowsArgumentExceptionFromConstructor()
+        {
+            Assert.Throws<ArgumentException>(() => new ExtMedia("", "groupId", "lang", "assoc-lang", "name", false, false, false, "CC1", new string[0]));
+            Assert.Throws<ArgumentException>(() => new ExtMedia("INVALID", "groupId", "lang", "assoc-lang", "name", false, false, false, "CC2", new string[0]));
+            Assert.Throws<ArgumentException>(() => new ExtMedia(MediaTypes.Video, "", "lang", "assoc-lang", "name", false, false, false, "CC3", new string[0]));
+            Assert.Throws<ArgumentException>(() => new ExtMedia(MediaTypes.Video, "groupId", "lang", "assoc-lang", "", false, false, false, "CC4", new string[0]));
+            Assert.Throws<ArgumentException>(() => new ExtMedia(MediaTypes.ClosedCaptions, "groupId", "lang", "assoc-lang", "name", false, false, false, "", null));
+            Assert.Throws<ArgumentException>(() => new ExtMedia(MediaTypes.ClosedCaptions, "groupId", "lang", "assoc-lang", "name", false, false, false, "FOO", null));
+        }
+
+        [Test]
+        public void TestExtMediaIsSerializedWithUri(
+            [Values(MediaTypes.Audio, MediaTypes.Video)] string mediaType,
+            [Values(true, false)] bool autoSelect,
+            [Values(true, false)] bool defaultVal)
+        {
+            var extMedia = new ExtMedia(mediaType, "groupId", "lang", "assoc-lang", "name", defaultVal, autoSelect, false,
+                                        null, autoSelect ? new [] { "jeba" } : null, new Uri("http://example.com/"));
+
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            extMedia.Serialize(writer);
+            var playlist = new PlaylistLine(_extMedia.TagName, sb.ToString());
+            _extMedia.Deserialize(playlist.GetParameters(), 0);
+
+            Assert.AreEqual(extMedia.Type, _extMedia.Type);
+            Assert.AreEqual(extMedia.Uri, _extMedia.Uri);
+            Assert.AreEqual(extMedia.Language, _extMedia.Language);
+            Assert.AreEqual(extMedia.AssocLanguage, _extMedia.AssocLanguage);
+            Assert.AreEqual(extMedia.GroupId, _extMedia.GroupId);
+            Assert.AreEqual(extMedia.InstreamId, _extMedia.InstreamId);
+            Assert.AreEqual(extMedia.Forced, _extMedia.Forced); // this is always false when media type is not subtitles
+            Assert.AreEqual(extMedia.AutoSelect, _extMedia.AutoSelect);
+            Assert.AreEqual(extMedia.Default, _extMedia.Default);
+            Assert.AreEqual(extMedia.Characteristics, _extMedia.Characteristics);
+        }
+
+        [Test]
+        public void TestExtMediaIsSerializedWithClosedCaptions(
+            [Values(true, false)] bool autoSelect,
+            [Values(true, false)] bool defaultVal)
+        {
+            var extMedia = new ExtMedia(MediaTypes.ClosedCaptions, "groupId", "lang", "assoc-lang", "name", defaultVal, autoSelect, false,
+                                        "CC1", autoSelect ? new [] { "jeba", "hoba" } : null, new Uri("http://example.com/"));
+
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            extMedia.Serialize(writer);
+            var playlist = new PlaylistLine(_extMedia.TagName, sb.ToString());
+            _extMedia.Deserialize(playlist.GetParameters(), 0);
+
+            Assert.AreEqual(extMedia.Type, _extMedia.Type);
+            Assert.AreEqual(extMedia.Uri, _extMedia.Uri);
+            Assert.AreEqual(extMedia.Language, _extMedia.Language);
+            Assert.AreEqual(extMedia.AssocLanguage, _extMedia.AssocLanguage);
+            Assert.AreEqual(extMedia.GroupId, _extMedia.GroupId);
+            Assert.AreEqual(extMedia.InstreamId, _extMedia.InstreamId);
+            Assert.AreEqual(extMedia.Forced, _extMedia.Forced); // this is always false when media type is not subtitles
+            Assert.AreEqual(extMedia.AutoSelect, _extMedia.AutoSelect);
+            Assert.AreEqual(extMedia.Default, _extMedia.Default);
+            Assert.AreEqual(extMedia.Characteristics, _extMedia.Characteristics);
+        }
+
+        [Test]
+        public void TestExtMediaIsSerializedWithSubtitles(
+            [Values(true, false)] bool forced,
+            [Values(true, false)] bool autoSelect,
+            [Values(true, false)] bool defaultVal)
+        {
+            var extMedia = new ExtMedia(MediaTypes.Subtitles, "groupId", "lang", "assoc-lang", "name", defaultVal, autoSelect, forced,
+                                        null, autoSelect ? new [] { "jeba" } : null);
+
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            extMedia.Serialize(writer);
+            var playlist = new PlaylistLine(_extMedia.TagName, sb.ToString());
+            _extMedia.Deserialize(playlist.GetParameters(), 0);
+
+            Assert.AreEqual(extMedia.Type, _extMedia.Type);
+            Assert.AreEqual(extMedia.Uri, _extMedia.Uri);
+            Assert.AreEqual(extMedia.Language, _extMedia.Language);
+            Assert.AreEqual(extMedia.AssocLanguage, _extMedia.AssocLanguage);
+            Assert.AreEqual(extMedia.GroupId, _extMedia.GroupId);
+            Assert.AreEqual(extMedia.InstreamId, _extMedia.InstreamId);
+            Assert.AreEqual(extMedia.Forced, _extMedia.Forced);
+            Assert.AreEqual(extMedia.AutoSelect, _extMedia.AutoSelect);
+            Assert.AreEqual(extMedia.Default, _extMedia.Default);
+            Assert.AreEqual(extMedia.Characteristics, _extMedia.Characteristics);
+        }
+
     }
 }

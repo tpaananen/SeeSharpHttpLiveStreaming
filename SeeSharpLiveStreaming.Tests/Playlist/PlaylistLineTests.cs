@@ -81,5 +81,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.IsFalse(first.Equals(new object()));
         }
 
+        [Test]
+        public void TestPlaylistLineRemovesLineEnding([Values("\r\n", "\n")] string lineEnding)
+        {
+            var playlistLine = new PlaylistLine("#EXT-X-STREAM-INF", "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineEnding, " http://example.com/low.m3u8");
+            Assert.IsFalse(playlistLine.Line.EndsWith(lineEnding));
+        }
     }
 }

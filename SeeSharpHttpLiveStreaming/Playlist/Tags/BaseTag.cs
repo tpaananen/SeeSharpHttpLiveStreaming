@@ -133,9 +133,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         protected static void WriteQuotedString(IPlaylistWriter writer, string attribute, string value, ref bool hasPreviousAttribute)
         {
             const string template = "{0}=\"{1}\"";
-            WriteAttributeSeparator(writer, hasPreviousAttribute);
-            writer.Write(string.Format(template, attribute, value));
-            hasPreviousAttribute = true;
+            if (!string.IsNullOrEmpty(value))
+            {
+                WriteAttributeSeparator(writer, hasPreviousAttribute);
+                writer.Write(string.Format(template, attribute, value));
+                hasPreviousAttribute = true;
+            }
         }
 
         /// <summary>
@@ -148,9 +151,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         protected static void WriteEnumeratedString(IPlaylistWriter writer, string attribute, string value, ref bool hasPreviousAttribute)
         {
             const string template = "{0}={1}";
-            WriteAttributeSeparator(writer, hasPreviousAttribute);
-            writer.Write(string.Format(template, attribute, value));
-            hasPreviousAttribute = true;
+            if (!string.IsNullOrEmpty(value))
+            {
+                WriteAttributeSeparator(writer, hasPreviousAttribute);
+                writer.Write(string.Format(template, attribute, value));
+                hasPreviousAttribute = true;
+            }
         }
     }
 }

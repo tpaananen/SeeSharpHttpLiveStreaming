@@ -37,6 +37,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             {
                 throw new ArgumentException("Line parameter does not start with the tag.");
             }
+            if (line.EndsWith("\n"))
+            {
+                line = line.Replace("\n", "").Replace("\r", "");
+            }
 
             Tag = tag;
             Line = line;
