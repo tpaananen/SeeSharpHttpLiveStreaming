@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
-using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
 using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
@@ -194,16 +192,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
             var playlist = new PlaylistLine(_extMedia.TagName, sb.ToString());
             _extMedia.Deserialize(playlist.GetParameters(), 0);
 
-            Assert.AreEqual(extMedia.Type, _extMedia.Type);
-            Assert.AreEqual(extMedia.Uri, _extMedia.Uri);
-            Assert.AreEqual(extMedia.Language, _extMedia.Language);
-            Assert.AreEqual(extMedia.AssocLanguage, _extMedia.AssocLanguage);
-            Assert.AreEqual(extMedia.GroupId, _extMedia.GroupId);
-            Assert.AreEqual(extMedia.InstreamId, _extMedia.InstreamId);
-            Assert.AreEqual(extMedia.Forced, _extMedia.Forced); // this is always false when media type is not subtitles
-            Assert.AreEqual(extMedia.AutoSelect, _extMedia.AutoSelect);
-            Assert.AreEqual(extMedia.Default, _extMedia.Default);
-            Assert.AreEqual(extMedia.Characteristics, _extMedia.Characteristics);
+            AssertAreEqual(extMedia, _extMedia);
         }
 
         [Test]
@@ -220,16 +209,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
             var playlist = new PlaylistLine(_extMedia.TagName, sb.ToString());
             _extMedia.Deserialize(playlist.GetParameters(), 0);
 
-            Assert.AreEqual(extMedia.Type, _extMedia.Type);
-            Assert.AreEqual(extMedia.Uri, _extMedia.Uri);
-            Assert.AreEqual(extMedia.Language, _extMedia.Language);
-            Assert.AreEqual(extMedia.AssocLanguage, _extMedia.AssocLanguage);
-            Assert.AreEqual(extMedia.GroupId, _extMedia.GroupId);
-            Assert.AreEqual(extMedia.InstreamId, _extMedia.InstreamId);
-            Assert.AreEqual(extMedia.Forced, _extMedia.Forced); // this is always false when media type is not subtitles
-            Assert.AreEqual(extMedia.AutoSelect, _extMedia.AutoSelect);
-            Assert.AreEqual(extMedia.Default, _extMedia.Default);
-            Assert.AreEqual(extMedia.Characteristics, _extMedia.Characteristics);
+            AssertAreEqual(extMedia, _extMedia);
         }
 
         [Test]
@@ -247,17 +227,21 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
             var playlist = new PlaylistLine(_extMedia.TagName, sb.ToString());
             _extMedia.Deserialize(playlist.GetParameters(), 0);
 
-            Assert.AreEqual(extMedia.Type, _extMedia.Type);
-            Assert.AreEqual(extMedia.Uri, _extMedia.Uri);
-            Assert.AreEqual(extMedia.Language, _extMedia.Language);
-            Assert.AreEqual(extMedia.AssocLanguage, _extMedia.AssocLanguage);
-            Assert.AreEqual(extMedia.GroupId, _extMedia.GroupId);
-            Assert.AreEqual(extMedia.InstreamId, _extMedia.InstreamId);
-            Assert.AreEqual(extMedia.Forced, _extMedia.Forced);
-            Assert.AreEqual(extMedia.AutoSelect, _extMedia.AutoSelect);
-            Assert.AreEqual(extMedia.Default, _extMedia.Default);
-            Assert.AreEqual(extMedia.Characteristics, _extMedia.Characteristics);
+            AssertAreEqual(extMedia, _extMedia);
         }
 
+        private void AssertAreEqual(ExtMedia expected, ExtMedia actual)
+        {
+            Assert.AreEqual(expected.Type, actual.Type);
+            Assert.AreEqual(expected.Uri, actual.Uri);
+            Assert.AreEqual(expected.Language, actual.Language);
+            Assert.AreEqual(expected.AssocLanguage, actual.AssocLanguage);
+            Assert.AreEqual(expected.GroupId, actual.GroupId);
+            Assert.AreEqual(expected.InstreamId, actual.InstreamId);
+            Assert.AreEqual(expected.Forced, actual.Forced);
+            Assert.AreEqual(expected.AutoSelect, actual.AutoSelect);
+            Assert.AreEqual(expected.Default, actual.Default);
+            Assert.AreEqual(expected.Characteristics, actual.Characteristics);
+        }
     }
 }
