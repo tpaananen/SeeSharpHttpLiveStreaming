@@ -41,6 +41,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// </summary>
         internal ByteRange()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

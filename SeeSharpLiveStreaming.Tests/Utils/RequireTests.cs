@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
+using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 using SeeSharpHttpLiveStreaming.Utils;
 
 // ReSharper disable ExpressionIsAlwaysNull
@@ -67,6 +68,18 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         {
             const string notEmpty = "121";
             notEmpty.RequireNotEmpty("notEmpty");
+        }
+
+        [Test]
+        public void TestRequireRequiresThatNoDefaultConstructorWasUsed()
+        {
+            Assert.Throws<InvalidOperationException>(() => new ByteRange().RequireNoDefaultConstructor());
+        }
+
+        [Test]
+        public void TestRequireRequiresThatNoDefaultConstructorWasUsedOk()
+        {
+            Assert.DoesNotThrow(() => new ByteRange(12,12).RequireNoDefaultConstructor());
         }
     }
 }

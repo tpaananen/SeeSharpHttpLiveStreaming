@@ -39,6 +39,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         /// </summary>
         internal DiscontinuitySequence()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

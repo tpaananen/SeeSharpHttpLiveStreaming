@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
 
 namespace SeeSharpHttpLiveStreaming.Utils
 {
@@ -64,6 +66,23 @@ namespace SeeSharpHttpLiveStreaming.Utils
             if (collection.Count == 0)
             {
                 throw new ArgumentException("Validation failed: The collection " + name + " is empty.", name);
+            }
+        }
+
+        /// <summary>
+        /// Requires that the default constructor was not used.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <param name="caller">The caller.</param>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the <paramref name="tag"/> was created using default constructor.
+        /// </exception>
+        internal static void RequireNoDefaultConstructor(this BaseTag tag, [CallerMemberName] string caller = null)
+        {
+            if (tag.UsingDefaultCtor)
+            {
+                throw new InvalidOperationException("The method " + caller + " requires that the " + tag.GetType() 
+                    + " was not created using default constructor.");
             }
         }
     }

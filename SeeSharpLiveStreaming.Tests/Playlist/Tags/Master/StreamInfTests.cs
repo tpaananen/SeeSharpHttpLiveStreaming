@@ -134,7 +134,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         [Test]
         public void TestStreamInfSerializeWithNullWriter()
         {
-            Assert.Throws<ArgumentNullException>(() => _streamInf.Serialize(null));
+            var streamInf = new StreamInf(1212121, 0, null, Resolution.Default, 
+                                          "aud", "vid", "sub", "cc1");
+            Assert.Throws<ArgumentNullException>(() => streamInf.Serialize(null));
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
 
 namespace SeeSharpHttpLiveStreaming.Utils.Writers
 {
@@ -13,7 +14,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
         private bool _disposed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlaylistWriter"/> class.
+        /// Initializes a new instance of the <see cref="PlaylistWriter" /> class.
         /// </summary>
         /// <param name="writer">The writer.</param>
         internal PlaylistWriter(TextWriter writer)

@@ -31,6 +31,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// </summary>
         internal ProgramDateTime()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// </summary>
         internal StreamInf()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

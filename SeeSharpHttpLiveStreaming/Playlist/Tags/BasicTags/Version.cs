@@ -31,6 +31,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
         /// </summary>
         internal Version()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

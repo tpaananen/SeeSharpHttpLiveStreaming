@@ -23,6 +23,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
         /// </summary>
         internal StartTag()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

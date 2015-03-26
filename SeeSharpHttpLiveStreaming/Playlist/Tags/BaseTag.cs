@@ -40,6 +40,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the default constructor was used.
+        /// </summary>
+        internal protected bool UsingDefaultCtor { get; protected set; }
+
+        /// <summary>
         /// When overridden in a derived class deserializes the tag from the <paramref name="content" />.
         /// </summary>
         /// <param name="content">The content.</param>
@@ -54,6 +59,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
         public void Serialize(IPlaylistWriter writer)
         {
+            this.RequireNoDefaultConstructor();
             writer.RequireNotNull("writer");
 
             writer.Write(TagName);

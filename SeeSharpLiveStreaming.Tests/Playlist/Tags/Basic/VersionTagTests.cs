@@ -6,6 +6,7 @@ using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
@@ -60,14 +61,14 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
         [Test]
         public void TestVersionNumberSerializationThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => _tag.Serialize(null));
+            Assert.Throws<ArgumentNullException>(() => new Version(12).Serialize(null));
         }
 
         [Test]
         public void TestVersionNumberIsSerializedCorrectly()
         {
-            var sb = new StringBuilder();
-            var writer = new PlaylistWriter(new StringWriter(sb));
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
             _tag = new Version(7);
             _tag.Serialize(writer);
             Assert.AreEqual(_tag.TagName + Tag.TagEndMarker + 7.ToString(CultureInfo.InvariantCulture) + Environment.NewLine, sb.ToString());

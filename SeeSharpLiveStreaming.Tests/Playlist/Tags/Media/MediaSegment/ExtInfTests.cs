@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
 {
@@ -53,5 +55,51 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
             Assert.AreEqual("title", _extInf.Information);
         }
 
+        [Test]
+        public void TestExtInfCtorThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ExtInf(12, null, 0));
+        }
+
+        [Test]
+        public void TestExtInfCtorThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => new ExtInf(12, string.Empty, 0));
+        }
+
+        [Test]
+        public void TestExtInfCtorThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ExtInf(-1, "This is a negative duration.", 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ExtInf(12, "This is a negative version.", -1));
+        }
+
+        [Test]
+        public void TestExtInfSerializesForCompatibilityVersionLessThan3([Range(0, 2)] int version)
+        {
+            var inf = new ExtInf(1000.01m, "1000 seconds", version);
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            inf.Serialize(writer);
+            var line = new PlaylistLine(inf.TagName, sb.ToString());
+            _extInf.Deserialize(line.GetParameters(), version);
+
+            Assert.AreEqual(inf.Duration, _extInf.Duration);
+            Assert.AreEqual(inf.Information, _extInf.Information);
+        }
+
+        [Test]
+        public void TestExtInfSerializesForCompatibilityVersionGreaterThanOrEqualTo3()
+        {
+            var inf = new ExtInf(1000.01m, "1000 seconds", 3);
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            inf.Serialize(writer);
+            var line = new PlaylistLine(inf.TagName, sb.ToString());
+            _extInf.Deserialize(line.GetParameters(), 3);
+
+            Assert.AreEqual(inf.Duration, _extInf.Duration);
+            Assert.AreEqual(inf.Information, _extInf.Information);
+        }
     }
 }

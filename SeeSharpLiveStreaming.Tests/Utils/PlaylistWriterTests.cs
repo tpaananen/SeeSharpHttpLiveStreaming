@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using NUnit.Framework;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Utils
@@ -16,8 +17,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [SetUp]
         public void SetUp()
         {
-            _stringBuilder = new StringBuilder();
-            _playlistWriter = new PlaylistWriter(new StringWriter(_stringBuilder));
+            _playlistWriter = TestPlaylistWriterFactory.CreateWithStringBuilder(out _stringBuilder);
         }
 
         [TearDown]

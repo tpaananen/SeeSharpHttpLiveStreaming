@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
@@ -25,6 +27,20 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         {
             var tag = TagFactory.Create(tagName);
             Assert.AreEqual(Tag.HasAttributes(tagName), tag.HasAttributes);
+        }
+
+        [Theory]
+        public void TestSerializeThrowsIfTagCreatedWithDefaultCtor(string tagName)
+        {
+            var tag = TagFactory.Create(tagName);
+            if (tag.HasAttributes)
+            {
+                Assert.Throws<InvalidOperationException>(() => tag.Serialize(new PlaylistWriter(new StringWriter())));
+            }
+            else
+            {
+                Assert.DoesNotThrow(() => tag.Serialize(new PlaylistWriter(new StringWriter())));
+            }
         }
 
     }

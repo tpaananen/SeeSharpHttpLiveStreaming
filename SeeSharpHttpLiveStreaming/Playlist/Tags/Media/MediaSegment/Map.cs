@@ -37,6 +37,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// </summary>
         internal Map()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

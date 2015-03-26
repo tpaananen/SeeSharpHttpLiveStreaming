@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -31,6 +33,29 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// </summary>
         internal ExtInf()
         {
+            UsingDefaultCtor = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtInf" /> class.
+        /// </summary>
+        /// <param name="duration">The duration.</param>
+        /// <param name="information">The information.</param>
+        /// <param name="version">The version.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="duration" /> is negative.</exception>
+        public ExtInf(decimal duration, string information, int version)
+        {
+            if (duration < 0)
+            {
+                throw new ArgumentOutOfRangeException("duration", duration, "The duration cannot be negative.");
+            }
+            if (version < 0)
+            {
+                throw new ArgumentOutOfRangeException("version", version, "The version cannot be negative.");
+            }
+            information.RequireNotEmpty("information");
+            Duration = version < 3 ? Math.Round(duration, 0, MidpointRounding.AwayFromZero) : duration;
+            Information = information;
         }
 
         /// <summary>
@@ -85,6 +110,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             {
                 throw new SerializationException("Failed to parse EXTINF tag.", ex);
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            writer.Write(Duration.ToString(CultureInfo.InvariantCulture));
+            writer.Write(",");
+            writer.Write(Information);
         }
     }
 }

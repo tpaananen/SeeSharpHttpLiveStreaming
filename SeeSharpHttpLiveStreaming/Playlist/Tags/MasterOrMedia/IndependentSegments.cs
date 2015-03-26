@@ -22,6 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
         /// </summary>
         internal IndependentSegments()
         {
+            // since this has no attributes, lets default UsingdefaultCtor as false
         }
 
         /// <summary>

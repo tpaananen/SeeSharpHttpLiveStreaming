@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.MasterOrMedia
@@ -75,8 +76,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.MasterOrMedia
         public void TestStartTagIsSerialized([Values(true, false)] bool precise)
         {
             var startTag = new StartTag(3456.45m, precise);
-            var sb = new StringBuilder();
-            var writer = new PlaylistWriter(new StringWriter(sb));
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
             startTag.Serialize(writer);
             var line = new PlaylistLine(startTag.TagName, sb.ToString());
             _startTag.Deserialize(line.GetParameters(), 0);

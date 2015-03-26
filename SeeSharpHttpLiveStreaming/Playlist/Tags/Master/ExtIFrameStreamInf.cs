@@ -31,6 +31,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// </summary>
         internal ExtIFrameStreamInf()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

@@ -27,6 +27,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// </summary>
         internal ExtMedia()
         {
+            UsingDefaultCtor = true;
         }
 
         /// <summary>

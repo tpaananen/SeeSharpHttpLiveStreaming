@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.MasterOrMedia
@@ -36,9 +37,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.MasterOrMedia
         [Test]
         public void TestIndependentSegmentsIsSerialized()
         {
-            var sb = new StringBuilder();
-            var writer = new PlaylistWriter(new StringWriter(sb));
-            _segments.Serialize(writer);
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            new IndependentSegments().Serialize(writer);
             Assert.AreEqual(_segments.TagName + Environment.NewLine, sb.ToString());
         }
     }

@@ -24,6 +24,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// </summary>
         internal SessionData()
         {
+            UsingDefaultCtor = true;
         }
 
         private SessionData(string dataId, string language)
