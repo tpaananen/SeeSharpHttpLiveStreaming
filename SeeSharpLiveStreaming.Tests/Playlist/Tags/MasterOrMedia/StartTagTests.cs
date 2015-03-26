@@ -74,12 +74,14 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.MasterOrMedia
         [Test]
         public void TestStartTagIsSerialized([Values(true, false)] bool precise)
         {
-            _startTag = new StartTag(3456.45m, precise);
+            var startTag = new StartTag(3456.45m, precise);
             var sb = new StringBuilder();
             var writer = new PlaylistWriter(new StringWriter(sb));
-            _startTag.Serialize(writer);
-            Assert.AreEqual(_startTag.TagName + Tag.TagEndMarker + "TIME-OFFSET=3456.45,PRECISE=" + YesNo.FromBoolean(precise) + Environment.NewLine, 
-                sb.ToString());
+            startTag.Serialize(writer);
+            var line = new PlaylistLine(startTag.TagName, sb.ToString());
+            _startTag.Deserialize(line.GetParameters(), 0);
+            Assert.AreEqual(startTag.TimeOffset, _startTag.TimeOffset);
+            Assert.AreEqual(startTag.Precise, _startTag.Precise);
         }
     }
 }

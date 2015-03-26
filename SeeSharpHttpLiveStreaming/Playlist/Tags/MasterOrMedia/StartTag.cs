@@ -108,10 +108,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
         /// </returns>
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
-            writer.Write("TIME-OFFSET=");
-            writer.Write(FormatDecimal(TimeOffset));
-            writer.Write(",PRECISE=");
-            writer.Write(YesNo.FromBoolean(Precise));
+            var hasPreviousAttributes = false;
+            WriteEnumeratedString(writer, "TIME-OFFSET", FormatDecimal(TimeOffset), ref hasPreviousAttributes);
+            WriteEnumeratedString(writer, "PRECISE", YesNo.FromBoolean(Precise), ref hasPreviousAttributes);
         }
 
         private void ParseTimeOffset(string content)

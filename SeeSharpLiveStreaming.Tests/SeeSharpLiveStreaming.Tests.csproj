@@ -67,6 +67,7 @@
     <Compile Include="Playlist\Tags\Master\StreamInfTests.cs" />
     <Compile Include="Playlist\Tags\TagFactoryTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\DiscontinuityTests.cs" />
+    <Compile Include="Playlist\YesNoTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\IncompatibleVersionExceptionTests.cs" />
     <Compile Include="Utils\PlaylistWriterTests.cs" />

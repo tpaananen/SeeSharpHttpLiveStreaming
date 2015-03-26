@@ -281,7 +281,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             WriteQuotedString(writer, "LANGUAGE", Language, ref hasPreviousAttributes);
             WriteQuotedString(writer, "ASSOC-LANGUAGE", AssocLanguage, ref hasPreviousAttributes);
             WriteQuotedString(writer, "NAME", Name, ref hasPreviousAttributes);
-            WriteEnumeratedString(writer, "DEFAULT", Default ? YesNo.Yes : string.Empty, ref hasPreviousAttributes);
+            WriteEnumeratedString(writer, "DEFAULT", YesNo.FromBoolean(Default), ref hasPreviousAttributes);
             WriteForcedAttribute(writer, ref hasPreviousAttributes);
             WriteAutoSelect(writer, ref hasPreviousAttributes);
             WriteCharacteristics(writer, ref hasPreviousAttributes);
@@ -297,12 +297,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         {
             if (Type == MediaTypes.Subtitles)
             {
-                WriteEnumeratedString(writer, "FORCED", Forced ? YesNo.Yes : string.Empty, ref hasPreviousAttributes);
+                WriteEnumeratedString(writer, "FORCED", YesNo.FromBoolean(Forced), ref hasPreviousAttributes);
             }
         }
 
-        private
-            void WriteAutoSelect(IPlaylistWriter writer, ref bool hasPreviousAttributes)
+        private void WriteAutoSelect(IPlaylistWriter writer, ref bool hasPreviousAttributes)
         {
             if (Default)
             {
@@ -310,7 +309,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             }
             else
             {
-                WriteEnumeratedString(writer, "AUTOSELECT", AutoSelect ? YesNo.Yes : string.Empty, ref hasPreviousAttributes);
+                WriteEnumeratedString(writer, "AUTOSELECT", YesNo.FromBoolean(AutoSelect), ref hasPreviousAttributes);
             }
         }
 

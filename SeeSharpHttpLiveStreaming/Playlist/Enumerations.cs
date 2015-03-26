@@ -94,12 +94,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     public static class YesNo
     {
         /// <summary>
-        /// The yes option, translates to <b>true</b> in <see cref="bool"/>.
+        /// The YES option, translates to <b>true</b> in <see cref="bool"/>.
         /// </summary>
         public const string Yes = "YES";
 
         /// <summary>
-        /// The no option, translates to <b>false</b> in <see cref="bool"/>.
+        /// The NO option, translates to <b>false</b> in <see cref="bool"/>.
         /// </summary>
         public const string No = "NO";
 
@@ -113,15 +113,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         }
 
         /// <summary>
-        /// Returns either <see cref="Yes"/> or <see cref="No"/> depending on the <paramref name="value"/>.
+        /// Returns either <see cref="Yes" /> or <see cref="No" /> depending on the <paramref name="value" />.
         /// </summary>
-        /// <param name="value">if set to <c>true</c> [value].</param>
+        /// <param name="value">if set to <c>true</c> value means Yes.</param>
+        /// <param name="required">if set to <c>true</c> the attribute is required and No value is added.</param>
         /// <returns>
-        /// If the <paramref name="value"/> is <b>true</b>, returns <see cref="Yes"/>; otherwise, <see cref="No"/>.
+        /// If the <paramref name="value" /> is <b>true</b>, returns <see cref="Yes" />; otherwise, <see cref="No" /> 
+        /// except if <paramref name="required"/> is <b>false</b>, then return empty string.
         /// </returns>
-        public static string FromBoolean(bool value)
+        public static string FromBoolean(bool value, bool required = false)
         {
-            return value ? Yes : No;
+            return value ? Yes : required ? No : string.Empty;
         }
     }
 
