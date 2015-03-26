@@ -102,12 +102,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         [Test]
         public void TestParseExtXByteRangeValidatedValues()
         {
-            string validValue = "0@1212";
-            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(validValue, 7));
-            validValue = "-1@1212";
-            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(validValue, 7));
-            validValue = "121@-1";
-            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(validValue, 7));
+            string invalidValue = "0@1212";
+            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(invalidValue, 7));
+            invalidValue = "-1@1212";
+            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(invalidValue, 7));
+            invalidValue = "121@-1";
+            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(invalidValue, 7));
         }
 
         [Test]
