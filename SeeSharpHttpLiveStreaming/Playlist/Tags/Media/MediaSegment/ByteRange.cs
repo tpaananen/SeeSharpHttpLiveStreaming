@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -10,8 +12,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// </summary>
     /// <remarks>
     /// The EXT-X-BYTERANGE tag indicates that a Media Segment is a sub-range
-    /// of the resource identified by its URI.  It applies only to the next
-    /// URI line that follows it in the Playlist.  Its format is:
+    /// of the resource identified by its URI. It applies only to the next
+    /// URI line that follows it in the Playlist. Its format is:
     ///
     /// #EXT-X-BYTERANGE:|n|[@|o|]
     ///
@@ -46,8 +48,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// </summary>
         /// <param name="length">The length.</param>
         /// <param name="startIndex">The start index.</param>
-        public ByteRange(long length, long startIndex)
+        public ByteRange(long length, long startIndex = 0)
         {
+            ValidateLength(length);
+            ValidateStartIndex(startIndex);
             Length = length;
             StartIndex = startIndex;
         }
@@ -98,15 +102,34 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 {
                     throw new FormatException("Invalid format in EXT-X-BYTERANGE value.");
                 }
-                Length = ValueParser.ParseInt(split[0]);
+                var length = ValueParser.ParseInt(split[0]);
+                ValidateLength(length);
+                Length = length;
+
                 if (split.Length == 2)
                 {
-                    StartIndex = ValueParser.ParseInt(split[1]);
+                    var startIndex = ValueParser.ParseInt(split[1]);
+                    ValidateStartIndex(startIndex);
+                    StartIndex = startIndex;
                 }
             }
             catch (Exception ex)
             {
                 throw new SerializationException("Failed to parse EXT-X-BYTERANGE tag.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            writer.Write(Length.ToString(CultureInfo.InvariantCulture));
+            if (StartIndex > 0)
+            {
+                writer.Write("@");
+                writer.Write(StartIndex.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -182,6 +205,22 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         public static bool operator !=(ByteRange left, ByteRange right)
         {
             return !Equals(left, right);
+        }
+
+        private static void ValidateStartIndex(long startIndex)
+        {
+            if (startIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException("startIndex", startIndex, "The start index cannot be negative.");
+            }
+        }
+
+        private static void ValidateLength(long length)
+        {
+            if (length <= 0)
+            {
+                throw new ArgumentOutOfRangeException("length", length, "The length cannot be zero or negative value.");
+            }
         }
     }
 }

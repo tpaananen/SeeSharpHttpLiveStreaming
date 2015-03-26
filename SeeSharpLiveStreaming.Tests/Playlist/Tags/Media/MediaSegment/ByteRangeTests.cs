@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
@@ -87,6 +89,39 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
             Assert.IsFalse(first.Equals(null));
             Assert.IsFalse(first.Equals((object)null));
             Assert.IsFalse(first.Equals(new object()));
+        }
+
+        [Test]
+        public void TestByteRangeValidatesArguments()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ByteRange(0, 12));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ByteRange(-1, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ByteRange(12, -1));
+        }
+
+        [Test]
+        public void TestParseExtXByteRangeValidatedValues()
+        {
+            string validValue = "0@1212";
+            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(validValue, 7));
+            validValue = "-1@1212";
+            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(validValue, 7));
+            validValue = "121@-1";
+            Assert.Throws<SerializationException>(() => _byteRange.Deserialize(validValue, 7));
+        }
+
+        [Test]
+        public void TestSerializeByteRange([Values(0, 12)] long startIndex)
+        {
+            var byteRange = new ByteRange(123, startIndex);
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            byteRange.Serialize(writer);
+            var line = new PlaylistLine(byteRange.TagName, sb.ToString());
+            _byteRange.Deserialize(line.GetParameters(), 7);
+
+            Assert.AreEqual(byteRange.Length, _byteRange.Length);
+            Assert.AreEqual(byteRange.StartIndex, _byteRange.StartIndex);
         }
     }
 }
