@@ -34,9 +34,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
-        public void TestExtInfThrowsIfParsingNoCommaSeparatedValue()
+        public void TestExtInfThrowsIfParsingNonNumericValue()
         {
-            Assert.Throws<SerializationException>(() => _extInf.Deserialize("sdsdsd;title", 0));
             Assert.Throws<SerializationException>(() => _extInf.Deserialize("sdsdsd", 0));
         }
 
@@ -60,7 +59,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         {
             _extInf.Deserialize("12121", 0);
             Assert.AreEqual(12121, _extInf.Duration);
-            Assert.AreEqual(null, _extInf.Information);
+            Assert.AreEqual(string.Empty, _extInf.Information);
         }
 
         [Test]
@@ -85,9 +84,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
-        public void TestExtInfSerializesForCompatibilityVersionGreaterThanOrEqualTo3()
+        public void TestExtInfSerializesForCompatibilityVersionGreaterThanOrEqualTo3([Values("1000.01 seconds", "", null)] string title)
         {
-            var inf = new ExtInf(1000.01m, "1000 seconds", 3);
+            var inf = new ExtInf(1000.01m, title, 3);
             StringBuilder sb;
             var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
             inf.Serialize(writer);
@@ -95,7 +94,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
             _extInf.Deserialize(line.GetParameters(), 3);
 
             Assert.AreEqual(inf.Duration, _extInf.Duration);
-            Assert.AreEqual(inf.Information, _extInf.Information);
+            Assert.AreEqual(inf.Information ?? string.Empty, _extInf.Information);
         }
     }
 }

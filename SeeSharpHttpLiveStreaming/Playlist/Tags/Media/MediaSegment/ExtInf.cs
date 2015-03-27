@@ -62,7 +62,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             {
                 throw new ArgumentOutOfRangeException("duration", duration, ex.Message);
             }
-            Information = information;
+            Information = information ?? string.Empty;
         }
 
         /// <summary>
@@ -103,16 +103,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             {
                 var split = content.Split(',');
                 var durationString = split[0];
-                if (split[0] == string.Empty)
-                {
-                    throw new SerializationException("The required duration is missing.");
-                }
                 var duration = ValueParser.ParseDecimal(durationString);
                 
                 Duration = GetDuration(duration, version);
                 if (split.Length > 1)
                 {
                     Information = split[1];
+                }
+                else
+                {
+                    Information = string.Empty;
                 }
             }
             catch (Exception ex)
