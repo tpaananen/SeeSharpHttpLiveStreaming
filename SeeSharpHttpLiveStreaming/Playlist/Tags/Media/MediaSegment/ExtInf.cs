@@ -106,14 +106,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 var duration = ValueParser.ParseDecimal(durationString);
                 
                 Duration = GetDuration(duration, version);
-                if (split.Length > 1)
-                {
-                    Information = split[1];
-                }
-                else
-                {
-                    Information = string.Empty;
-                }
+                Information = split.Length > 1 ? split[1] : string.Empty;
             }
             catch (Exception ex)
             {

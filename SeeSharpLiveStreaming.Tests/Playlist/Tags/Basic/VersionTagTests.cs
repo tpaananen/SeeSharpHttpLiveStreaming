@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Tests.Helpers;
-using SeeSharpHttpLiveStreaming.Utils.Writers;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic

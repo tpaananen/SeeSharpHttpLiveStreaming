@@ -1,13 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
-using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia;
 using SeeSharpHttpLiveStreaming.Tests.Helpers;
-using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.MasterOrMedia
 {

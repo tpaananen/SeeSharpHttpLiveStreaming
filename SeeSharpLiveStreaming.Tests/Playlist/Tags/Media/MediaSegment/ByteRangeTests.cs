@@ -95,6 +95,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         public void TestByteRangeValidatesArguments()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new ByteRange(0, 12));
+            // ReSharper disable once RedundantArgumentDefaultValue
             Assert.Throws<ArgumentOutOfRangeException>(() => new ByteRange(-1, 0));
             Assert.Throws<ArgumentOutOfRangeException>(() => new ByteRange(12, -1));
         }

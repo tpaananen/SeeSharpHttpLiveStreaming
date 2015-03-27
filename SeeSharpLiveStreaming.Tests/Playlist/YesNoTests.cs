@@ -21,6 +21,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         [Test]
         public void TestYesNoFromBooleanReturnsEmptyString()
         {
+            // ReSharper disable once RedundantArgumentDefaultValue
             Assert.AreEqual(string.Empty, YesNo.FromBoolean(false, false));
         }
     }
