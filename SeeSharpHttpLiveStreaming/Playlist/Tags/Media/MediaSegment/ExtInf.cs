@@ -50,16 +50,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="duration" /> is negative.</exception>
         public ExtInf(decimal duration, string information, int version)
         {
-            if (duration < 0)
-            {
-                throw new ArgumentOutOfRangeException("duration", duration, "The duration cannot be negative.");
-            }
             if (version < 0)
             {
                 throw new ArgumentOutOfRangeException("version", version, "The version cannot be negative.");
             }
-            information.RequireNotEmpty("information");
-            Duration = GetDuration(duration, version);
+            try
+            {
+                Duration = GetDuration(duration, version);
+            }
+            catch (SerializationException ex)
+            {
+                throw new ArgumentOutOfRangeException("duration", duration, ex.Message);
+            }
             Information = information;
         }
 
@@ -100,16 +102,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             try
             {
                 var split = content.Split(',');
-                if (split.Length != 2)
-                {
-                    throw new SerializationException("The EXTINF tag did not contain valid value. Len: " + split.Length);
-                }
-                
                 var durationString = split[0];
+                if (split[0] == string.Empty)
+                {
+                    throw new SerializationException("The required duration is missing.");
+                }
                 var duration = ValueParser.ParseDecimal(durationString);
                 
                 Duration = GetDuration(duration, version);
-                Information = split[1];
+                if (split.Length > 1)
+                {
+                    Information = split[1];
+                }
             }
             catch (Exception ex)
             {
@@ -124,12 +128,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
             writer.Write(Duration.ToString(CultureInfo.InvariantCulture));
-            writer.Write(",");
-            writer.Write(Information);
+            if (!string.IsNullOrEmpty(Information))
+            {
+                writer.Write(",");
+                writer.Write(Information);
+            }
         }
 
         private static decimal GetDuration(decimal duration, int version)
         {
+            if (duration <= 0)
+            {
+                throw new SerializationException("The duration cannot be negative or zero.");
+            }
             return version < MinVersionForDecimalDuration ? Math.Round(duration, 0, MidpointRounding.AwayFromZero) : duration;
         }
     }

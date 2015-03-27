@@ -56,15 +56,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
-        public void TestExtInfCtorThrowsArgumentNullException()
+        public void TestExtInfParsesWithoutInfo()
         {
-            Assert.Throws<ArgumentNullException>(() => new ExtInf(12, null, 0));
-        }
-
-        [Test]
-        public void TestExtInfCtorThrowsArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() => new ExtInf(12, string.Empty, 0));
+            _extInf.Deserialize("12121", 0);
+            Assert.AreEqual(12121, _extInf.Duration);
+            Assert.AreEqual(null, _extInf.Information);
         }
 
         [Test]
