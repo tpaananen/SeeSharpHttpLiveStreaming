@@ -29,6 +29,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     public class ExtInf : BaseTag
     {
         /// <summary>
+        /// Defines the version when decimals can be accepted in <see cref="Duration"/>.
+        /// </summary>
+        private const int MinVersionForDecimalDuration = 3;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ExtInf"/> class.
         /// </summary>
         internal ExtInf()
@@ -54,7 +59,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 throw new ArgumentOutOfRangeException("version", version, "The version cannot be negative.");
             }
             information.RequireNotEmpty("information");
-            Duration = version < 3 ? Math.Round(duration, 0, MidpointRounding.AwayFromZero) : duration;
+            Duration = GetDuration(duration, version);
             Information = information;
         }
 
@@ -103,7 +108,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 var durationString = split[0];
                 var duration = ValueParser.ParseDecimal(durationString);
                 
-                Duration = version < 3 ? Math.Round(duration, 0, MidpointRounding.AwayFromZero) : duration;
+                Duration = GetDuration(duration, version);
                 Information = split[1];
             }
             catch (Exception ex)
@@ -121,6 +126,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             writer.Write(Duration.ToString(CultureInfo.InvariantCulture));
             writer.Write(",");
             writer.Write(Information);
+        }
+
+        private static decimal GetDuration(decimal duration, int version)
+        {
+            return version < MinVersionForDecimalDuration ? Math.Round(duration, 0, MidpointRounding.AwayFromZero) : duration;
         }
     }
 }
