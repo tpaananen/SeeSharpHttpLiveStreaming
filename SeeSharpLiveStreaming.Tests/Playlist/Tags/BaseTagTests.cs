@@ -54,6 +54,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 
             var tag = new Version(12);
             Assert.Throws<SerializationException>(() => tag.Serialize(mockWriter.Object));
+            mockWriter.VerifyAll();
         }
     }
 }
