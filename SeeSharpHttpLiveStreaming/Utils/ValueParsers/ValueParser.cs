@@ -18,6 +18,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                                                                 NumberStyles.Number | 
                                                                 NumberStyles.Integer;
 
+        const int SizeOfByte = 8; // bits
+        const string HexPrefixIdentifier = "0x";
+
         /// <summary>
         /// Gets the start position where the parsing starts.
         /// </summary>
@@ -247,13 +250,6 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// </exception>
         public static string ParseHexadecimal(string attribute, string line, bool requireExists, int bits)
         {
-            const int sizeOfByte = 8; // bits
-            const string hexPrefixIdentifier = "0x";
-
-            if (bits < sizeOfByte)
-            {
-                throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than " + sizeOfByte + ".");
-            }
             string value = ParseEnumeratedString(attribute, line, requireExists);
 
             if (value == string.Empty)
@@ -261,15 +257,43 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 return string.Empty;
             }
             
-            if (value.StartsWith(hexPrefixIdentifier))
+            value = CreateHexValue(value, bits);
+            return value;
+        }
+
+        /// <summary>
+        /// Creates the hexadecimal value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="bits">The bits.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="value"/> is <b>null</b>.
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when the <paramref name="value"/> is longer than value represented by <paramref name="bits"/>
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when the <paramref name="bits"/> is less than 8.
+        /// </exception>
+        /// <returns></returns>
+        internal static string CreateHexValue(string value, int bits)
+        {
+            value.RequireNotNull("value");
+            if (bits < SizeOfByte)
             {
-                value = value.Substring(hexPrefixIdentifier.Length);
+                throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than " + SizeOfByte + ".");
             }
 
-            int sizeInBytes = bits / sizeOfByte;
+            if (value.StartsWith(HexPrefixIdentifier))
+            {
+                value = value.Substring(HexPrefixIdentifier.Length);
+            }
+
+            int sizeInBytes = bits / SizeOfByte;
             if (value.Length > sizeInBytes)
             {
-                throw new SerializationException("The value " + value + " to be parsed is longer than the number of bits " + bits + ".");
+                throw new SerializationException("The value " + value + " to be parsed is longer than the number of bits " +
+                                                 bits + ".");
             }
 
             value = value.PadLeft(sizeInBytes, '0');

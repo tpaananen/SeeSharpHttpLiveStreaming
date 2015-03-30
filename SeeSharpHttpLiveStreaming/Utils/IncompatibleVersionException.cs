@@ -34,16 +34,16 @@ namespace SeeSharpHttpLiveStreaming.Utils
         /// <summary>
         /// Initializes a new instance of the <see cref="IncompatibleVersionException" /> class.
         /// </summary>
-        /// <param name="tag">The tag.</param>
+        /// <param name="tagName">Name of the tag.</param>
         /// <param name="attribute">The attribute.</param>
         /// <param name="version">The version.</param>
         /// <param name="requiredVersion">The required version.</param>
-        public IncompatibleVersionException(BaseTag tag, string attribute, int version, int requiredVersion)
-            : base ("Tag " + tag.TagName + " could not be parsed, current version " + version 
+        public IncompatibleVersionException(string tagName, string attribute, int version, int requiredVersion)
+            : base ("Tag " + tagName + " could not be parsed, current version " + version 
                     + " is incompatible with required version " + requiredVersion 
                     + " while parsing attribute " + attribute + ".")
         {
-            TagName = tag.TagName;
+            TagName = tagName;
             CurrentVersion = version;
             RequiredVersion = requiredVersion;
             Attribute = attribute;
@@ -52,14 +52,14 @@ namespace SeeSharpHttpLiveStreaming.Utils
         /// <summary>
         /// Initializes a new instance of the <see cref="IncompatibleVersionException" /> class.
         /// </summary>
-        /// <param name="tag">The tag.</param>
+        /// <param name="tagName">Name of the tag.</param>
         /// <param name="version">The version.</param>
         /// <param name="requiredVersion">The required version.</param>
-        public IncompatibleVersionException(BaseTag tag, int version, int requiredVersion)
-            : base ("Tag " + tag.TagName + " could not be parsed, current version " + version 
+        public IncompatibleVersionException(string tagName, int version, int requiredVersion)
+            : base ("Tag " + tagName + " could not be parsed, current version " + version 
                     + " is incompatible with required version " + requiredVersion + ".")
         {
-            TagName = tag.TagName;
+            TagName = tagName;
             CurrentVersion = version;
             RequiredVersion = requiredVersion;
         }

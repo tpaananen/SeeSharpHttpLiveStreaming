@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using Moq;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
+using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
 {
@@ -43,5 +46,14 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
             }
         }
 
+        [Test]
+        public void TestSerializeThrowsSerializationExceptionIfAnErrorOccurs()
+        {
+            var mockWriter = new Mock<IPlaylistWriter>();
+            mockWriter.Setup(x => x.Write(It.IsAny<string>())).Throws<IOException>().Verifiable();
+
+            var tag = new Version(12);
+            Assert.Throws<SerializationException>(() => tag.Serialize(mockWriter.Object));
+        }
     }
 }

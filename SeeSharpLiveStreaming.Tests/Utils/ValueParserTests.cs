@@ -178,5 +178,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         {
             Assert.Throws<FormatException>(() => ValueParser.ParseDecimal("123x1080"));
         }
+
+        [Test]
+        public void TestCreateHexValueThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => ValueParser.CreateHexValue(null, 128));
+        }
     }
 }

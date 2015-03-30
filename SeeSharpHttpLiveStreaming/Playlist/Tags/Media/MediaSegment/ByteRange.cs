@@ -92,7 +92,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         {
             if (version < 4)
             {
-                throw new IncompatibleVersionException(this, version, 4);
+                throw new IncompatibleVersionException(TagName, version, 4);
             }
 
             content.RequireNotEmpty("content");

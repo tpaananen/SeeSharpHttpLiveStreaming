@@ -86,7 +86,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 const int requiredVersion = 5; // in some case 6
                 if (version < requiredVersion)
                 {
-                    throw new IncompatibleVersionException(this, version, requiredVersion);
+                    throw new IncompatibleVersionException(TagName, version, requiredVersion);
                 }
 
                 ParseUri(content);

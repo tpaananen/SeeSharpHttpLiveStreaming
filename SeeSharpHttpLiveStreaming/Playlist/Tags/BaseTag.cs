@@ -61,11 +61,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         {
             this.RequireNoDefaultConstructor();
             writer.RequireNotNull("writer");
-
-            writer.Write(TagName);
-            BeginWriteAttributes(writer);
-            SerializeAttributes(writer);
-            writer.WriteLineEnd();
+            try
+            {
+                writer.Write(TagName);
+                BeginWriteAttributes(writer);
+                SerializeAttributes(writer);
+                writer.WriteLineEnd();
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException("Failed to serialize " + TagName + " tag.", ex);
+            }
         }
 
         private void BeginWriteAttributes(IPlaylistWriter writer)

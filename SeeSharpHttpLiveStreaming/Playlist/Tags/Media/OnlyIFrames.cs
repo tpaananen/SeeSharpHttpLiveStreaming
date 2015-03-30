@@ -79,7 +79,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             const int requiredVersion = 4;
             if (version < requiredVersion)
             {
-                throw new IncompatibleVersionException(this, version, requiredVersion);
+                throw new IncompatibleVersionException(TagName, version, requiredVersion);
             } 
             if (!string.IsNullOrEmpty(content))
             {

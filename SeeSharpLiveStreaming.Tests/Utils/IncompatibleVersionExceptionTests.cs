@@ -11,7 +11,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [Test]
         public void TestIncompatibleVersionException()
         {
-            var exception = new IncompatibleVersionException(new ByteRange(), "", 12, 122);
+            var exception = new IncompatibleVersionException(new ByteRange().TagName, "", 12, 122);
             var info = new SerializationInfo(typeof (IncompatibleVersionException), new FormatterConverter());
             exception.GetObjectData(info, new StreamingContext());
             Assert.AreEqual(exception.TagName, info.GetValue("TagName", typeof(string)));

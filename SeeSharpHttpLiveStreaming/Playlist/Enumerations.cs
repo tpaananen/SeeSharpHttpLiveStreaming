@@ -47,8 +47,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         SampleAes = 2
     }
 
-    
-
     /// <summary>
     /// Defines enumerated strings of media types used in master playlist tag EXT-X-MEDIA.
     /// </summary>
@@ -150,6 +148,27 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                     return EncryptionMethod.Aes128;
                 case "SAMPLE-AES":
                     return EncryptionMethod.SampleAes;
+                default:
+                    throw new ArgumentException("Invalid encryption method value " + method + ".");
+            }
+        }
+
+        /// <summary>
+        /// Converts the <paramref name="method"/> to a string value.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <returns>The <see cref="String"/> value.</returns>
+        /// <exception cref="ArgumentException">Thrown when the <paramref name="method"/> is invalid.</exception>
+        public static string FromEncryptionMethod(this EncryptionMethod method)
+        {
+            switch (method)
+            {
+                case EncryptionMethod.None:
+                    return "NONE";
+                case EncryptionMethod.Aes128:
+                    return "AES-128";
+                case EncryptionMethod.SampleAes:
+                    return "SAMPLE-AES";
                 default:
                     throw new ArgumentException("Invalid encryption method value " + method + ".");
             }
