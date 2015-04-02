@@ -12,7 +12,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// encoded video frames whose encoding does not depend on any other
     /// frame.
     ///
-    /// The EXT-X-I-FRAMES-ONLY tag applies to the entire Playlist.  Its
+    /// The EXT-X-I-FRAMES-ONLY tag applies to the entire Playlist. Its
     /// format is:
     ///
     /// #EXT-X-I-FRAMES-ONLY

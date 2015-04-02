@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using PlaylistType = SeeSharpHttpLiveStreaming.Playlist.Tags.Media.PlaylistType;
 using EnumValues = SeeSharpHttpLiveStreaming.Playlist;
 
@@ -46,6 +48,29 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
             Assert.AreEqual(value, _playlistType.PlaylistTypeValue);
         }
 
-        
+        [Test]
+        public void TestPlaylistTypeCtorThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new PlaylistType(null));
+        }
+
+        [Test]
+        public void TestPlaylistTypeCtorThrowsArgumentException([Values("", "invalidValue")] string value)
+        {
+            Assert.Throws<ArgumentException>(() => new PlaylistType(value));
+        }
+
+        [Test]
+        public void TestPlaylistTypeSerializes([Values(EnumValues.PlaylistType.Event, EnumValues.PlaylistType.Vod)] string value)
+        {
+            var playlistType = new PlaylistType(value);
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            playlistType.Serialize(writer);
+            var line = new PlaylistLine(playlistType.TagName, sb.ToString());
+            _playlistType.Deserialize(line.GetParameters(), 0);
+
+            Assert.AreEqual(playlistType.PlaylistTypeValue, _playlistType.PlaylistTypeValue);
+        }
     }
 }

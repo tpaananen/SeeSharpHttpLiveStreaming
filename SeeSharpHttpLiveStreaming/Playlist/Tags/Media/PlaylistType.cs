@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
 {
@@ -26,6 +27,20 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         internal PlaylistType()
         {
             UsingDefaultCtor = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaylistType"/> class.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        public PlaylistType(string type)
+        {
+            type.RequireNotEmpty(type);
+            if (!Playlist.PlaylistType.IsValid(type))
+            {
+                throw new ArgumentException("The type is not valid.", "type");
+            }
+            PlaylistTypeValue = type;
         }
 
         /// <summary>
@@ -69,6 +84,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             {
                 throw new SerializationException("Failed to parse EXT-X-PLAYLIST-TYPE tag.", ex);
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            writer.Write(PlaylistTypeValue);
         }
     }
 }
