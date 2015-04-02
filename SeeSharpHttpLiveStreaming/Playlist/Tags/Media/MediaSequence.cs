@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
 {
@@ -36,6 +38,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         internal MediaSequence()
         {
             UsingDefaultCtor = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MediaSequence"/> class.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        public MediaSequence(long number)
+        {
+            Number = number;
         }
 
         /// <summary>
@@ -75,6 +86,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             {
                 throw new SerializationException("Failed to parse EXT-X-MEDIA-SEQUENCE tag.", ex);
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            writer.Write(Number.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
 {
@@ -46,6 +49,17 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
             Assert.AreEqual(54321, _mediaSequence.Number);
         }
 
+        [Test]
+        public void TestMediaSequenceSerializes()
+        {
+            var mediaSequence = new MediaSequence(121);
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            mediaSequence.Serialize(writer);
+            var playlist = new PlaylistLine(mediaSequence.TagName, sb.ToString());
+            _mediaSequence.Deserialize(playlist.GetParameters(), 0);
 
+            Assert.AreEqual(mediaSequence.Number, _mediaSequence.Number);
+        }
     }
 }
