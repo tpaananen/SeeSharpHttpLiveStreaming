@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
 {
@@ -24,6 +26,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         internal TargetDuration()
         {
             UsingDefaultCtor = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TargetDuration"/> class.
+        /// </summary>
+        /// <param name="duration">The duration.</param>
+        public TargetDuration(long duration)
+        {
+            if (duration <= 0)
+            {
+                throw new ArgumentException("The duration is required to be a positive value.", "duration");
+            }
+            Duration = duration;
         }
 
         /// <summary>
@@ -59,15 +74,24 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             try
             {
                 Duration = ValueParser.ParseInt(content);
-                if (Duration == 0)
+                if (Duration <= 0)
                 {
-                    throw new SerializationException("Non zero value is required.");
+                    throw new SerializationException("The duration is required to be a positive value.");
                 }
             }
             catch (Exception ex)
             {
                 throw new SerializationException("Failed to parse EXT-X-TARGETDURATION tag.", ex);
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            writer.Write(Duration.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

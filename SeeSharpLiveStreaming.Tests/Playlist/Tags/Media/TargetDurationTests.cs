@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
 {
@@ -28,7 +30,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
         }
 
         [Test]
-        public void TestTargetDurationParsingFailsWhenInvalidInputValue([Values("0", "sds")] string value)
+        public void TestTargetDurationParsingFailsWhenInvalidInputValue([Values("-1", "0", "sds")] string value)
         {
             Assert.Throws<SerializationException>(() => _targetDuration.Deserialize(value, 0));
         }
@@ -43,6 +45,24 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
         public void TestTargetDurationThrowsForEmptyInput()
         {
             Assert.Throws<ArgumentException>(() => _targetDuration.Deserialize(string.Empty, 0));
+        }
+
+        [Test]
+        public void TestTargetDurationCtorThrowsArgumentException([Values(-1L, 0L)] long value)
+        {
+            Assert.Throws<ArgumentException>(() => new TargetDuration(value));
+        }
+
+        [Test]
+        public void TestTargetDurationSerializes()
+        {
+            var dur = new TargetDuration(121L);
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            dur.Serialize(writer);
+            var line = new PlaylistLine(dur.TagName, sb.ToString());
+            _targetDuration.Deserialize(line.GetParameters(), 0);
+            Assert.AreEqual(dur.Duration, _targetDuration.Duration);
         }
 
     }
