@@ -51,7 +51,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         {
             uri.RequireNotNull("uri");
             Uri = uri;
-            ByteRange = length != 0 ? new ByteRange(length, startIndex) : new ByteRange();
+            ByteRange = length != 0 ? new ByteRange(length, startIndex) : ByteRange.Default;
         }
 
         /// <summary>
