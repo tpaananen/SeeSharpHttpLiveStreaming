@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -26,12 +27,23 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// </remarks>
     public class ProgramDateTime : BaseTag
     {
+        private const string Formatter = "O";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgramDateTime"/> class.
         /// </summary>
         internal ProgramDateTime()
         {
             UsingDefaultCtor = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgramDateTime"/> class.
+        /// </summary>
+        /// <param name="dateTime">The date time.</param>
+        public ProgramDateTime(DateTimeOffset dateTime)
+        {
+            DateTime = dateTime;
         }
 
         /// <summary>
@@ -83,6 +95,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             {
                 throw new SerializationException("Failed to parse EXT-X-PROGRAM-DATE-TIME tag.", ex);
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            writer.Write(DateTime.ToString(Formatter));
         }
     }
 }

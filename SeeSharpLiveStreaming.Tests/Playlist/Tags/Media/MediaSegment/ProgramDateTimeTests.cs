@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
 {
@@ -53,6 +55,20 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         {
             var exception = Assert.Throws<SerializationException>(() => _dateTime.Deserialize("2010-02-29T14:54:23.031Z", 0));
             Assert.AreEqual(typeof(FormatException), exception.InnerException.GetType());
+        }
+
+        [Test]
+        public void TestProgramDateTimeSerializes()
+        {
+            var now = DateTimeOffset.Now;
+            var date = new ProgramDateTime(now);
+            StringBuilder sb;
+            var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
+            date.Serialize(writer);
+            var line = new PlaylistLine(date.TagName, sb.ToString());
+            _dateTime.Deserialize(line.GetParameters(), 0);
+
+            Assert.AreEqual(now, _dateTime.DateTime);
         }
     }
 }
