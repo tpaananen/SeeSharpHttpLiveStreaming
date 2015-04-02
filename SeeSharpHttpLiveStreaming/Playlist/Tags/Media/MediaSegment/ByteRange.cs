@@ -86,7 +86,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// <summary>
         /// Gets the default byte range of 0@0.
         /// </summary>
-        public ByteRange Default
+        public static ByteRange Default
         {
             get
             {
