@@ -84,6 +84,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         public long StartIndex { get; private set; }
 
         /// <summary>
+        /// Gets the default byte range of 0@0.
+        /// </summary>
+        public ByteRange Default
+        {
+            get
+            {
+                return new ByteRange();
+            }
+        }
+
+        /// <summary>
         /// Deserializes the tag from the <paramref name="content"/>..
         /// </summary>
         /// <param name="content">The content.</param>
@@ -125,6 +136,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// </summary>
         /// <param name="writer">The writer.</param>
         protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            InternalSerializeAttributes(writer);
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        internal void InternalSerializeAttributes(IPlaylistWriter writer)
         {
             writer.Write(Length.ToString(CultureInfo.InvariantCulture));
             if (StartIndex > 0)

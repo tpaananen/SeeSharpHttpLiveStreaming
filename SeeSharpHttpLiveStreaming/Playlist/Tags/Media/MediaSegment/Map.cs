@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -38,6 +39,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         internal Map()
         {
             UsingDefaultCtor = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Map"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <param name="length">The length.</param>
+        /// <param name="startIndex">The start index.</param>
+        public Map(Uri uri, long length, long startIndex = 0)
+        {
+            uri.RequireNotNull("uri");
+            Uri = uri;
+            ByteRange = length != 0 ? new ByteRange(length, startIndex) : new ByteRange();
         }
 
         /// <summary>
@@ -95,6 +109,28 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             catch (Exception ex)
             {
                 throw new SerializationException("Failed to parse EXT-X-MAP tag.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            bool hasPreviousAttribute = true;
+            WriteQuotedString(writer, "URI", Uri.AbsoluteUri, ref hasPreviousAttribute);
+            WriteByteRange(writer);
+        }
+
+        private void WriteByteRange(IPlaylistWriter writer)
+        {
+            if (ByteRange != ByteRange.Default)
+            {
+                // Uri is REQUIRED, so always add comma
+                writer.Write(",BYTERANGE=\"");
+                ByteRange.InternalSerializeAttributes(writer);
+                writer.Write("\"");
             }
         }
 
