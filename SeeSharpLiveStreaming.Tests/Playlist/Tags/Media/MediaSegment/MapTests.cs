@@ -64,7 +64,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
-        public void TestSerializeSerializes([Values(0L, 121L)] long length)
+        public void TestMapSerializes([Values(0L, 121L)] long length)
         {
             var uri = new Uri("http://example.com/");
             var map = new Map(uri, length, 1024);
