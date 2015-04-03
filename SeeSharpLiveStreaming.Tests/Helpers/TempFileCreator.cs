@@ -58,6 +58,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
         /// <returns>
         /// The path to the file as <see cref="Uri"/>.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times. File is left open by the factory and the internal stream.")]
         internal static Uri CreateTempFile(string content)
         {
             var file = Path.GetTempFileName();
@@ -65,11 +66,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
             {
                 var uri = new Uri(file);
                 using (var fs = File.OpenWrite(file))
+                using (var writer = TestPlaylistWriterFactory.Create(fs))
                 {
-                    using (var writer = TestPlaylistWriterFactory.Create(fs))
-                    {
-                        writer.Write(content);
-                    }
+                    writer.Write(content);
                 }
                 return uri;
             }

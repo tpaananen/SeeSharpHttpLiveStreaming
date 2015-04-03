@@ -41,7 +41,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
         public static IPlaylistWriter Create(Stream stream)
         {
             stream.RequireNotNull("stream");
-            var internalWriter = new StreamWriter(stream, GetEncoding());
+            var internalWriter = new StreamWriter(stream, GetEncoding(), 4096, true);
             return new PlaylistWriter(internalWriter);
         }
 
