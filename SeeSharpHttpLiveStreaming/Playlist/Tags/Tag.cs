@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 {
     /// <summary>
-    /// Contains static set of valid tags in the playlist file.
+    /// Contains static set of valid tags in the playlist files.
     /// </summary>
     /// <remarks>
     /// Specification: https://tools.ietf.org/html/draft-pantos-http-live-streaming-14
@@ -14,7 +13,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
     {
 
         /// <summary>
-        /// Specifies the tag end marker.
+        /// Specifies the tag name end marker.
         /// </summary>
         internal const string TagEndMarker = ":";
 
@@ -58,7 +57,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <remarks>
         /// 4.3.3 Media Playlist Tags > https://tools.ietf.org/html/draft-pantos-http-live-streaming-14#section-4.3.3
         /// </remarks>
-        internal static readonly IReadOnlyCollection<string> MediaPlaylistTags = new ReadOnlyCollection<string>(
+        internal static readonly IReadOnlyCollection<string> MediaPlaylistTags = 
             new[]
             {
                 "#EXT-X-TARGETDURATION",
@@ -67,7 +66,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 "#EXT-X-ENDLIST",
                 "#EXT-X-PLAYLIST-TYPE",
                 "#EXT-X-I-FRAMES-ONLY"
-            });
+            };
 
         /// <summary>
         /// The master playlist tags
@@ -127,16 +126,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </returns>
         internal static bool IsMediaPlaylistTag(string tag)
         {
-            bool isValid = MediaPlaylistTags.Contains(tag);
-            if (!isValid)
-            {
-                isValid = MasterOrMediaPlaylistTags.Contains(tag);
-            }
-            return isValid;
+            return MediaPlaylistTags.Contains(tag) || 
+                   MasterOrMediaPlaylistTags.Contains(tag);
         }
 
         /// <summary>
-        /// Determines whether the tag is a media segment playlist tag.
+        /// Determines whether the tag is a media segment tag.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>
@@ -156,19 +151,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </returns>
         internal static bool IsMasterTag(string tag)
         {
-            bool isValid = MasterPlaylistTags.Contains(tag);
-            if (!isValid)
-            {
-                isValid = MasterOrMediaPlaylistTags.Contains(tag);
-            }
-            return isValid;
+            return MasterPlaylistTags.Contains(tag) || 
+                   MasterOrMediaPlaylistTags.Contains(tag);
         }
 
         /// <summary>
         /// Determines whether the specified tag is a valid tag.
         /// </summary>
-        /// <param name="tag">The tag to be validated.</param>
-        /// <returns></returns>
+        /// <param name="tag">The tag name to be validated.</param>
+        /// <returns>
+        /// <b>True</b> if the <paramref name="tag"/> is a valid playlist tag; otserwise, <b>false</b>.
+        /// </returns>
         public static bool IsValid(string tag)
         {
             return IsMasterTag(tag) ||
@@ -178,11 +171,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         }
 
         /// <summary>
-        /// Determines whether the tag is followed by URI.
+        /// Determines whether the tag may be followed by URI.
         /// </summary>
         /// <param name="tag">The tag.</param>
         /// <returns>
-        /// True if the tag is followed by the URI; otherwise, false.
+        /// <b>True</b> if the tag is followed by the URI; otherwise, <b>false</b>.
         /// </returns>
         public static bool IsFollowedByUri(string tag)
         {
@@ -194,7 +187,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// Determines whether the tag has attributes.
         /// </summary>
         /// <param name="tag">The tag.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// <b>True</b> if the <paramref name="tag"/> has attributes; otherwise, <b>false</b>.
+        /// </returns>
         public static bool HasAttributes(string tag)
         {
             return !HasNoAttributes.Contains(tag);
