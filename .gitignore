@@ -194,3 +194,4 @@ coverage
 coverage/*
 /coverals.ps1
 /SeeSharpLiveStreaming.Tests/TestCoverage/results.xml
+/SeeSharpLiveStreaming.sln.GhostDoc.xml
