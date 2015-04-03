@@ -40,8 +40,13 @@
     <Compile Include="Playlist\Enumerations.cs" />
     <Compile Include="Playlist\HlsPlaylist.cs" />
     <Compile Include="Playlist\HlsPlaylistParser.cs" />
+    <Compile Include="Playlist\Loaders\IPlaylistLoaderFactory.cs" />
+    <Compile Include="Playlist\Loaders\PlaylistLoader.cs" />
+    <Compile Include="Playlist\Loaders\HlsPlaylistReader.cs" />
     <Compile Include="Playlist\IEncryption.cs" />
     <Compile Include="Playlist\IHlsPlaylist.cs" />
+    <Compile Include="Playlist\Loaders\IPlaylistLoader.cs" />
+    <Compile Include="Playlist\Loaders\PlaylistLoaderFactory.cs" />
     <Compile Include="Playlist\MasterPlaylist.cs" />
     <Compile Include="Playlist\MediaPlaylist.cs" />
     <Compile Include="Playlist\PlaylistBase.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 namespace SeeSharpHttpLiveStreaming.Utils.Writers
 {
@@ -9,6 +10,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
     /// </summary>
     internal class PlaylistWriter : IPlaylistWriter
     {
+
+        private static readonly UTF8Encoding ReferenceEncoding = new UTF8Encoding(false);
+
         internal readonly TextWriter TextWriter;
         private bool _disposed;
 
@@ -16,9 +20,20 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
         /// Initializes a new instance of the <see cref="PlaylistWriter" /> class.
         /// </summary>
         /// <param name="writer">The writer.</param>
+        /// <exception cref="ArgumentException">
+        /// Thrown when encoding of the <paramref name="writer"/> is not <see cref="UTF8Encoding"/> or 
+        /// when the encoding of the <paramref name="writer"/> uses BOM.
+        /// </exception>
+        /// <remarks>
+        /// We could also use <see cref="ASCIIEncoding"/> as specified but we refuce to do so.
+        /// </remarks>
         internal PlaylistWriter(TextWriter writer)
         {
             writer.RequireNotNull("writer");
+            if (!Equals(writer.Encoding, ReferenceEncoding))
+            {
+                throw new ArgumentException("The internal writer must use UTF-8 encoding without BOM.");
+            }
             TextWriter = writer;
         }
 
@@ -40,6 +55,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
         {
             ThrowIfDisposedOf();
             TextWriter.WriteLine();
+            TextWriter.Flush();
         }
 
         [DebuggerStepThrough]
@@ -71,6 +87,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
         {
             if (disposing && !_disposed)
             {
+                TextWriter.Flush();
                 TextWriter.Dispose();
             }
             _disposed = true;

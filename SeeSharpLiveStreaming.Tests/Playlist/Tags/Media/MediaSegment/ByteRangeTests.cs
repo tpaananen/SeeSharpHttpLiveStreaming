@@ -112,7 +112,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
-        public void TestSerializeByteRange([Values(0, 12)] long startIndex)
+        public void TestSerializeByteRange([Values(0L, 12L)] long startIndex)
         {
             var byteRange = new ByteRange(123, startIndex);
             StringBuilder sb;

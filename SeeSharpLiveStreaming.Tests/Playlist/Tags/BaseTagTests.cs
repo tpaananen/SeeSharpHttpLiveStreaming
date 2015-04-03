@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
@@ -38,11 +39,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
             var tag = TagFactory.Create(tagName);
             if (tag.HasAttributes)
             {
-                Assert.Throws<InvalidOperationException>(() => tag.Serialize(new PlaylistWriter(new StringWriter())));
+                Assert.Throws<InvalidOperationException>(() => tag.Serialize(TestPlaylistWriterFactory.Create()));
             }
             else
             {
-                Assert.DoesNotThrow(() => tag.Serialize(new PlaylistWriter(new StringWriter())));
+                Assert.DoesNotThrow(() => tag.Serialize(TestPlaylistWriterFactory.Create()));
             }
         }
 

@@ -56,10 +56,23 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
             _playlistWriter.Dispose();
             Assert.Throws<ObjectDisposedException>(() => _playlistWriter.Write("You should be disposed of!"));
 
-            var playlistWriter = new PlaylistWriter(new StringWriter(_stringBuilder));
+            var playlistWriter = (PlaylistWriter)TestPlaylistWriterFactory.Create();
             playlistWriter.Close(false);
             playlistWriter.Close(true);
             Assert.Throws<ObjectDisposedException>(playlistWriter.WriteLineEnd);
+        }
+
+        [Test]
+        public void TestPlaylistWriterThrowsArgumentExceptionIfInternalWriterUsesOtherThanUtf8Encoding()
+        {
+            Assert.Throws<ArgumentException>(() => new PlaylistWriter(new StreamWriter(new MemoryStream())));
+            Assert.Throws<ArgumentException>(() => new PlaylistWriter(new StreamWriter(new MemoryStream(), new ASCIIEncoding())));
+        }
+
+        [Test]
+        public void TestPlaylistWriterThrowsArgumentExceptionIfInternalWriterUsesUtf8EncodingWithBom()
+        {
+            Assert.Throws<ArgumentException>(() => new PlaylistWriter(new StreamWriter(new MemoryStream(), new UTF8Encoding(true))));
         }
     }
 }
