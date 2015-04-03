@@ -12,6 +12,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets the version.
         /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the playlist has not been initialized.
+        /// </exception>
         int Version { get; }
 
         /// <summary>
@@ -22,6 +25,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets a value indicating whether the <see cref="Playlist"/> is a master playlist.
         /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the playlist has not been initialized.
+        /// </exception>
         bool IsMaster { get; }
 
         /// <summary>
@@ -36,6 +42,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="content"/> is <b>null</b>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the <paramref name="content"/> is empty string.
         /// </exception>
         void Parse(string content);
     }

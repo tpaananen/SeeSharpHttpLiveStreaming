@@ -20,21 +20,34 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets a value indicating whether this playlist is a master playlist.
         /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the playlist has not been initialized.
+        /// </exception>
         public bool IsMaster
         {
-            get { return Playlist is MasterPlaylist; }
+            get
+            {
+                if (Playlist == null)
+                {
+                    throw new InvalidOperationException("The playlist has not been initialized.");
+                }
+                return Playlist is MasterPlaylist;
+            }
         }
 
         /// <summary>
         /// Gets the version.
         /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the playlist has not been initialized.
+        /// </exception>
         public int Version 
         {
             get
             {
                 if (Playlist == null)
                 {
-                    throw new InvalidOperationException("The playlist has not been parsed.");
+                    throw new InvalidOperationException("The playlist has not been initialized.");
                 }
                 return Playlist.Version;
             }
@@ -45,13 +58,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">
-        /// Thrown when parsing fails.
+        /// Thrown when parsing of the <paramref name="content"/> fails.
         /// </exception>
         /// <exception cref="InvalidOperationException">
         /// Thrown if the playlist has already been deserialized.
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="content"/> is <b>null</b>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the <paramref name="content"/> is empty string.
         /// </exception>
         public void Parse(string content)
         {

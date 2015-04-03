@@ -264,13 +264,23 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         }
 
         [Test]
-        public void TestPlaylistThrowsIfVersionIsRequestedBeforePlaylistIsParsed()
+        public void TestPlaylistThrowsIfVersionIsRequestedBeforePlaylistIsInitialized()
         {
             var list = new HlsPlaylist();
 #pragma warning disable 219
             int x = 0;
 #pragma warning restore 219
             Assert.Throws<InvalidOperationException>(() => x = list.Version);
+        }
+
+        [Test]
+        public void TestPlaylistThrowsIfIsMasterIsRequestedBeforePlaylistIsInitialized()
+        {
+            var list = new HlsPlaylist();
+#pragma warning disable 219
+            bool x = false;
+#pragma warning restore 219
+            Assert.Throws<InvalidOperationException>(() => x = list.IsMaster);
         }
 
         [Test]
