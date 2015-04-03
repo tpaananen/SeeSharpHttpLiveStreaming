@@ -378,7 +378,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 throw new SerializationException("Invalid value provided in DEFAULT attribute.");
             }
-            Default = defaultValue == YesNo.Yes;
+            Default = YesNo.FromString(defaultValue);
         }
 
         private void ParseAutoSelect(string content)
@@ -389,7 +389,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 throw new SerializationException("Invalid value provided in AUTOSELECT attribute.");
             }
-            AutoSelect = value == YesNo.Yes;
+            AutoSelect = YesNo.FromString(value);
             if (value != string.Empty)
             {
                 if (Default)
@@ -414,7 +414,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             {
                 throw new SerializationException("FORCED attribute must not exist when TYPE is not SUBTITLES.");
             }
-            Forced = value == YesNo.Yes;
+            Forced = YesNo.FromString(value);
         }
 
         private void ParseInstreamId(string content)

@@ -123,6 +123,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             return value ? Yes : required ? No : string.Empty;
         }
+
+        /// <summary>
+        /// Converts the <paramref name="value"/> to the <see cref="Boolean"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <b>True</b> if the <paramref name="value"/> is <see cref="Yes"/>; otherwise, returns <b>false</b>.
+        /// </returns>
+        public static bool FromString(string value)
+        {
+            return value == Yes;
+        }
     }
 
     /// <summary>
