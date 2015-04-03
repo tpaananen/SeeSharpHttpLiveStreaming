@@ -39,6 +39,7 @@
     <Compile Include="ISerializable.cs" />
     <Compile Include="Playlist\Enumerations.cs" />
     <Compile Include="Playlist\HlsPlaylist.cs" />
+    <Compile Include="Playlist\HlsPlaylistCreator.cs" />
     <Compile Include="Playlist\HlsPlaylistParser.cs" />
     <Compile Include="Playlist\Loaders\IPlaylistLoaderFactory.cs" />
     <Compile Include="Playlist\Loaders\PlaylistLoader.cs" />
