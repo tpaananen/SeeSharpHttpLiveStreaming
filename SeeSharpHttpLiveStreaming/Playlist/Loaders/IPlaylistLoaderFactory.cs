@@ -1,14 +1,16 @@
 ﻿namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
 {
     /// <summary>
-    /// 
+    /// Represents playlist loader factory interface.
     /// </summary>
     public interface IPlaylistLoaderFactory
     {
         /// <summary>
-        /// Creates this instance.
+        /// Creates a new instance of <see cref="IPlaylistLoader"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// An instance of <see cref="IPlaylistLoader"/>.
+        /// </returns>
         IPlaylistLoader Create();
     }
 

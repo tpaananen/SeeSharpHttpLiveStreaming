@@ -25,7 +25,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
         /// when the encoding of the <paramref name="writer"/> uses BOM.
         /// </exception>
         /// <remarks>
-        /// We could also use <see cref="ASCIIEncoding"/> as specified but we refuce to do so.
+        /// We could also use <see cref="ASCIIEncoding"/> as specified but we refuse to do so.
         /// </remarks>
         internal PlaylistWriter(TextWriter writer)
         {

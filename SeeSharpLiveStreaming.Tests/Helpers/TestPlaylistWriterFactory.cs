@@ -55,7 +55,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
         public static IPlaylistWriter CreateWithStringBuilder(out StringBuilder stringBuilder)
         {
             stringBuilder = new StringBuilder();
-            var encoding = new UTF8Encoding(false);
+            var encoding = GetEncoding();
             var memoryStream = new WriteOnlyStream(stringBuilder, encoding);
             var internalWriter = new StreamWriter(memoryStream, encoding);
             return new PlaylistWriter(internalWriter);
