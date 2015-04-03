@@ -65,7 +65,6 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [Test]
         public void TestPlaylistWriterThrowsArgumentExceptionIfInternalWriterUsesOtherThanUtf8Encoding()
         {
-            Assert.Throws<ArgumentException>(() => new PlaylistWriter(new StreamWriter(new MemoryStream())));
             Assert.Throws<ArgumentException>(() => new PlaylistWriter(new StreamWriter(new MemoryStream(), new UnicodeEncoding())));
         }
 
