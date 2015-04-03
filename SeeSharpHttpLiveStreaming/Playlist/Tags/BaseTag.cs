@@ -86,9 +86,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// When overridden in a derived class serializes the attributes.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        protected virtual void SerializeAttributes(IPlaylistWriter writer)
-        {
-        }
+        protected abstract void SerializeAttributes(IPlaylistWriter writer);
 
         /// <summary>
         /// Creates the specified content.

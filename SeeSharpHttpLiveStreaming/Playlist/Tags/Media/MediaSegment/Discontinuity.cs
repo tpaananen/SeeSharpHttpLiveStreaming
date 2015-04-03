@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -73,6 +74,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             {
                 throw new SerializationException("The EXT-X-DISCONTINUITY tag must not have any attributes.");
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes. This tag has no attributes so it does nothing.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
         }
     }
 }

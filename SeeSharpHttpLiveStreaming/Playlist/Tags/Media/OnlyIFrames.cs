@@ -1,5 +1,6 @@
 ﻿using System;
 using SeeSharpHttpLiveStreaming.Utils;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
 {
@@ -85,6 +86,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             {
                 throw new ArgumentException("The " + TagName.Substring(1) + " must not have attributes.");
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes. This tag has no attributes so it does nothing.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
         }
     }
 }

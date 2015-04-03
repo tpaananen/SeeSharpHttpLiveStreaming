@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
 {
@@ -43,6 +45,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DiscontinuitySequence"/> class.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        public DiscontinuitySequence(long number)
+        {
+            if (number < 0)
+            {
+                throw new ArgumentException("The number must be non-negative decimal integer.");
+            }
+            Number = number;
+        }
+
+        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName
@@ -77,8 +92,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             }
             catch (Exception ex)
             {
-                throw new SerializationException("Failed to parse " + TagName.Substring(1) + " tag.", ex);
+                throw new SerializationException("Failed to parse " + TagName + " tag.", ex);
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
+            writer.Write(Number.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

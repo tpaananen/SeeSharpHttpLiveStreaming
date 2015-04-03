@@ -1,4 +1,5 @@
 ﻿using System;
+using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
 {
@@ -60,6 +61,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
             {
                 throw new ArgumentException("The EXT-X-INDEPENDENT-SEGMENTS tag must not have attributes.");
             }
+        }
+
+        /// <summary>
+        /// Serializes the attributes. This tag has no attributes so it does nothing.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        protected override void SerializeAttributes(IPlaylistWriter writer)
+        {
         }
     }
 }
