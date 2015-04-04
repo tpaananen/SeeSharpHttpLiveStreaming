@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
@@ -11,10 +12,27 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
     {
 
         [Test]
+        public void TestBaseTagCreateThrowsIfStartTagIsTriedToCreate()
+        {
+            var line = new PlaylistLine(Tag.StartLine, Tag.StartLine);
+            Assert.Throws<InvalidOperationException>(() => TagFactory.Create(line, 0));
+        }
+
+        [Test]
         public void TestTagFactoryCreatesTag()
         {
             var tag = TagFactory.Create("#EXT-X-VERSION");
             Assert.AreEqual(typeof(Version), tag.GetType());
+        }
+
+        [Test]
+        public void TestTagFactoryCreatesTagFromLine()
+        {
+            var line = new PlaylistLine("#EXT-X-VERSION", "#EXT-X-VERSION:3");
+            var tag = TagFactory.Create(line, 0);
+            Assert.AreEqual(typeof(Version), tag.GetType());
+            Assert.AreEqual(3, ((Version)tag).VersionNumber);
+            Assert.IsTrue(tag.UsingDefaultCtor);
         }
 
         [Test]

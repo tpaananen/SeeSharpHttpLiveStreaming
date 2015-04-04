@@ -81,7 +81,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             try
             {
                 IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content);
-                Playlist = PlaylistBase.Create(playlist);
+                Playlist = PlaylistFactory.Create(playlist);
             }
             catch (Exception ex)
             {

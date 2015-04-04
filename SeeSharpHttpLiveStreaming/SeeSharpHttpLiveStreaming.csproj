@@ -51,6 +51,7 @@
     <Compile Include="Playlist\MasterPlaylist.cs" />
     <Compile Include="Playlist\MediaPlaylist.cs" />
     <Compile Include="Playlist\PlaylistBase.cs" />
+    <Compile Include="Playlist\PlaylistFactory.cs" />
     <Compile Include="Playlist\PlaylistLine.cs" />
     <Compile Include="Playlist\Tags\BaseTag.cs" />
     <Compile Include="Playlist\Tags\BasicTags\Version.cs" />

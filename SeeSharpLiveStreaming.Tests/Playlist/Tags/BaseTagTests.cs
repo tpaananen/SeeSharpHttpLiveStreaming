@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Moq;
 using NUnit.Framework;
-using SeeSharpHttpLiveStreaming.Playlist;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
@@ -19,12 +18,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         [Datapoints]
         public IEnumerable<string> Tags = TagFactory.TypeMapping.Keys.ToList();
 
-        [Test]
-        public void TestBaseTagCreateThrowsIfStartTagIsTriedToCreate()
-        {
-            var line = new PlaylistLine(Tag.StartLine, Tag.StartLine);
-            Assert.Throws<InvalidOperationException>(() => BaseTag.Create(line, 0));
-        }
+        
 
         [Theory]
         public void TestTagsReportsHasAttributesCorrectly(string tagName)

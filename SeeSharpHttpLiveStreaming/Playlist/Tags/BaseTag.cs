@@ -89,26 +89,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         protected abstract void SerializeAttributes(IPlaylistWriter writer);
 
         /// <summary>
-        /// Creates the specified content.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="version">The version.</param>
-        /// <returns></returns>
-        /// <exception cref="System.InvalidOperationException">The start tag cannot be created.</exception>
-        /// <exception cref="System.Runtime.Serialization.SerializationException">Thrown if parsing of the content fails.</exception>
-        internal static BaseTag Create(PlaylistLine line, int version)
-        {
-            if (line.Tag == Tag.StartLine)
-            {
-                throw new InvalidOperationException("The start tag cannot be created.");
-            }
-
-            var tagObject = TagFactory.Create(line.Tag);
-            tagObject.Deserialize(line.GetParameters(), version);
-            return tagObject;
-        }
-
-        /// <summary>
         /// Formats the decimal value.
         /// </summary>
         /// <param name="value">The value.</param>

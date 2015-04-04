@@ -52,6 +52,7 @@
     <Compile Include="Playlist\Loaders\HlsPlaylistReaderTests.cs" />
     <Compile Include="Playlist\Loaders\PlaylistLoaderTests.cs" />
     <Compile Include="Playlist\Loaders\PlaylistLoaderFactoryTests.cs" />
+    <Compile Include="Playlist\PlaylistFactoryTests.cs" />
     <Compile Include="Playlist\PlaylistLineTests.cs" />
     <Compile Include="Playlist\PlaylistReadingTestBase.cs" />
     <Compile Include="Playlist\TagParserTests.cs" />

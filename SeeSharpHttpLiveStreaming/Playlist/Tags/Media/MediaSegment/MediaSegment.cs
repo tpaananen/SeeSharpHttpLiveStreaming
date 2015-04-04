@@ -32,7 +32,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         {
             if (line.Tag != Discontinuity)
             {
-                _tags.Add(BaseTag.Create(line, version));
+                _tags.Add(TagFactory.Create(line, version));
             }
             // Set flag that was changed due to discont..
         }
@@ -79,7 +79,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 
             if (_tags.Count == 0)
             {
-                _tags.Add(BaseTag.Create(line, version));
+                _tags.Add(TagFactory.Create(line, version));
                 return true;
             }
 
@@ -88,7 +88,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 return false;
             }
 
-            _tags.Add(BaseTag.Create(line, version));
+            _tags.Add(TagFactory.Create(line, version));
             return true;
         }
     }
