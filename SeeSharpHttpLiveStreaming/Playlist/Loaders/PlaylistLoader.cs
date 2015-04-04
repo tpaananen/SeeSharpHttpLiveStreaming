@@ -21,7 +21,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
             = new ReadOnlyCollection<string>(new [] { ".m3u8", ".m3u" });
 
         internal static readonly IReadOnlyCollection<string> ValidContentTypes 
-            = new ReadOnlyCollection<string>(new [] { "application/vnd.apple.mpegurl", "audio/mpegurl" });
+            = new ReadOnlyCollection<string>(new [] { "application/vnd.apple.mpegurl", "audio/mpegurl",  });
 
         /// <summary>
         /// Loads the content from the <paramref name="uri" />.
@@ -109,7 +109,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
             else
             {
                 var contentType = responseHeaders.Get("Content-Type");
-                if (!ValidContentTypes.Contains(contentType))
+                if (string.IsNullOrEmpty(contentType))
+                {
+                    throw new SerializationException("Failed to get content type.");
+                }
+                contentType = contentType.Split(new [] { ";" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                
+                if (!ValidContentTypes.Contains(contentType)) // There can be charset included in the content type
                 {
                     throw new SerializationException("The content cannot be identified as a proper playlist file " 
                                             + " content type of response headers. Content type received " + contentType);
