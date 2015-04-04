@@ -33,7 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         public IHlsPlaylist CreateFrom(Uri uri)
         {
             var loader = new HlsPlaylistReader(_factory);
-            var content = loader.Read(uri);
+            string content = loader.Read(uri);
             return HlsPlaylistParser.Parse(content);
         }
 
@@ -56,7 +56,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         public async Task<IHlsPlaylist> CreateFromAsync(Uri uri)
         {
             var loader = new HlsPlaylistReader(_factory);
-            var content = await loader.ReadAsync(uri).ConfigureAwait(false);
+            string content = await loader.ReadAsync(uri).ConfigureAwait(false);
             return HlsPlaylistParser.Parse(content);
         }
     }

@@ -38,7 +38,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
         /// </exception>
         public string Read(Uri uri)
         {
-            var loader = _playlistLoaderFactory.Create();
+            IPlaylistLoader loader = _playlistLoaderFactory.Create();
             return loader.Load(uri);
         }
 
@@ -58,7 +58,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
         /// </exception>
         public Task<string> ReadAsync(Uri uri)
         {
-            var loader = _playlistLoaderFactory.Create();
+            IPlaylistLoader loader = _playlistLoaderFactory.Create();
             return loader.LoadAsync(uri);
         }
     }

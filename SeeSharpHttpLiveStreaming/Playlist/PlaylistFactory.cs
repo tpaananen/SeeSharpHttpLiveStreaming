@@ -32,7 +32,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             try
             {
                 IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content);
-                var firstTag = GetFirstNonCommonTag(playlist);
+                string firstTag = GetFirstNonCommonTag(playlist);
                 return CreatePlaylistByTag(firstTag, playlist);
             }
             catch (SerializationException)

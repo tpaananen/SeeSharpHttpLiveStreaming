@@ -55,7 +55,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             type.RequireNotEmpty("type");
             tags.RequireNotEmpty("tags");
             
-
             GroupId = groupId;
             Type = type;
             ExtMedias = GetMediaTags(groupId, tags);

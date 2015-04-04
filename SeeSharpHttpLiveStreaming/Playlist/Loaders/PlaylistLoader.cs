@@ -16,12 +16,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
     /// </summary>
     internal class PlaylistLoader : IPlaylistLoader
     {
+        private static readonly string[] ContentTypeSplitter = {";"};
 
         internal static readonly IReadOnlyCollection<string> ValidFileExtensions
             = new ReadOnlyCollection<string>(new [] { ".m3u8", ".m3u" });
 
         internal static readonly IReadOnlyCollection<string> ValidContentTypes 
-            = new ReadOnlyCollection<string>(new [] { "application/vnd.apple.mpegurl", "audio/mpegurl",  });
+            = new ReadOnlyCollection<string>(new [] { "application/vnd.apple.mpegurl", "audio/mpegurl" });
 
         /// <summary>
         /// Loads the content from the <paramref name="uri" />.
@@ -98,8 +99,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
         {
             if (uri.IsFile)
             {
-                var filename = Path.GetFileName(uri.LocalPath);
-                var extension = Path.GetExtension(filename);
+                string filename = Path.GetFileName(uri.LocalPath);
+                string extension = Path.GetExtension(filename);
                 if (!ValidFileExtensions.Contains(extension))
                 {
                     throw new SerializationException("The content cannot be identified as a proper playlist file " 
@@ -108,14 +109,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
             }
             else
             {
-                var contentType = responseHeaders.Get("Content-Type");
+                string contentType = responseHeaders.Get("Content-Type");
                 if (string.IsNullOrEmpty(contentType))
                 {
                     throw new SerializationException("Failed to get content type.");
                 }
-                contentType = contentType.Split(new [] { ";" }, StringSplitOptions.RemoveEmptyEntries)[0];
-                
-                if (!ValidContentTypes.Contains(contentType)) // There can be charset included in the content type
+                // Get the first instance of splitted string which should be the actual content type
+                // There can be charset included in the content type
+                contentType = contentType.Split(ContentTypeSplitter, StringSplitOptions.RemoveEmptyEntries)[0];
+                if (!ValidContentTypes.Contains(contentType))
                 {
                     throw new SerializationException("The content cannot be identified as a proper playlist file " 
                                             + " content type of response headers. Content type received " + contentType);
