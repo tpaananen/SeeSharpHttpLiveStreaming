@@ -9,13 +9,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
     internal static class TestPlaylistWriterFactory
     {
 
-        /// <summary>
-        /// Gets the encoding.
-        /// </summary>
-        /// <returns></returns>
-        private static Encoding GetEncoding()
+        private static Stream GetStream(StringBuilder builder)
         {
-            return new UTF8Encoding(false);
+            return new WriteOnlyStream(builder, new UTF8Encoding(false));
         }
 
         /// <summary>
@@ -27,10 +23,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
         public static IPlaylistWriter Create()
         {
             var stringBuilder = new StringBuilder();
-            var encoding = GetEncoding();
-            var memoryStream = new WriteOnlyStream(stringBuilder, encoding);
-            var internalWriter = new StreamWriter(memoryStream, encoding);
-            return new PlaylistWriter(internalWriter);
+            return new PlaylistWriter(GetStream(stringBuilder));
         }
 
         /// <summary>
@@ -41,8 +34,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
         public static IPlaylistWriter Create(Stream stream)
         {
             stream.RequireNotNull("stream");
-            var internalWriter = new StreamWriter(stream, GetEncoding(), 4096, true);
-            return new PlaylistWriter(internalWriter);
+            return new PlaylistWriter(stream);
         }
 
         /// <summary>
@@ -55,10 +47,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
         public static IPlaylistWriter CreateWithStringBuilder(out StringBuilder stringBuilder)
         {
             stringBuilder = new StringBuilder();
-            var encoding = GetEncoding();
-            var memoryStream = new WriteOnlyStream(stringBuilder, encoding);
-            var internalWriter = new StreamWriter(memoryStream, encoding);
-            return new PlaylistWriter(internalWriter);
+            return new PlaylistWriter(GetStream(stringBuilder));
         }
 
         internal sealed class WriteOnlyStream : Stream

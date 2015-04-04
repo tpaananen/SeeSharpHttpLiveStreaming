@@ -29,9 +29,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
             _httpListener.Prefixes.Clear();
             _httpListener.Prefixes.Add(string.Format("{0}://{1}:{2}/", Uri.UriSchemeHttp, "localhost", port));
             _httpListener.Start();
-            Console.WriteLine("Listening @ " + port);
-            // ReSharper disable once CSharpWarnings::CS4014
+            #pragma warning disable 4014
             BeginGetContext(contentType, playlistContent);
+            #pragma warning restore 4014
         }
 
         // ReSharper disable once UnusedMethodReturnValue.Local
@@ -46,13 +46,14 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
 
                 var context = await _httpListener.GetContextAsync().ConfigureAwait(false);
 
-                // ReSharper disable once CSharpWarnings::CS4014
+                #pragma warning disable 4014
                 BeginGetContext(contentType, playlistContent);
+                #pragma warning restore 4014
 
                 var response = context.Response;
                 response.ContentType = contentType;
-                var encoding = new UTF8Encoding(false);
-                var bytes = encoding.GetBytes(playlistContent);
+                response.ContentEncoding = new UTF8Encoding(false);
+                var bytes = response.ContentEncoding.GetBytes(playlistContent);
                 await response.OutputStream.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
                 response.Close();
             }
@@ -86,9 +87,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
             {
                 try
                 {
-                    Console.WriteLine("Closing listener...");
                     _httpListener.Close();
-                    Console.WriteLine("Listener closed...");
                 }
                 catch (Exception ex)
                 {

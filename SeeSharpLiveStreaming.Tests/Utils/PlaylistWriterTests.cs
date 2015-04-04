@@ -63,15 +63,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         }
 
         [Test]
-        public void TestPlaylistWriterThrowsArgumentExceptionIfInternalWriterUsesOtherThanUtf8Encoding()
+        public void TestPlaylistWriterThrowsArgumentOutOfRangeExceptionWithInvalidBufferSize([Values(-1, 0)] int bufferSize)
         {
-            Assert.Throws<ArgumentException>(() => new PlaylistWriter(new StreamWriter(new MemoryStream(), new UnicodeEncoding())));
-        }
-
-        [Test]
-        public void TestPlaylistWriterThrowsArgumentExceptionIfInternalWriterUsesUtf8EncodingWithBom()
-        {
-            Assert.Throws<ArgumentException>(() => new PlaylistWriter(new StreamWriter(new MemoryStream(), new UTF8Encoding(true))));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new PlaylistWriter(new MemoryStream(), bufferSize));
         }
     }
 }

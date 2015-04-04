@@ -11,30 +11,29 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
     internal class PlaylistWriter : IPlaylistWriter
     {
 
-        private static readonly UTF8Encoding ReferenceEncoding = new UTF8Encoding(false);
-
         internal readonly TextWriter TextWriter;
         private bool _disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaylistWriter" /> class.
         /// </summary>
-        /// <param name="writer">The writer.</param>
-        /// <exception cref="ArgumentException">
-        /// Thrown when encoding of the <paramref name="writer"/> is not <see cref="UTF8Encoding"/> or 
-        /// when the encoding of the <paramref name="writer"/> uses BOM.
+        /// <param name="stream">The stream.</param>
+        /// <param name="bufferSize">Size of the buffer.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the <paramref name="stream"/> is <b>null</b>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when the <paramref name="bufferSize"/> is out of range.
         /// </exception>
         /// <remarks>
-        /// We could also use <see cref="ASCIIEncoding"/> as specified, it is allowed if the framework used is 
-        /// allowing it in the comparison.
+        /// The stream is owned by the writer from now own. When the writer instance is 
+        /// being disposed of, the stream also is closed.
         /// </remarks>
-        internal PlaylistWriter(TextWriter writer)
+        internal PlaylistWriter(Stream stream, int bufferSize = ushort.MaxValue)
         {
-            writer.RequireNotNull("writer");
-            if (!Equals(writer.Encoding, ReferenceEncoding))
-            {
-                throw new ArgumentException("The internal writer must use UTF-8 encoding without BOM.");
-            }
+            stream.RequireNotNull("stream");
+            var encoding = new UTF8Encoding(false);
+            var writer = new StreamWriter(stream, encoding, bufferSize, false);
             TextWriter = writer;
         }
 
