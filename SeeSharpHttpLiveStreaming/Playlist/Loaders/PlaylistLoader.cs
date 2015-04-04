@@ -97,32 +97,35 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
         /// </remarks>
         private static void ValidateContentByUriOrHeaders(Uri uri, NameValueCollection responseHeaders)
         {
-            if (uri.IsFile)
+            if (ValidateByFileName(uri))
             {
-                string filename = Path.GetFileName(uri.LocalPath);
-                string extension = Path.GetExtension(filename);
-                if (!ValidFileExtensions.Contains(extension))
-                {
-                    throw new SerializationException("The content cannot be identified as a proper playlist file " 
-                                            + " by URI.");
-                }
+                return;
             }
-            else
+            ValidateByContentType(responseHeaders);
+        }
+
+        private static void ValidateByContentType(NameValueCollection responseHeaders)
+        {
+            string contentType = responseHeaders.Get("Content-Type");
+            if (string.IsNullOrEmpty(contentType))
             {
-                string contentType = responseHeaders.Get("Content-Type");
-                if (string.IsNullOrEmpty(contentType))
-                {
-                    throw new SerializationException("Failed to get content type.");
-                }
-                // Get the first instance of splitted string which should be the actual content type
-                // There can be charset included in the content type
-                contentType = contentType.Split(ContentTypeSplitter, StringSplitOptions.RemoveEmptyEntries)[0];
-                if (!ValidContentTypes.Contains(contentType))
-                {
-                    throw new SerializationException("The content cannot be identified as a proper playlist file " 
-                                            + " content type of response headers. Content type received " + contentType);
-                }
+                throw new SerializationException("Failed to get content type for validation.");
             }
+            // Get the first instance of splitted string which should be the actual content type
+            // There can be charset included in the content type
+            contentType = contentType.Split(ContentTypeSplitter, StringSplitOptions.RemoveEmptyEntries)[0];
+            if (!ValidContentTypes.Contains(contentType))
+            {
+                throw new SerializationException("The content cannot be identified as a proper playlist file. "
+                                                 + "Content type received " + contentType);
+            }
+        }
+
+        private static bool ValidateByFileName(Uri uri)
+        {
+            string filename = Path.GetFileName(WebUtility.UrlDecode(uri.ToString()));
+            string extension = Path.GetExtension(filename);
+            return ValidFileExtensions.Contains(extension);
         }
     }
 }

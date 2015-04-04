@@ -52,6 +52,34 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
             }
         }
 
+        [Theory]
+        public void TestPlaylistLoaderLoadsFromHttpServerUsingTxt(string contentType)
+        {
+            using (var server = new TestWebServer())
+            {
+                var content = CreateValidMasterPlaylist("\n");
+                server.Listen(_port, contentType, content);
+                _uri = new Uri(string.Format("{0}://{1}:{2}/GetTempFile/temp.txt", Uri.UriSchemeHttp, "localhost", _port));
+                var loader = new PlaylistLoader();
+                var loadedContent = loader.Load(_uri);
+                Assert.AreEqual(content, loadedContent);
+            }
+        }
+
+        [Theory]
+        public async Task TestPlaylistLoaderLoadsFromHttpServerAsyncUsingTxt(string contentType)
+        {
+            using (var server = new TestWebServer())
+            {
+                var content = CreateValidMasterPlaylist("\n");
+                server.Listen(_port, contentType, content);
+                _uri = new Uri(string.Format("{0}://{1}:{2}/GetTempFile/temp.txt", Uri.UriSchemeHttp, "localhost", _port));
+                var loader = new PlaylistLoader();
+                var loadedContent = await loader.LoadAsync(_uri).ConfigureAwait(false);
+                Assert.AreEqual(content, loadedContent);
+            }
+        }
+
         [Test]
         public void TestPlaylistLoaderRefusesToLoadPlaylistFromHttpServerIfContentTypeIsInvalid([Values(null, "", "invalid.content.type")] string contentType)
         {
@@ -59,7 +87,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
             {
                 var content = CreateValidMasterPlaylist("\n");
                 server.Listen(_port, contentType, content);
-
+                _uri = new Uri(string.Format("{0}://{1}:{2}/GetTempFile/temp.txt", Uri.UriSchemeHttp, "localhost", _port));
                 var loader = new PlaylistLoader();
                 Assert.Throws<IOException>(() => loader.Load(_uri));
             }
@@ -72,7 +100,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
             {
                 var content = CreateValidMasterPlaylist("\n");
                 server.Listen(_port, contentType, content);
-
+                _uri = new Uri(string.Format("{0}://{1}:{2}/GetTempFile/temp.txt", Uri.UriSchemeHttp, "localhost", _port));
                 var loader = new PlaylistLoader();
                 Assert.Throws<IOException>(async () => await loader.LoadAsync(_uri).ConfigureAwait(false));
             }
