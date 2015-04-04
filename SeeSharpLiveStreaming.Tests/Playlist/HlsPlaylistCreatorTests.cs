@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist.Loaders;
 using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist
@@ -10,6 +12,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
     {
 
         private HlsPlaylistCreator _creator;
+        private readonly string _extension = PlaylistLoader.ValidFileExtensions.ElementAt(0);
 
         [SetUp]
         public void SetUp()
@@ -24,7 +27,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         public void TestParserCreatesMasterPlaylist(string newLine)
         {
             var playlist = CreateValidMasterPlaylist(newLine);
-            TempFileCreator.RunInSafeContext(playlist, uri =>
+            
+            TempFileCreator.RunInSafeContext(playlist, _extension, uri =>
             {
                 var playlistObject = _creator.CreateFrom(uri);
                 AssertMasterPlaylist(playlistObject);
@@ -35,7 +39,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         public void TestParserCreatesMediaPlaylist(string newLine)
         {
             var playlist = CreateValidMediaPlaylist(newLine);
-            TempFileCreator.RunInSafeContext(playlist, uri =>
+            TempFileCreator.RunInSafeContext(playlist, _extension, uri =>
             {
                 var playlistObject = _creator.CreateFrom(uri);
                 AssertMediaPlaylist(playlistObject);
@@ -46,7 +50,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         public async Task TestParserCreatesMasterPlaylistAsync(string newLine)
         {
             var playlist = CreateValidMasterPlaylist(newLine);
-            await TempFileCreator.RunInSafeContextAsync(playlist, async uri =>
+            await TempFileCreator.RunInSafeContextAsync(playlist, _extension, async uri =>
             {
                 var playlistObject = await _creator.CreateFromAsync(uri).ConfigureAwait(false);
                 AssertMasterPlaylist(playlistObject);
@@ -57,7 +61,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         public async Task TestParserCreatesMediaPlaylistAsync(string newLine)
         {
             var playlist = CreateValidMediaPlaylist(newLine);
-            await TempFileCreator.RunInSafeContextAsync(playlist, async uri =>
+            await TempFileCreator.RunInSafeContextAsync(playlist, _extension, async uri =>
             {
                 var playlistObject = await _creator.CreateFromAsync(uri).ConfigureAwait(false);
                 AssertMediaPlaylist(playlistObject);

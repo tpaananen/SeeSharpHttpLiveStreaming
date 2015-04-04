@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
-using SeeSharpHttpLiveStreaming.Playlist.Tags;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist
 {
