@@ -85,7 +85,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
             _frame.Deserialize(sb.ToString().Replace(_frame.TagName + Tag.TagEndMarker, string.Empty), 0);
 
             Assert.AreEqual(frame.Video, _frame.Video);
-            Assert.AreEqual(frame.Uri.AbsoluteUri, _frame.Uri.AbsoluteUri);
+            Assert.AreEqual(frame.Uri, _frame.Uri);
             Assert.AreEqual(frame.AverageBandwidth, _frame.AverageBandwidth);
             Assert.AreEqual(frame.Bandwidth, _frame.Bandwidth);
             Assert.AreEqual(frame.Codecs, _frame.Codecs);

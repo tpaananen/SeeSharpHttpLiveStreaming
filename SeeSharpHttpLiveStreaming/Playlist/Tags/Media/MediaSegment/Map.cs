@@ -119,7 +119,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
             bool hasPreviousAttribute = true;
-            WriteQuotedString(writer, "URI", Uri.AbsoluteUri, ref hasPreviousAttribute);
+            WriteUri(writer, "URI", Uri, ref hasPreviousAttribute);
             WriteByteRange(writer);
         }
 
@@ -137,8 +137,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         private void ParseUri(string content)
         {
             const string name = "URI";
-            var value = ValueParser.ParseQuotedString(name, content, true);
-            Uri = new Uri(value);
+            Uri = ParseUri(name, content, true);
         }
 
         private void ParseByteRange(string content, int version)

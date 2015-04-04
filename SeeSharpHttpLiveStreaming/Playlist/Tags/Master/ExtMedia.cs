@@ -269,10 +269,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             WriteEnumeratedString(writer, "TYPE", Type, ref hasPreviousAttributes);
             if (Type != MediaTypes.ClosedCaptions)
             {
-                if (Uri != null)
-                {
-                    WriteQuotedString(writer, "URI", Uri.AbsoluteUri, ref hasPreviousAttributes);
-                }
+                WriteUri(writer, "URI", Uri, ref hasPreviousAttributes);
             }
             else
             {
@@ -331,19 +328,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         {
             const string name = "URI";
             bool mustNotExist = Type == MediaTypes.ClosedCaptions;
-            var uriString = ValueParser.ParseQuotedString(name, content, false);
+            var uri = ParseUri(name, content, false);
             if (mustNotExist)
             {
-                if (uriString != string.Empty)
+                if (uri != null)
                 {
                     throw new SerializationException("Failed to parse URI attribute, it must not exist when the TYPE is CLOSED-CAPTIONS.");
                 }
             }
-
-            if (uriString != string.Empty)
-            {
-                Uri = new Uri(uriString);
-            }
+            Uri = uri;
         }
 
         private void ParseGroupId(string content)

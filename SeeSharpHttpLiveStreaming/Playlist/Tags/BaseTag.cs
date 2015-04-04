@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Net;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
+using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
@@ -19,7 +21,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <summary>
         /// The decimal format specifier.
         /// </summary>
-        protected const string DecimalFormatSpecifier = "F2";
+        protected const string DecimalFormatSpecifier = "F3";
 
         /// <summary>
         /// Gets the name of the tag.
@@ -119,14 +121,34 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <param name="writer">The writer.</param>
         /// <param name="attribute">The attribute.</param>
         /// <param name="value">The value.</param>
-        /// <param name="hasPreviousAttribute">if set to <c>true</c> [has previous attribute].</param>
+        /// <param name="hasPreviousAttribute">if set to <c>true</c> has previous attribute.</param>
         protected static void WriteQuotedString(IPlaylistWriter writer, string attribute, string value, ref bool hasPreviousAttribute)
         {
             const string template = "{0}=\"{1}\"";
             if (!string.IsNullOrEmpty(value))
             {
                 WriteAttributeSeparator(writer, hasPreviousAttribute);
+                // TODO: escape
                 writer.Write(string.Format(template, attribute, value));
+                hasPreviousAttribute = true;
+            }
+        }
+
+        /// <summary>
+        /// Writes an URI.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="attribute">The attribute.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="hasPreviousAttribute">if set to <c>true</c> has previous attributes.</param>
+        protected static void WriteUri(IPlaylistWriter writer, string attribute, Uri value, ref bool hasPreviousAttribute)
+        {
+            const string template = "{0}=\"{1}\"";
+            if (value != null)
+            {
+                WriteAttributeSeparator(writer, hasPreviousAttribute);
+                var uri = WebUtility.UrlEncode(value.ToString());
+                writer.Write(string.Format(template, attribute, uri));
                 hasPreviousAttribute = true;
             }
         }
@@ -147,6 +169,21 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 writer.Write(string.Format(template, attribute, value));
                 hasPreviousAttribute = true;
             }
+        }
+
+        /// <summary>
+        /// Parses the URI.
+        /// </summary>
+        /// <param name="attributeName">Name of the attribute.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="required">if set to <c>true</c> the URI is required.</param>
+        /// <returns>
+        /// The <see cref="Uri"/> parsed from the content.
+        /// </returns>
+        protected static Uri ParseUri(string attributeName, string content, bool required)
+        {
+            var value = ValueParser.ParseQuotedString(attributeName, content, required);
+            return value != string.Empty ? new Uri(WebUtility.UrlDecode(value)) : null;
         }
     }
 }

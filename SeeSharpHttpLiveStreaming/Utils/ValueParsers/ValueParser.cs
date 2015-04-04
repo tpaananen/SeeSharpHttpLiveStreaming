@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 
 namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
@@ -18,8 +19,8 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                                                                 NumberStyles.Number | 
                                                                 NumberStyles.Integer;
 
-        const int SizeOfByte = 8; // bits
-        const string HexPrefixIdentifier = "0x";
+        private const int SizeOfByte = 8; // bits
+        private const string HexPrefixIdentifier = "0x"; // case ignored
 
         /// <summary>
         /// Gets the start position where the parsing starts.
@@ -284,11 +285,13 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than " + SizeOfByte + ".");
             }
 
-            if (value.StartsWith(HexPrefixIdentifier))
+            if (!value.StartsWith(HexPrefixIdentifier, StringComparison.OrdinalIgnoreCase))
             {
-                value = value.Substring(HexPrefixIdentifier.Length);
+                throw new SerializationException("The hex value does not have prefix of " + HexPrefixIdentifier + ", case ignored.");
             }
 
+            var prefix = value.Substring(0, HexPrefixIdentifier.Length);
+            value = value.Substring(HexPrefixIdentifier.Length);
             int sizeInBytes = bits / SizeOfByte;
             if (value.Length > sizeInBytes)
             {
@@ -296,7 +299,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                                                  bits + ".");
             }
 
-            value = value.PadLeft(sizeInBytes, '0');
+            value = prefix + value.PadLeft(sizeInBytes, '0');
             return value;
         }
 

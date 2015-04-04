@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
-using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
@@ -92,7 +91,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             try
             {
                 base.Deserialize(content, version);
-                ParseUri(content);
+                Uri = ParseUri("URI", content, true);
             }
             catch (Exception ex)
             {
@@ -108,14 +107,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         {
             bool hasPreviousAttributes;
             SerializeBaseAttributes(writer, out hasPreviousAttributes);
-            WriteQuotedString(writer, "URI", Uri.AbsoluteUri, ref hasPreviousAttributes);
-        }
-
-        private void ParseUri(string content)
-        {
-            const string name = "URI";
-            var value = ValueParser.ParseQuotedString(name, content, true);
-            Uri = new Uri(value);
+            WriteUri(writer, "URI", Uri, ref hasPreviousAttributes);
         }
     }
 }

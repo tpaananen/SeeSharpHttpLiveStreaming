@@ -219,7 +219,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 return;
             }
 
-            WriteQuotedString(writer, "URI", Uri.AbsoluteUri, ref hasPreviousAttributes);
+            WriteUri(writer, "URI", Uri, ref hasPreviousAttributes);
             WriteEnumeratedString(writer, "IV", InitializationVector, ref hasPreviousAttributes);
             WriteQuotedString(writer, "KEYFORMAT", KeyFormat, ref hasPreviousAttributes);
             WriteQuotedString(writer, "KEYFORMATVERSIONS", string.Join(KeyFormatVersionSeparator, KeyFormatVersions), ref hasPreviousAttributes);
@@ -228,8 +228,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         private void ParseUri(string content)
         {
             const string name = "URI";
-            var value = ValueParser.ParseQuotedString(name, content, true);
-            Uri = new Uri(value);
+            Uri = ParseUri(name, content, true);
         }
 
         private void ParseMethod(string content)

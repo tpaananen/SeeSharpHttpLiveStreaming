@@ -135,18 +135,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             AssertUriOrValueExistsButNotBoth();
             var hasPreviousAttributes = false;
             WriteQuotedString(writer, "DATA-ID", DataId, ref hasPreviousAttributes);
-            if (Uri != null)
-            {
-                WriteQuotedString(writer, "URI", Uri.AbsoluteUri, ref hasPreviousAttributes);
-            }
-            if (Value != null)
-            {
-                WriteQuotedString(writer, "VALUE", Value, ref hasPreviousAttributes);
-            }
-            if (!string.IsNullOrWhiteSpace(Language))
-            {
-                WriteQuotedString(writer, "LANGUAGE", Language, ref hasPreviousAttributes);
-            }
+            WriteUri(writer, "URI", Uri, ref hasPreviousAttributes);
+            WriteQuotedString(writer, "VALUE", Value, ref hasPreviousAttributes);
+            WriteQuotedString(writer, "LANGUAGE", Language, ref hasPreviousAttributes);
         }
 
         private void AssertUriOrValueExistsButNotBoth()
@@ -170,11 +161,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseUri(string content)
         {
             const string name = "URI";
-            var value = ValueParser.ParseQuotedString(name, content, false); // MUST BE IF VALUE DOES NOT EXIST
-            if (value != string.Empty)
-            {
-                Uri = new Uri(value);
-            }
+            Uri = ParseUri(name, content, false);
         }
 
         private void ParseValue(string content)
