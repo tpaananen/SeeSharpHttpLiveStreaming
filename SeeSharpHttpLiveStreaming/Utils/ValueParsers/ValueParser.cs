@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 
 namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers

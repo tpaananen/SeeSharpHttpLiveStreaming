@@ -100,22 +100,21 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
             {
                 var filename = Path.GetFileName(uri.LocalPath);
                 var extension = Path.GetExtension(filename);
-                if (ValidFileExtensions.Contains(extension))
+                if (!ValidFileExtensions.Contains(extension))
                 {
-                    return;
+                    throw new SerializationException("The content cannot be identified as a proper playlist file " 
+                                            + " by URI.");
                 }
             }
             else
             {
                 var contentType = responseHeaders.Get("Content-Type");
-                if (ValidContentTypes.Contains(contentType))
+                if (!ValidContentTypes.Contains(contentType))
                 {
-                    return;
+                    throw new SerializationException("The content cannot be identified as a proper playlist file " 
+                                            + " content type of response headers. Content type received " + contentType);
                 }
             }
-
-            throw new SerializationException("The content cannot be identified as a proper playlist file " 
-                                            + " by URI or content type of response headers.");
         }
     }
 }
