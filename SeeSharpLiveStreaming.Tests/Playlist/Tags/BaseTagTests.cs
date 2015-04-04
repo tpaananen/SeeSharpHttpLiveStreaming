@@ -18,8 +18,6 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         [Datapoints]
         public IEnumerable<string> Tags = TagFactory.TypeMapping.Keys.ToList();
 
-        
-
         [Theory]
         public void TestTagsReportsHasAttributesCorrectly(string tagName)
         {

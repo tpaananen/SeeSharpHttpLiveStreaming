@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Utils;
 
 namespace SeeSharpHttpLiveStreaming.Playlist
@@ -77,20 +75,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             {
                 throw new InvalidOperationException("The playlist is already deserialized.");
             }
-            
-            try
-            {
-                IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content);
-                Playlist = PlaylistFactory.Create(playlist);
-            }
-            catch (Exception ex)
-            {
-                if (ex is SerializationException)
-                {
-                    throw;
-                }
-                throw new SerializationException("Failed to parse playlist file.", ex);
-            }
+            Playlist = PlaylistFactory.Create(content);
         }
     }
 }

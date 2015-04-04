@@ -96,7 +96,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
             return new ReadOnlyCollection<PlaylistLine>(lines);
         }
 
-        private static void ProcessTag(string tag, StringReader reader, List<PlaylistLine> lines, string line)
+        private static void ProcessTag(string tag, TextReader reader, ICollection<PlaylistLine> lines, string line)
         {
             // Change this so that if it is media segment,
             // the next line can be uri but it might be another segment tag

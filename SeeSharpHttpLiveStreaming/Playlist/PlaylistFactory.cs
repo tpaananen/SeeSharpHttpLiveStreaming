@@ -13,19 +13,36 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     internal static class PlaylistFactory
     {
         /// <summary>
-        /// Creates a specific playlist depending on content of the <paramref name="playlist" />.
+        /// Creates a specific playlist depending on content of the <paramref name="content" />.
         /// </summary>
-        /// <param name="playlist">The playlist.</param>
+        /// <param name="content">The content.</param>
         /// <returns>
         /// The <see cref="PlaylistBase" /> instance.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the <paramref name="content"/> is <b>null</b>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the <paramref name="content"/> is empty string.
+        /// </exception>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        internal static PlaylistBase Create(IReadOnlyCollection<PlaylistLine> playlist)
+        internal static PlaylistBase Create(string content)
         {
-            playlist.RequireNotEmpty("playlist");
-
-            var firstTag = GetFirstNonCommonTag(playlist);
-            return CreatePlaylistByTag(firstTag, playlist);
+            content.RequireNotEmpty("content");
+            try
+            {
+                IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content);
+                var firstTag = GetFirstNonCommonTag(playlist);
+                return CreatePlaylistByTag(firstTag, playlist);
+            }
+            catch (SerializationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException("Failed to create playlist.", ex);
+            }
         }
 
         /// <summary>
