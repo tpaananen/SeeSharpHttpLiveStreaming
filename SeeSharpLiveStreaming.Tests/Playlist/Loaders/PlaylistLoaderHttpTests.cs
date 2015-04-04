@@ -27,8 +27,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
         [Theory]
         public void TestPlaylistLoaderLoadsFromHttpServer(string contentType)
         {
-            var server = new TestWebServer();
-            try
+            using (var server = new TestWebServer())
             {
                 var content = CreateValidMasterPlaylist("\n");
                 server.Listen(_port, contentType, content);
@@ -37,17 +36,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
                 var loadedContent = loader.Load(_uri);
                 Assert.AreEqual(content, loadedContent);
             }
-            finally
-            {
-                server.Dispose();
-            }
         }
 
         [Theory]
         public async Task TestPlaylistLoaderLoadsFromHttpServerAsync(string contentType)
         {
-            var server = new TestWebServer();
-            try
+            using (var server = new TestWebServer())
             {
                 var content = CreateValidMasterPlaylist("\n");
                 server.Listen(_port, contentType, content);
@@ -56,17 +50,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
                 var loadedContent = await loader.LoadAsync(_uri).ConfigureAwait(false);
                 Assert.AreEqual(content, loadedContent);
             }
-            finally
-            {
-                server.Dispose();
-            }
         }
 
         [Test]
         public void TestPlaylistLoaderRefusesToLoadPlaylistFromHttpServerIfContentTypeIsInvalid()
         {
-            var server = new TestWebServer();
-            try
+            using (var server = new TestWebServer())
             {
                 var content = CreateValidMasterPlaylist("\n");
                 server.Listen(_port, "invalid.content.type", content);
@@ -74,17 +63,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
                 var loader = new PlaylistLoader();
                 Assert.Throws<IOException>(() => loader.Load(_uri));
             }
-            finally
-            {
-                server.Dispose();
-            }
         }
 
         [Test]
         public void TestPlaylistLoaderRefusesToLoadPlaylistFromHttpServerIfContentTypeIsInvalidAsync()
         {
-            var server = new TestWebServer();
-            try
+            using (var server = new TestWebServer())
             {
                 var content = CreateValidMasterPlaylist("\n");
                 server.Listen(_port, "invalid.content.type", content);
@@ -92,11 +76,6 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
                 var loader = new PlaylistLoader();
                 Assert.Throws<IOException>(async () => await loader.LoadAsync(_uri).ConfigureAwait(false));
             }
-            finally
-            {
-                server.Dispose();
-            }
         }
-
     }
 }
