@@ -18,6 +18,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         internal const string TagEndMarker = ":";
 
         /// <summary>
+        /// Defines the tag start character.
+        /// </summary>
+        internal const string StartChar = "#";
+
+        /// <summary>
         /// Each playlist should start with this line.
         /// </summary>
         internal const string StartLine = "#EXTM3U";

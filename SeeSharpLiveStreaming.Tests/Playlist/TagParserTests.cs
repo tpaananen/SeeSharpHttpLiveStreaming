@@ -54,10 +54,17 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         }
 
         [Test]
-        public void TestParseTagReturnEmptyStringIfNoTagEndMarkerIsFoundForTagWithAttributes()
+        public void TestParseTagReturnsEmptyStringIfNoTagEndMarkerIsFoundForNotSupportedTag()
+        {
+            var tag = TagParser.ParseTag("#EXT-X-STREAM-INF-INV");
+            Assert.AreEqual(string.Empty, tag);
+        }
+
+        [Test]
+        public void TestParseTagReturnsTagIfNoTagEndMarkerIsFoundForTagWithAttributes()
         {
             var tag = TagParser.ParseTag("#EXT-X-STREAM-INF");
-            Assert.AreEqual(string.Empty, tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", tag);
         }
 
         [Theory]

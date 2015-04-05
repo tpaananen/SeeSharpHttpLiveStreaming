@@ -21,7 +21,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </summary>
         /// <param name="line">The line.</param>
         /// <returns>
-        /// The tag parsed from the line or empty string if tag could not be parsed or the .
+        /// The tag parsed from the line or empty string if tag could not be parsed or the tag was not supported
+        /// by the current version of the protocol.
         /// </returns>
         internal static string ParseTag(string line)
         {
@@ -30,21 +31,24 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 return string.Empty;
             }
 
+            if (!line.StartsWith(Tag.StartChar))
+            {
+                return string.Empty;
+            }
+
             var indexOfEndMarker = line.IndexOf(Tag.TagEndMarker, StringComparison.Ordinal);
             if (indexOfEndMarker <= 1)
             {
-                if (line.StartsWith("#") && !Tag.HasAttributes(line))
+                if (!Tag.HasAttributes(line))
                 {
                     // some tags do not have anything but name
                     return line;
                 }
-
-                // The start of the line is '#' and there should be something other characters also, so assume
-                // we need at least 1 char more, typically we need many more but this is enough...
-                return string.Empty;
+                // Tag should have attributes, we will ignore, or should we refuse to parse?
+                return Tag.IsValid(line) ? line : string.Empty;
             }
 
-            // tag has no end marker.
+            // The tag has an end marker, check if it is a valid tag
             var tag = line.Substring(0, indexOfEndMarker);
             return Tag.IsValid(tag) ? tag : string.Empty;
         }
@@ -98,33 +102,35 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 
         private static void ProcessTag(string tag, TextReader reader, ICollection<PlaylistLine> lines, string line)
         {
-            // Change this so that if it is media segment,
-            // the next line can be uri but it might be another segment tag
             if (Tag.IsFollowedByUri(tag))
             {
                 // Some tags might be followed by uri
+                // read from the stream 1..n lines until got something
                 string uriOrTag = ReadUri(reader);
                 if (uriOrTag == string.Empty)
                 {
-                    return;
+                    return; // EOF
                 }
 
                 // media segment tags might not be followed by uri
-                if (uriOrTag.StartsWith("#"))
+                // This should be a valid tag
+                if (uriOrTag.StartsWith(Tag.StartChar))
                 {
                     lines.Add(new PlaylistLine(tag, line));
-                    // another tag, so again
+                    // another tag found while trying to find the URI
+                    // The tag was stored and heading to parse a new tag
                     tag = ParseTag(uriOrTag);
                     ProcessTag(tag, reader, lines, uriOrTag);
                 }
                 else
                 {
-                    // now should be uri
+                    // now should be uri or fails to parse
                     lines.Add(new PlaylistLine(tag, line, uriOrTag));
                 }
             }
             else
             {
+                // this is a valid tag without URI
                 lines.Add(new PlaylistLine(tag, line));
             }
         }
