@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
+using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
@@ -79,22 +80,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
         {
             if (version != 0)
             {
+                // this is for check against multiple version tags in a playlist file
                 throw new InvalidOperationException("The version number must be zero when deserializing EXT-X-VERSION tag.");
             }
 
-            content.RequireNotNull("content");
-            if (content == string.Empty)
-            {
-                VersionNumber = 1;
-            }
-            else
-            {
-                if (!int.TryParse(content, NumberStyles.Integer, CultureInfo.InvariantCulture, out version))
-                {
-                    throw new SerializationException("Faild to parse version number attribute of the EXT-X-VERSION tag.");
-                }
-                VersionNumber = version;
-            }
+            content.RequireNotEmpty("content");
+            VersionNumber = ValueParser.ParseInt(content);
         }
 
         /// <summary>

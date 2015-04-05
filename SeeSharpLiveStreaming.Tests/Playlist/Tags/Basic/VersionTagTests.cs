@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Runtime.Serialization;
 using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
@@ -24,7 +23,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
         }
 
         [Test]
-        public void ExtXVersionTagParsesTheVersionNumber([Range(0, 10)] int version)
+        public void ExtXVersionTagParsesTheVersionNumber([Range(0, 7)] int version)
         {
             string parameters = version.ToString(CultureInfo.InvariantCulture);
             _tag.Deserialize(parameters, 0);
@@ -40,20 +39,19 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
         [Test]
         public void ExtXVersionTagThrowsSerializationExceptionIfParsingOfVersioNumberFails()
         {
-            Assert.Throws<SerializationException>(() => _tag.Deserialize("NA", 0));
-        }
-
-        [Test]
-        public void TestVersionIsOneIfNoContent()
-        {
-            _tag.Deserialize("", 0);
-            Assert.AreEqual(1, _tag.VersionNumber);
+            Assert.Throws<FormatException>(() => _tag.Deserialize("NA", 0));
         }
 
         [Test]
         public void TestVersionNumberThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => _tag.Deserialize(null, 0));
+        }
+
+        [Test]
+        public void TestVersionNumberThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => _tag.Deserialize(string.Empty, 0));
         }
 
         [Test]

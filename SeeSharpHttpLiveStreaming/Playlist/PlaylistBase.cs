@@ -26,14 +26,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         }
 
         /// <summary>
-        /// Gets the compatibility level version number tag.
+        /// Gets the compatibility level version number.
         /// </summary>
+        /// <remarks>
+        /// Defaults to zero (0) if that tag is not included when deserializing from server.
+        /// Server can set the the version accoring to supported level (TBD).
+        /// </remarks>
         public int Version { get; private set; }
 
         /// <summary>
         /// Processes the playlist line.
         /// </summary>
-        /// <param name="line">The line.</param>
+        /// <param name="line">The playlist line.</param>
         protected void ProcessSingleLine(PlaylistLine line)
         {
             var tag = TagFactory.Create(line, Version);
