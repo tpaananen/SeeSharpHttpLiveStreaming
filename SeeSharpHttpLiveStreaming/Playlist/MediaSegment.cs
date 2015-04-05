@@ -50,9 +50,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets the duration of the segment.
         /// </summary>
-        /// <value>
-        /// The duration.
-        /// </value>
         public decimal Duration { get; private set; }
 
         /// <summary>
@@ -66,7 +63,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         public ByteRange ByteRange { get; private set; }
 
         /// <summary>
-        /// Gets the URI. This parsed from the line holding EXT-X-INF tag.
+        /// Gets the URI.
         /// </summary>
         public Uri Uri { get; private set; }
 
