@@ -38,14 +38,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             }
             else
             {
-                CreatedByDiscontinyity = true;
+                CreatedByDiscontinuity = true;
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the segment was created by discontinyity.
+        /// Gets a value indicating whether the segment was created by discontinuity tag.
         /// </summary>
-        public bool CreatedByDiscontinyity { get; private set; }
+        public bool CreatedByDiscontinuity { get; private set; }
 
         /// <summary>
         /// Gets the duration of the segment.
