@@ -38,7 +38,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// Processes the playlist line.
         /// </summary>
         /// <param name="line">The playlist line.</param>
-        protected void ProcessSingleLine(PlaylistLine line)
+        /// <returns>
+        /// The tag created from the line.
+        /// </returns>
+        /// <remarks>
+        /// If the tag is not a <see cref="Version"/> tag, it is added to the list 
+        /// of tags.
+        /// </remarks>
+        protected virtual BaseTag ProcessSingleLine(PlaylistLine line)
         {
             var tag = TagFactory.Create(line, Version);
             if (tag.TagType != TagType.ExtXVersion)
@@ -50,6 +57,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 var versionTag = (Version) tag;
                 Version = versionTag.VersionNumber;
             }
+            return tag;
         }
     }
 }

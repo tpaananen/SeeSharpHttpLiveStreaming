@@ -36,7 +36,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         public PlaylistType(string type)
         {
             type.RequireNotEmpty(type);
-            if (!Playlist.PlaylistType.IsValid(type))
+            if (!MediaPlaylistTypeCode.IsValid(type))
             {
                 throw new ArgumentException("The type is not valid.", "type");
             }
@@ -74,7 +74,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             content.RequireNotEmpty("content");
             try
             {
-                if (!Playlist.PlaylistType.IsValid(content))
+                if (!MediaPlaylistTypeCode.IsValid(content))
                 {
                     throw new FormatException("Invalid value " + content + " for EXT-X-PLAYLIST-TYPE tag.");
                 }

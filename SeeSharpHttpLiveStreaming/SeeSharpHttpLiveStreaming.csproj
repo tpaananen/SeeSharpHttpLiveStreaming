@@ -70,7 +70,7 @@
     <Compile Include="Playlist\Tags\Media\MediaSegment\ByteRange.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\Key.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\Map.cs" />
-    <Compile Include="Playlist\Tags\Media\MediaSegment\MediaSegment.cs" />
+    <Compile Include="Playlist\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ProgramDateTime.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSequence.cs" />
     <Compile Include="Playlist\Tags\Media\OnlyIFrames.cs" />

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Playlist.Tags.Media;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 
 namespace SeeSharpHttpLiveStreaming.Playlist
@@ -32,21 +34,35 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         }
 
         /// <summary>
+        /// Gets the type of the playlist. Defaults to <see cref="MediaPlaylistType.None"/>.
+        /// </summary>
+        public MediaPlaylistType PlaylistType { get; private set; }
+
+        /// <summary>
+        /// Gets the sequence number.
+        /// </summary>
+        public long SequenceNumber { get; private set; }
+
+        /// <summary>
+        /// Gets the max duration of each segment in the playlist.
+        /// </summary>
+        public long TargetDuration { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the EXT-X-I-FRAMES-ONLY tag is present.
+        /// This indicates that each media segment must have <see cref="ByteRange"/>
+        /// tag present.
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        public bool IFramesOnly { get; private set; }
+
+        /// <summary>
         /// Deserializes a <see cref="MediaPlaylist"/>.
         /// </summary>
         /// <param name="content"></param>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
         private void Parse(IEnumerable<PlaylistLine> content)
         {
-
-            // Algorithm:
-            // 1. Parse tags that are not media segment tags as usual
-            // 2. If the tag is a media segment tag:
-            // 2.1 Create media segment
-            // 2.2 Feed media segment as long as it takes tags
-            // 2.3 When media segment rejects to parse tag, add media segment to the list of media segments and create a new media segment and go to 2.1
-            // 3. Add media segment to the list of media segments if it was created and has child tags
-
             MediaSegment mediaSegment = null;
             foreach (var line in content)
             {
@@ -66,20 +82,65 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                     throw new SerializationException("The tag " + line.Tag + " is a master playlist tag. Media playlist tag must not contain master playlist tags.");
                 }
             }
+
+            ValidateMediaSegments();
+        }
+
+        private void ValidateMediaSegments()
+        {
+            _mediaSegments.RemoveAll(x => x.Uri == null);
+            if (IFramesOnly && _mediaSegments.Any(d => d.ByteRange == null))
+            {
+                throw new SerializationException("The EXT-X-I-FRAMES-ONLY tag is present but byte range tag is missing from the media segment.");
+            }
         }
 
         private void ProcessMediaSegment(PlaylistLine line, ref MediaSegment mediaSegment)
         {
-            if (mediaSegment == null)
+            while (true)
             {
-                mediaSegment = new MediaSegment(line, Version);
-                _mediaSegments.Add(mediaSegment);
+                if (mediaSegment == null)
+                {
+                    mediaSegment = new MediaSegment(line, Version);
+                    _mediaSegments.Add(mediaSegment);
+                }
+                else if (!mediaSegment.ReadTag(line, Version))
+                {
+                    mediaSegment = null;
+                    continue;
+                }
+                break;
             }
-            else if (!mediaSegment.ReadTag(line, Version))
+        }
+
+        /// <summary>
+        /// Processes the playlist line.
+        /// </summary>
+        /// <param name="line">The playlist line.</param>
+        protected override BaseTag ProcessSingleLine(PlaylistLine line)
+        {
+            var tag = base.ProcessSingleLine(line);
+            if (tag.TagType == TagType.ExtXPlaylistType)
             {
-                mediaSegment = null;
-                ProcessMediaSegment(line, ref mediaSegment);
+                var type = (PlaylistType) tag;
+                PlaylistType = MediaPlaylistTypeCode.ToType(type.PlaylistTypeValue);
             }
+            else if (tag.TagType == TagType.ExtXMediaSequence)
+            {
+                var seq = (MediaSequence) tag;
+                SequenceNumber = seq.Number;
+            }
+            else if (tag.TagType == TagType.ExtXTargetDuration)
+            {
+                var duration = (TargetDuration) tag;
+                TargetDuration = duration.Duration;
+            }
+            else if (tag.TagType == TagType.ExtXIFramesOnly)
+            {
+                IFramesOnly = true;
+            }
+
+            return tag;
         }
     }
 }

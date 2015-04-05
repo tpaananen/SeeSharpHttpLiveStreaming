@@ -44,7 +44,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                     // some tags do not have anything but name
                     return line;
                 }
-                // Tag should have attributes, we will ignore, or should we refuse to parse?
+                // Tag should have attributes, we will pass the control to the valid tag itself, 
+                // or should we refuse to parse?
                 return Tag.IsValid(line) ? line : string.Empty;
             }
 
@@ -125,6 +126,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 else
                 {
                     // now should be uri or fails to parse
+                    // TODO: uri can be relative uri, convert to absolute here
                     lines.Add(new PlaylistLine(tag, line, uriOrTag));
                 }
             }

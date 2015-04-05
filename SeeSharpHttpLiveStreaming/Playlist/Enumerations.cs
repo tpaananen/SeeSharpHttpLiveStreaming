@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using SeeSharpHttpLiveStreaming.Utils;
 
 namespace SeeSharpHttpLiveStreaming.Playlist
@@ -188,9 +189,33 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     }
 
     /// <summary>
+    /// Enumerates the media playlist types.
+    /// </summary>
+    public enum MediaPlaylistType
+    {
+        /// <summary>
+        /// The playlist type is not present.
+        /// </summary>
+        [Description("NONE")]
+        None = 0,
+
+        /// <summary>
+        /// Event type.
+        /// </summary>
+        [Description("EVENT")]
+        Event = 1,
+
+        /// <summary>
+        /// Video on demand type.
+        /// </summary>
+        [Description("VOD")]
+        VideoOnDemand = 2
+    }
+
+    /// <summary>
     /// Contanis constants for possible playlist type values.
     /// </summary>
-    public static class PlaylistType
+    public static class MediaPlaylistTypeCode
     {
         /// <summary>
         /// If the EXT-X-PLAYLIST-TYPE value is EVENT, Media Segments can only be
@@ -211,6 +236,57 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         public static bool IsValid(string value)
         {
             return value == Event || value == Vod;
+        }
+
+        /// <summary>
+        /// Converts string playlist code to enumerated value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// The <see cref="MediaPlaylistType"/> value.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        /// Thrown when the playlist type value is not valid.
+        /// </exception>
+        public static MediaPlaylistType ToType(string value)
+        {
+            switch (value)
+            {
+                case Event:
+                    return MediaPlaylistType.Event;
+                case Vod:
+                    return MediaPlaylistType.VideoOnDemand;
+                case null:
+                case "":
+                    return MediaPlaylistType.None;
+                default:
+                    throw new ArgumentException("The playlist type value is not valid.");
+            }
+        }
+
+        /// <summary>
+        /// Froms the type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>
+        /// String representation of the playlist type.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        /// Thrown when the playlist type value is not valid.
+        /// </exception>
+        public static string FromType(MediaPlaylistType type)
+        {
+            switch (type)
+            {
+                case MediaPlaylistType.Event:
+                    return Event;
+                case MediaPlaylistType.VideoOnDemand:
+                    return Vod;
+                case MediaPlaylistType.None:
+                    return string.Empty;
+                default:
+                    throw new ArgumentException("The playlist type value is not valid.");
+            }
         }
     }
 

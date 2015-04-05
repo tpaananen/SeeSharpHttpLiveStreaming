@@ -41,8 +41,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
         }
 
         [Test]
-        public void TestPlaylistTypeIsParsed([Values(EnumValues.PlaylistType.Event, 
-                                                     EnumValues.PlaylistType.Vod)] string value)
+        public void TestPlaylistTypeIsParsed([Values(MediaPlaylistTypeCode.Event, 
+                                                     MediaPlaylistTypeCode.Vod)] string value)
         {
             _playlistType.Deserialize(value, 0);
             Assert.AreEqual(value, _playlistType.PlaylistTypeValue);
@@ -61,7 +61,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
         }
 
         [Test]
-        public void TestPlaylistTypeSerializes([Values(EnumValues.PlaylistType.Event, EnumValues.PlaylistType.Vod)] string value)
+        public void TestPlaylistTypeSerializes([Values(MediaPlaylistTypeCode.Event, MediaPlaylistTypeCode.Vod)] string value)
         {
             var playlistType = new PlaylistType(value);
             StringBuilder sb;

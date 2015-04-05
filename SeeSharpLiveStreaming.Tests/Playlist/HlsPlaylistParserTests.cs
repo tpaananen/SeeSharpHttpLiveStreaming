@@ -33,6 +33,22 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         }
 
         [Theory]
+        public void TestParserCreatesMediaPlaylistWithIFramesOnly(string newLine)
+        {
+            var playlist = CreateValidMediaPlaylistWithIFramesOnly(newLine);
+            var playlistObject = HlsPlaylistParser.Parse(playlist);
+
+            AssertMediaPlaylist(playlistObject);
+        }
+
+        [Theory]
+        public void TestParserFailsToCreatePlaylistWithIFramesOnlyFromInvalidFile(string newLine)
+        {
+            var playlist = CreateInvalidMediaPlaylistWithIFramesOnly(newLine);
+            Assert.Throws<SerializationException>(() => HlsPlaylistParser.Parse(playlist));
+        }
+
+        [Theory]
         public void TestParserCreatesMediaPlaylistButThrowsIfTriedToParseAgain(string newLine)
         {
             var playlist = CreateValidMediaPlaylist(newLine);
