@@ -57,6 +57,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         public bool IFramesOnly { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether this is the final playlist / segment.
+        /// When the playlist contains the final segment of the presentation, there 
+        /// must be a #EXT-X-ENDLIST tag.
+        /// </summary>
+        public bool IsFinal { get; private set; }
+
+        /// <summary>
         /// Deserializes a <see cref="MediaPlaylist"/>.
         /// </summary>
         /// <param name="content"></param>
@@ -138,6 +145,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             else if (tag.TagType == TagType.ExtXIFramesOnly)
             {
                 IFramesOnly = true;
+            }
+            else if (tag.TagType == TagType.ExtXEndList)
+            {
+                IsFinal = true;
             }
 
             return tag;

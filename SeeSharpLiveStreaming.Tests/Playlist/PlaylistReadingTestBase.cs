@@ -47,7 +47,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "http://media.example.com/media.ts" + lineFeed +
                 "#EXTINF:8.121,Some short take" + lineFeed +
                 "#EXT-X-BYTERANGE:889@2048" + lineFeed + 
-                "http://media.example.com/media.ts" + lineFeed;
+                "http://media.example.com/media.ts" + lineFeed +
+                "#EXT-X-ENDLIST" + lineFeed;
         }
 
         protected static string CreateInvalidMediaPlaylist(string lineFeed)
@@ -264,9 +265,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.That(playlistObject.Playlist is MediaPlaylist);
             var mediaPlaylist = (MediaPlaylist) playlistObject.Playlist;
             Assert.AreEqual(3, mediaPlaylist.MediaSegments.Count);
-            Assert.That(mediaPlaylist.MediaSegments.All(x => x.Tags != null)); // parsing not proper yet
+            Assert.That(mediaPlaylist.MediaSegments.All(x => x.Tags != null));
             Assert.AreEqual(6, playlistObject.Version);
-            Assert.AreEqual(3, playlistObject.Playlist.Tags.Count);
         }
 
     }
