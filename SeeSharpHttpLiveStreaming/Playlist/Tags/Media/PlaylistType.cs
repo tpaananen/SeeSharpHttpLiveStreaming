@@ -35,7 +35,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         /// <param name="type">The type.</param>
         public PlaylistType(string type)
         {
-            type.RequireNotEmpty(type);
+            type.RequireNotEmpty("type");
             if (!MediaPlaylistTypeCode.IsValid(type))
             {
                 throw new ArgumentException("The type is not valid.", "type");
