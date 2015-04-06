@@ -6,3 +6,10 @@ Windows .NET | *nix Mono  | Code coverage
 
 
 Work in progress.. so do not hold your breath
+
+Plan:
+- Client side observable API
+- Just provide a URI by subscribing
+- Optionally select a variant stream if available
+- Subscribers can observe the data as raw bytes using the observable API.
+- ...
