@@ -13,3 +13,9 @@ Plan:
 - Optionally select a variant stream if available
 - Subscribers can observe the data as raw bytes using the observable API.
 - ...
+
+
+Links:
+
+- [Playlist specification](https://tools.ietf.org/html/draft-pantos-http-live-streaming-14)
+- [developer.apple.com](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/StreamingMediaGuide/Introduction/Introduction.html)
