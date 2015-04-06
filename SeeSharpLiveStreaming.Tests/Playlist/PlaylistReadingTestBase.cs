@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist
@@ -18,16 +17,17 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-TARGETDURATION:10" + lineFeed +
                 "#EXT-X-MEDIA-SEQUENCE:0" + lineFeed +
                 "" + lineFeed +
-                "#EXTINF:9.009,Some info" + lineFeed +
                 "#EXT-X-PROGRAM-DATE-TIME:2015-03-21T12:22:22.212+02:00" + lineFeed + 
+                "#EXTINF:9.009,Some info" + lineFeed +
+                "#EXT-X-BYTERANGE:1024@0" + lineFeed + 
                 "http://media.example.com/first.ts" + lineFeed +
-                "#EXT-X-BYTERANGE:1024@0" + lineFeed +
                 "#EXT-X-DISCONTINUITY" + lineFeed +
                 "#EXTINF:9.009,Some other info" + lineFeed +
                 "http://media.example.com/second.ts" + lineFeed +
                 "#EXTINF:3.003,Some short take" + lineFeed +
+                "#EXT-X-BYTERANGE:1024@45" + lineFeed + 
                 "http://media.example.com/third.ts" + lineFeed +
-                "#EXT-X-BYTERANGE:1024@45" + lineFeed + lineFeed;
+                 lineFeed;
         }
 
         protected static string CreateValidMediaPlaylistWithIFramesOnly(string lineFeed)
@@ -46,9 +46,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-BYTERANGE:1024@1024" + lineFeed +
                 "http://media.example.com/media.ts" + lineFeed +
                 "#EXTINF:8.121,Some short take" + lineFeed +
-                "#EXT-X-BYTERANGE:889@2048" + lineFeed + 
+                "#EXT-X-BYTERANGE:889@2048" + lineFeed +
                 "http://media.example.com/media.ts" + lineFeed +
-                "#EXT-X-ENDLIST" + lineFeed;
+                "#EXT-X-ENDLIST" + lineFeed + lineFeed + lineFeed;
         }
 
         protected static string CreateInvalidMediaPlaylist(string lineFeed)
@@ -68,7 +68,25 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-DISCONTINUITY" + lineFeed + 
                 "#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000" + lineFeed + "http://example.com/mid.m3u8" + lineFeed +
                 "#EXTINF:3.003,Some short take" + lineFeed +
-                "http://media.example.com/third.ts" + lineFeed + lineFeed;
+                "http://media.example.com/third.ts" + lineFeed;
+        }
+
+        protected static string CreateInvalidMediaPlaylistMissingUriFromSegment(string lineFeed)
+        {
+            return
+                "#EXTM3U" + lineFeed +
+                "#EXT-X-VERSION:6" + lineFeed +
+                "#EXT-X-TARGETDURATION:10" + lineFeed +
+                "" + lineFeed +
+                "     " + lineFeed +
+                "#EXTINF:9.009,Some info" + lineFeed +
+                "" + lineFeed +
+                "     " + lineFeed +
+                "http://media.example.com/first.ts" + lineFeed +
+                "#EXTINF:9.009,Some other info" + lineFeed +
+                "http://media.example.com/second.ts" + lineFeed +
+                "#EXT-X-DISCONTINUITY" + lineFeed +
+                "#EXTINF:3.003,last segment without URI" + lineFeed;
         }
 
         protected static string CreateInvalidMediaPlaylistWithIFramesOnly(string lineFeed)
@@ -265,9 +283,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.That(playlistObject.Playlist is MediaPlaylist);
             var mediaPlaylist = (MediaPlaylist) playlistObject.Playlist;
             Assert.AreEqual(3, mediaPlaylist.MediaSegments.Count);
-            Assert.That(mediaPlaylist.MediaSegments.All(x => x.Tags != null));
             Assert.AreEqual(6, playlistObject.Version);
         }
 
+        // TODO: test segment properties
     }
 }

@@ -95,7 +95,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
 
         private void ValidateMediaSegments()
         {
-            _mediaSegments.RemoveAll(x => x.Uri == null);
             if (IFramesOnly && _mediaSegments.Any(d => d.ByteRange == null))
             {
                 throw new SerializationException("The EXT-X-I-FRAMES-ONLY tag is present but byte range tag is missing from the media segment.");
@@ -104,19 +103,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist
 
         private void ProcessMediaSegment(PlaylistLine line, ref MediaSegment mediaSegment)
         {
-            while (true)
+            if (mediaSegment == null)
             {
-                if (mediaSegment == null)
-                {
-                    mediaSegment = new MediaSegment(line, Version);
-                    _mediaSegments.Add(mediaSegment);
-                }
-                else if (!mediaSegment.ReadTag(line, Version))
-                {
-                    mediaSegment = null;
-                    continue;
-                }
-                break;
+                mediaSegment = new MediaSegment();
+            }
+
+            if (!mediaSegment.ReadTag(line, Version))
+            {
+                _mediaSegments.Add(mediaSegment);
+                mediaSegment = null;
             }
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 
@@ -21,31 +19,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// </remarks>
     public class MediaSegment
     {
-        private const string Discontinuity = "#EXT-X-DISCONTINUITY";
 
-        private readonly List<string> _tags = new List<string>();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MediaSegment" /> class.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="version">The version.</param>
-        internal MediaSegment(PlaylistLine line, int version)
-        {
-            if (line.Tag != Discontinuity)
-            {
-                CreateTag(line, version);
-            }
-            else
-            {
-                CreatedByDiscontinuity = true;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the segment was created by discontinuity tag.
-        /// </summary>
-        public bool CreatedByDiscontinuity { get; private set; }
+        // TODO: create constructor that takes key and map as optional parameters when there is test data available
 
         /// <summary>
         /// Gets the duration of the segment.
@@ -67,18 +42,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </summary>
         public Uri Uri { get; private set; }
 
-        // TBD: map, key and program date
-
         /// <summary>
-        /// Gets the tags of the segment.
+        /// Gets the program date time.
         /// </summary>
-        public IReadOnlyCollection<string> Tags
-        {
-            get
-            {
-                return new ReadOnlyCollection<string>(_tags);
-            }
-        }
+        public ProgramDateTime ProgramDateTime { get; private set; }
+
+        // TBD: map, key
 
         /// <summary>
         /// Reads the tag and either accepts or rejects it.
@@ -88,30 +57,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <param name="line">The line.</param>
         /// <param name="version">The version.</param>
         /// <returns>
-        ///   <b>True</b> is the tag was accepted; otherwise, <b>false</b>.
+        /// When this method returns <b>false</b> it indicates that the 
+        /// segment is ready and a new segment should be created for 
+        /// next lines.
         /// </returns>
         public bool ReadTag(PlaylistLine line, int version)
         {
-            /* TODO: Current parsing implementetation does not satisfy statement below:
-              
-             * Each Media Segment is specified by a series of Media Segment tags
-               followed by a URI. Some Media Segment tags apply to just the next
-               segment; 
-               others apply to all subsequent segments until another
-               instance of the same tag.
-             
-               - Key?
-               - Map?
-               - ProgramDateTime?
-             */
-
-            if (line.Tag == Discontinuity || _tags.Contains(line.Tag))
-            {
-                return false;
-            }
-
+            // Accept tags as long there is a URI on the line
             CreateTag(line, version);
-            return true;
+            return line.Uri == null;
         }
 
         private void CreateTag(PlaylistLine line, int version)
@@ -132,8 +86,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 Information = inf.Information;
                 Duration = inf.Duration;
             }
-            // TBD: program date time, key, map
-            _tags.Add(tag.TagName);
+            else if (tag.TagType == TagType.ExtXProgramDateTime)
+            {
+                ProgramDateTime = tag as ProgramDateTime;
+            }
+            // TBD: key, map
         }
     }
 }

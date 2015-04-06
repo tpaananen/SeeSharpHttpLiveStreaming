@@ -103,37 +103,36 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
 
         private static void ProcessTag(string tag, TextReader reader, ICollection<PlaylistLine> lines, string line)
         {
-            if (Tag.IsFollowedByUri(tag))
+            while (true)
             {
-                // Some tags might be followed by uri
-                // read from the stream 1..n lines until got something
-                string uriOrTag = ReadUri(reader);
-                if (uriOrTag == string.Empty)
+                if (Tag.IsFollowedByUri(tag))
                 {
-                    return; // EOF
-                }
+                    // Some tags might be followed by uri
+                    // read from the stream 1..n lines until got something
+                    string uriOrTag = ReadUri(reader);
 
-                // media segment tags might not be followed by uri
-                // This should be a valid tag
-                if (uriOrTag.StartsWith(Tag.StartChar))
-                {
-                    lines.Add(new PlaylistLine(tag, line));
-                    // another tag found while trying to find the URI
-                    // The tag was stored and heading to parse a new tag
-                    tag = ParseTag(uriOrTag);
-                    ProcessTag(tag, reader, lines, uriOrTag);
-                }
-                else
-                {
+                    // media segment tags might not be followed by uri
+                    // This should be a valid tag
+                    if (uriOrTag.StartsWith(Tag.StartChar))
+                    {
+                        lines.Add(new PlaylistLine(tag, line));
+                        // another tag found while trying to find the URI
+                        // The tag was stored and heading to parse a new tag
+                        tag = ParseTag(uriOrTag);
+                        line = uriOrTag;
+                        continue;
+                    }
+
                     // now should be uri or fails to parse
                     // TODO: uri can be relative uri, convert to absolute here
                     lines.Add(new PlaylistLine(tag, line, uriOrTag));
                 }
-            }
-            else
-            {
-                // this is a valid tag without URI
-                lines.Add(new PlaylistLine(tag, line));
+                else
+                {
+                    // this is a valid tag without URI
+                    lines.Add(new PlaylistLine(tag, line));
+                }
+                break;
             }
         }
 

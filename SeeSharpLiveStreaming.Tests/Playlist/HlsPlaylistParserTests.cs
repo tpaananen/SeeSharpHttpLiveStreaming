@@ -42,6 +42,13 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         }
 
         [Theory]
+        public void TestParserFailsToCreatePlaylistWithMissingUriSegments(string newLine)
+        {
+            var playlist = CreateInvalidMediaPlaylistMissingUriFromSegment(newLine);
+            Assert.Throws<SerializationException>(() => HlsPlaylistParser.Parse(playlist));
+        }
+
+        [Theory]
         public void TestParserFailsToCreatePlaylistWithIFramesOnlyFromInvalidFile(string newLine)
         {
             var playlist = CreateInvalidMediaPlaylistWithIFramesOnly(newLine);
