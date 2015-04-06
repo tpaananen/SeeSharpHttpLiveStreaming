@@ -11,7 +11,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
     /// <summary>
     /// Represents the base tag for each tag described in HTTP Live Streaming specification.
     /// </summary>
-    public abstract class BaseTag : ISerializable
+    internal abstract class BaseTag : ISerializable
     {
         /// <summary>
         /// The attribute separator.

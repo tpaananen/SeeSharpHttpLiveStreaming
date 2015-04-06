@@ -76,8 +76,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// but is validated that the playlist starts correctly.
         /// </summary>
         /// <param name="playlist">The playlist.</param>
-        /// <returns></returns>
-        internal static IReadOnlyCollection<PlaylistLine> ReadLines(string playlist)
+        /// <param name="uri">The URI.</param>
+        /// <returns>
+        /// The collection of <see cref="PlaylistLine"/> structs.
+        /// </returns>
+        internal static IReadOnlyCollection<PlaylistLine> ReadLines(string playlist, Uri uri)
         {
             playlist.RequireNotEmpty("playlist");
 
@@ -95,13 +98,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                         continue;
                     }
                     
-                    ProcessTag(tag, reader, lines, line);
+                    ProcessTag(tag, reader, lines, line, uri);
                 }
             }
             return new ReadOnlyCollection<PlaylistLine>(lines);
         }
 
-        private static void ProcessTag(string tag, TextReader reader, ICollection<PlaylistLine> lines, string line)
+        private static void ProcessTag(string tag, TextReader reader, ICollection<PlaylistLine> lines, string line, Uri baseUri)
         {
             while (true)
             {
@@ -124,8 +127,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                     }
 
                     // now should be uri or fails to parse
-                    // TODO: uri can be relative uri, convert to absolute here
-                    lines.Add(new PlaylistLine(tag, line, uriOrTag));
+                    if (uriOrTag == string.Empty)
+                    {
+                        throw new SerializationException("The URI is missing.");
+                    }
+                    var uri = CreateUri(uriOrTag, baseUri);
+                    lines.Add(new PlaylistLine(tag, line, uri));
                 }
                 else
                 {
@@ -134,6 +141,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 }
                 break;
             }
+        }
+
+        private static Uri CreateUri(string uriString, Uri baseUri)
+        {
+            return Uri.IsWellFormedUriString(uriString, UriKind.Absolute) 
+                ? new Uri(uriString) 
+                : new Uri(baseUri, uriString);
         }
 
         private static string ReadUri(TextReader reader)

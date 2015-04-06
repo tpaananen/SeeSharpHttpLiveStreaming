@@ -30,7 +30,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// See Section 6.2.1 and Section 6.3.5 for more information on setting
     /// the EXT-X-MEDIA-SEQUENCE tag.
     /// </remarks>
-    public class MediaSequence : BaseTag
+    internal class MediaSequence : BaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaSequence"/> class.

@@ -15,7 +15,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
     /// 
     /// #EXT-X-START:&lt;attribute list&gt;
     /// </summary>
-    public class StartTag : BaseTag
+    internal class StartTag : BaseTag
     {
 
         /// <summary>

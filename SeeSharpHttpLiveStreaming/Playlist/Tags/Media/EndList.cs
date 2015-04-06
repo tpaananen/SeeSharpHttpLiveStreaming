@@ -13,7 +13,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     ///
     /// #EXT-X-ENDLIST
     /// </remarks>
-    public class EndList : BaseTag
+    internal class EndList : BaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EndList"/> class.

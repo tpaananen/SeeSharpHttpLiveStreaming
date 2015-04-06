@@ -7,8 +7,23 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// <summary>
     /// Represents HTTP Live streaming playlist wrapper.
     /// </summary>
-    public class HlsPlaylist : IHlsPlaylist
+    internal class HlsPlaylist : IHlsPlaylist
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HlsPlaylist"/> class.
+        /// </summary>
+        /// <param name="baseUri">The base URI.</param>
+        internal HlsPlaylist(Uri baseUri)
+        {
+            baseUri.RequireNotNull("baseUri");
+            Uri = baseUri;
+        }
+
+        /// <summary>
+        /// Gets the URI.
+        /// </summary>
+        public Uri Uri { get; private set; }
 
         /// <summary>
         /// Gets the playlist.
@@ -75,7 +90,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             {
                 throw new InvalidOperationException("The playlist is already deserialized.");
             }
-            Playlist = PlaylistFactory.Create(content);
+            Playlist = PlaylistFactory.Create(content, Uri);
         }
     }
 }

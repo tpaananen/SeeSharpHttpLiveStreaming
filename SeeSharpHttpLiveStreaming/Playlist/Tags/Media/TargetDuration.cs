@@ -21,7 +21,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// where s is a decimal-integer indicating the target duration in
     /// seconds.The EXT-X-TARGETDURATION tag is REQUIRED.
     /// </remarks>
-    public class TargetDuration : BaseTag
+    internal class TargetDuration : BaseTag
     {
         internal TargetDuration()
         {

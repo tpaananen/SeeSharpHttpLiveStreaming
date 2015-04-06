@@ -4,7 +4,7 @@
     /// Represents the playlist loader factory to create concrete 
     /// instances of the <see cref="IPlaylistLoader"/> interface.
     /// </summary>
-    public sealed class PlaylistLoaderFactory : IPlaylistLoaderFactory
+    internal sealed class PlaylistLoaderFactory : IPlaylistLoaderFactory
     {
         /// <summary>
         /// Creates a new instance of <see cref="IPlaylistLoader"/>.

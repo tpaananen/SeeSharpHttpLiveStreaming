@@ -11,7 +11,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// <summary>
     /// Base class for stream inf tags.
     /// </summary>
-    public abstract class StreamInfBaseTag : BaseTag
+    internal abstract class StreamInfBaseTag : BaseTag
     {
         // ReSharper disable once InconsistentNaming
         /// <summary>

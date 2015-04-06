@@ -38,7 +38,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// present in any Rendition in the group, or client playback failures
     /// can occur.
     /// </remarks>
-    public sealed class RenditionGroup
+    internal sealed class RenditionGroup
     {
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <summary>
         /// Gets the EXT-X-MEDIA tags that belong to the group.
         /// </summary>
-        public IReadOnlyCollection<ExtMedia> ExtMedias { get; private set; }
+        internal IReadOnlyCollection<ExtMedia> ExtMedias { get; private set; }
 
         /// <summary>
         /// Validates the media tags.

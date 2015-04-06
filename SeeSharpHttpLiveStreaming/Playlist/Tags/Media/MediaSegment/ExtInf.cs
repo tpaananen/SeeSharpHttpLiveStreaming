@@ -26,7 +26,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// the comma is an optional human-readable informative title of the
     /// Media Segment.
     /// </remarks>
-    public class ExtInf : BaseTag
+    internal class ExtInf : BaseTag
     {
         /// <summary>
         /// Defines the version when decimals can be accepted in <see cref="Duration"/>.

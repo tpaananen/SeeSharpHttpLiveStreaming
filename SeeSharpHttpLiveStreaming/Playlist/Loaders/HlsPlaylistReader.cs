@@ -9,7 +9,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
     /// Represents the playlist loader by providing both synchronous and 
     /// asynchronous operations to read the file contents.
     /// </summary>
-    public class HlsPlaylistReader
+    internal class HlsPlaylistReader
     {
         private readonly IPlaylistLoaderFactory _playlistLoaderFactory;
 

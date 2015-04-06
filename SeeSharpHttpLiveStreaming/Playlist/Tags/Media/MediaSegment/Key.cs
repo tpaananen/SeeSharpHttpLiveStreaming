@@ -21,7 +21,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// key. The format is:
     /// #EXT-X-KEY:&lt;attribute-list&gt;
     /// </remarks>
-    public sealed class Key : BaseTag
+    internal sealed class Key : BaseTag
     {
         private const int RequiredIvVersion = 2;
 

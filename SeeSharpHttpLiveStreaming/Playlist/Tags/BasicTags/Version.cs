@@ -24,7 +24,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
     /// a client encounters a Playlist with multiple EXT-X-VERSION tags, it
     /// SHOULD fail to parse it.
     /// </summary>
-    public class Version : BaseTag
+    internal class Version : BaseTag
     {
 
         /// <summary>

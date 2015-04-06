@@ -11,7 +11,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// <summary>
     /// Represents a master playlist.
     /// </summary>
-    public sealed class MasterPlaylist : PlaylistBase
+    internal sealed class MasterPlaylist : PlaylistBase
     {
         private readonly List<RenditionGroup> _renditionGroups = new List<RenditionGroup>(); 
 

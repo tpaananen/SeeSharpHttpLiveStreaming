@@ -16,7 +16,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// Its format is:
     /// #EXT-X-STREAM-INF:&lt;attribute-list&gt;
     /// </summary>
-    public class StreamInf : StreamInfBaseTag
+    internal class StreamInf : StreamInfBaseTag
     {
 
         /// <summary>

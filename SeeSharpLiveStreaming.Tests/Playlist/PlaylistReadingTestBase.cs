@@ -263,7 +263,27 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "http://example.com/main/english-audio.m3u8" + lineFeed + lineFeed;
         }
 
-        protected static void AssertMasterPlaylist(IHlsPlaylist playlistObject)
+        protected static string CreateValidMediaPlaylistWithEncryptionDetails(string lineFeed)
+        {
+            return 
+                "#EXTM3U" + lineFeed + 
+                "#EXT-X-TARGETDURATION:10" + lineFeed + 
+                "#EXT-X-VERSION:3" + lineFeed + 
+                "#EXT-X-MEDIA-SEQUENCE:0" + lineFeed + 
+                "#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\",IV=0x9c7db8778570d05c3177c349fd9236aa" + lineFeed + 
+                "#EXTINF:10.0," + lineFeed + 
+                "bumper0.ts" + lineFeed + 
+                "#EXTINF:8.0," + lineFeed + 
+                "bumper1.ts" + lineFeed + 
+                "#EXT-X-DISCONTINUITY" + lineFeed + 
+                "#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=53\",IV=0xc055ee9f6c1eb7aa50bfab02b0814972" + lineFeed + 
+                "#EXTINF:10.0," + lineFeed + 
+                "movieA.ts" + lineFeed + 
+                "#EXTINF:10.0," + lineFeed + 
+                "movieB.ts" + lineFeed;
+        }
+
+        internal static void AssertMasterPlaylist(IHlsPlaylist playlistObject)
         {
             Assert.IsNotNull(playlistObject);
             Assert.That(playlistObject is HlsPlaylist);
@@ -275,7 +295,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.AreEqual(0, master.RenditionGroups.Count);
         }
 
-        protected static void AssertMediaPlaylist(IHlsPlaylist playlistObject)
+        internal static void AssertMediaPlaylist(IHlsPlaylist playlistObject)
         {
             Assert.IsNotNull(playlistObject);
             Assert.That(playlistObject is HlsPlaylist);

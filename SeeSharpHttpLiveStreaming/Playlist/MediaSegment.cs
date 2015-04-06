@@ -17,7 +17,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// SHOULD fail to parse Playlists that contain both Media Segment Tags
     /// and Master Playlist tags (Section 4.3.4).
     /// </remarks>
-    public class MediaSegment
+    internal class MediaSegment
     {
 
         // TODO: create constructor that takes key and map as optional parameters when there is test data available

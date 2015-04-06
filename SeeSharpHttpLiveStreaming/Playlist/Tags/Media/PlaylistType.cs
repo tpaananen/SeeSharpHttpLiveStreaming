@@ -19,7 +19,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// added to the end of the Media Playlist.  If the EXT-X-PLAYLIST-TYPE
     /// value is VOD, the Media Playlist cannot change.
     /// </remarks>
-    public class PlaylistType : BaseTag
+    internal class PlaylistType : BaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaylistType"/> class.

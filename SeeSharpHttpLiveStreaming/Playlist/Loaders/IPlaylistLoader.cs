@@ -8,7 +8,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
     /// Represents interface for playlist loaders. 
     /// Playlist loader should handle loading of the playlist from the provided URI.
     /// </summary>
-    public interface IPlaylistLoader
+    internal interface IPlaylistLoader
     {
         /// <summary>
         /// Loads the content from the <paramref name="uri"/>.

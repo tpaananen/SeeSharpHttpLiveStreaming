@@ -54,18 +54,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <param name="line">The line.</param>
         /// <param name="uri">The URI.</param>
         /// <exception cref="System.ArgumentException">
-        /// Thrown when the URI could not be created.
+        /// Thrown when the <paramref name="uri"/> is <b>null</b>.
         /// </exception>
-        internal PlaylistLine(string tag, string line, string uri)
+        internal PlaylistLine(string tag, string line, Uri uri)
             : this(tag, line)
         {
-            Uri result;
-
-            if (!Uri.TryCreate(uri, UriKind.Absolute, out result))
-            {
-                throw new ArgumentException("The URI could not be created.", "uri");
-            }
-            Uri = result;
+            uri.RequireNotNull("uri");
+            Uri = uri;
         }
 
         /// <summary>

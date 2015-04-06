@@ -8,7 +8,7 @@ namespace SeeSharpHttpLiveStreaming.Utils
     /// Exception that represents that a tag cannot be parsed due to too low version number.
     /// </summary>
     [Serializable]
-    public class IncompatibleVersionException : Exception
+    internal class IncompatibleVersionException : Exception
     {
         /// <summary>
         /// Gets the name of the tag.

@@ -11,7 +11,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// <summary>
     /// Represents the media playlist.
     /// </summary>
-    public sealed class MediaPlaylist : PlaylistBase
+    internal sealed class MediaPlaylist : PlaylistBase
     {
 
         private readonly List<MediaSegment> _mediaSegments = new List<MediaSegment>(); 

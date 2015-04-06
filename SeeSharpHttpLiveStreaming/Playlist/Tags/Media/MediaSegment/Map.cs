@@ -31,7 +31,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// greater is REQUIRED.
     /// 
     /// </remarks>
-    public class Map : BaseTag
+    internal class Map : BaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Map"/> class.

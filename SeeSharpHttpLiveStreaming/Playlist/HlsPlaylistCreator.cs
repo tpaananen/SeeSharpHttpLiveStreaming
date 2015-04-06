@@ -10,7 +10,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// Represents the playlist creator. This class can be used to 
     /// read the content from the source and deserialize the playlist file.
     /// </summary>
-    public sealed class HlsPlaylistCreator
+    internal sealed class HlsPlaylistCreator
     {
         private readonly IPlaylistLoaderFactory _factory = new PlaylistLoaderFactory();
 
@@ -30,11 +30,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <exception cref="SerializationException">
         /// Thrown when (de)serialization of the content fails.
         /// </exception>
-        public IHlsPlaylist CreateFrom(Uri uri)
+        internal IHlsPlaylist CreateFrom(Uri uri)
         {
             var loader = new HlsPlaylistReader(_factory);
             string content = loader.Read(uri);
-            return HlsPlaylistParser.Parse(content);
+            return HlsPlaylistParser.Parse(content, uri);
         }
 
         /// <summary>
@@ -53,11 +53,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <exception cref="SerializationException">
         /// Thrown when (de)serialization of the content fails.
         /// </exception>
-        public async Task<IHlsPlaylist> CreateFromAsync(Uri uri)
+        internal async Task<IHlsPlaylist> CreateFromAsync(Uri uri)
         {
             var loader = new HlsPlaylistReader(_factory);
             string content = await loader.ReadAsync(uri).ConfigureAwait(false);
-            return HlsPlaylistParser.Parse(content);
+            return HlsPlaylistParser.Parse(content, uri);
         }
     }
 }

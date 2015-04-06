@@ -33,7 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// See Section 6.2.1 and Section 6.2.2 for more information about
     /// setting the value of the EXT-X-DISCONTINUITY-SEQUENCE tag.
     /// </remarks>
-    public class DiscontinuitySequence : BaseTag
+    internal class DiscontinuitySequence : BaseTag
     {
 
         /// <summary>

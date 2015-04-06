@@ -8,7 +8,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// <summary>
     /// Represents a base class for playlists.
     /// </summary>
-    public abstract class PlaylistBase
+    internal abstract class PlaylistBase
     {
 
         /// <summary>

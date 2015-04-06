@@ -16,7 +16,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
     /// it applies to every Media Segment in every Media Playlist in the
     /// Master Playlist.
     /// </summary>
-    public class IndependentSegments : BaseTag
+    internal class IndependentSegments : BaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IndependentSegments"/> class.

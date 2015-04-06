@@ -10,6 +10,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
     [TestFixture]
     public class TagParserTests
     {
+        private static readonly Uri Uri = new Uri("http://example.com/playlist/load.m3u8");
+
         [Datapoints]
         // ReSharper disable once UnusedMember.Local
         private static string[] _lineFeeds = {"\r\n", "\n"};
@@ -18,10 +20,20 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         {
             return
                 "#EXTM3U" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + "http://example.com/low.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000" + lineFeed + lineFeed + "http://example.com/mid.m3u8" + lineFeed + lineFeed + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000" + lineFeed + "http://example.com/hi.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"" + lineFeed + "http://example.com/audio-only.m3u8" + lineFeed;
+                "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + "http://example.com/playlist/low.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000" + lineFeed + lineFeed + "http://example.com/playlist/mid.m3u8" + lineFeed + lineFeed + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000" + lineFeed + "http://example.com/playlist/hi.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"" + lineFeed + "http://example.com/playlist/audio-only.m3u8" + lineFeed;
+        }
+
+        private static string GetPlaylistWithRelativeUris(string lineFeed)
+        {
+            return
+                "#EXTM3U" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + "low.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000" + lineFeed + lineFeed + "mid.m3u8" + lineFeed + lineFeed + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000" + lineFeed + "hi.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"" + lineFeed + "audio-only.m3u8" + lineFeed;
         }
 
         [Theory]
@@ -70,7 +82,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         [Theory]
         public void TestParseTagReturnsEmptyStringIfUnknownTagIsFound(string lineFeed)
         {
-            var line = "#EXT-X-STREAM-INT:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + "http://example.com/low.m3u8" + lineFeed;
+            var line = "#EXT-X-STREAM-INT:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + "http://example.com/playlist/low.m3u8" + lineFeed;
             var tag = TagParser.ParseTag(line);
             Assert.AreEqual(string.Empty, tag);
         }
@@ -78,7 +90,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         [Theory]
         public void TestParseTagReturnsTagCorrectly(string lineFeed)
         {
-            var line = "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + "http://example.com/low.m3u8" + lineFeed;
+            var line = "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + "http://example.com/playlist/low.m3u8" + lineFeed;
             var tag = TagParser.ParseTag(line);
             Assert.AreEqual("#EXT-X-STREAM-INF", tag);
         }
@@ -87,7 +99,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         public void TestTagParserCreatesPlaylistCollection(string lineFeed)
         {
             var playlist = GetPlaylist(lineFeed);
-            var list = TagParser.ReadLines(playlist);
+            var list = TagParser.ReadLines(playlist, Uri);
 
             Assert.IsNotNull(list);
             Assert.AreEqual(4, list.Count);
@@ -98,13 +110,37 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(3).Tag);
 
             Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000", list.ElementAt(0).Line);
-            Assert.AreEqual(new Uri("http://example.com/low.m3u8"), list.ElementAt(0).Uri);
+            Assert.AreEqual(new Uri("http://example.com/playlist/low.m3u8"), list.ElementAt(0).Uri);
             Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000", list.ElementAt(1).Line);
-            Assert.AreEqual(new Uri("http://example.com/mid.m3u8"), list.ElementAt(1).Uri);
+            Assert.AreEqual(new Uri("http://example.com/playlist/mid.m3u8"), list.ElementAt(1).Uri);
             Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000", list.ElementAt(2).Line);
-            Assert.AreEqual(new Uri("http://example.com/hi.m3u8"), list.ElementAt(2).Uri);
+            Assert.AreEqual(new Uri("http://example.com/playlist/hi.m3u8"), list.ElementAt(2).Uri);
             Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"", list.ElementAt(3).Line);
-            Assert.AreEqual(new Uri("http://example.com/audio-only.m3u8"), list.ElementAt(3).Uri);
+            Assert.AreEqual(new Uri("http://example.com/playlist/audio-only.m3u8"), list.ElementAt(3).Uri);
+        }
+
+        [Theory]
+        public void TestTagParserCreatesPlaylistCollectionFromPlaylistWithRelativeUris(string lineFeed)
+        {
+            var playlist = GetPlaylistWithRelativeUris(lineFeed);
+            var list = TagParser.ReadLines(playlist, Uri);
+
+            Assert.IsNotNull(list);
+            Assert.AreEqual(4, list.Count);
+            
+            Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(0).Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(1).Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(2).Tag);
+            Assert.AreEqual("#EXT-X-STREAM-INF", list.ElementAt(3).Tag);
+
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000", list.ElementAt(0).Line);
+            Assert.AreEqual(new Uri("http://example.com/playlist/low.m3u8"), list.ElementAt(0).Uri);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000", list.ElementAt(1).Line);
+            Assert.AreEqual(new Uri("http://example.com/playlist/mid.m3u8"), list.ElementAt(1).Uri);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000", list.ElementAt(2).Line);
+            Assert.AreEqual(new Uri("http://example.com/playlist/hi.m3u8"), list.ElementAt(2).Uri);
+            Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"", list.ElementAt(3).Line);
+            Assert.AreEqual(new Uri("http://example.com/playlist/audio-only.m3u8"), list.ElementAt(3).Uri);
         }
 
         [Test]

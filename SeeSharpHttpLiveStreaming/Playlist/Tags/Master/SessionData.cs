@@ -17,7 +17,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     ///
     /// #EXT-X-SESSION-DATA:&lt;attribute list&gt;
     /// </remarks>
-    public class SessionData : BaseTag
+    internal class SessionData : BaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SessionData"/> class.

@@ -22,7 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// The provisions in Section 4.3.4.2.1 also apply to EXT-X-I-FRAME-
     /// STREAM-INF tags with a VIDEO attribute.
     /// </remarks>
-    public class ExtIFrameStreamInf : StreamInfBaseTag
+    internal class ExtIFrameStreamInf : StreamInfBaseTag
     {
 
         /// <summary>

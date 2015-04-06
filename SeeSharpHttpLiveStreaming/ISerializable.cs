@@ -4,9 +4,10 @@ using SeeSharpHttpLiveStreaming.Utils.Writers;
 namespace SeeSharpHttpLiveStreaming
 {
     /// <summary>
-    /// Classes implementing the interface will be able to deserialize itself from the lines of string.
+    /// Classes implementing this interface will be able to deserialize themselves from the line(s) of strings and 
+    /// also they will be able to serialize themselves into line(s) of strings.
     /// </summary>
-    public interface ISerializable
+    internal interface ISerializable
     {
         /// <summary>
         /// Deserializes the tag from the <paramref name="content"/>.

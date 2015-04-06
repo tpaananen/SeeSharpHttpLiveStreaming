@@ -5,7 +5,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// <summary>
     /// Represents the encryption interface.
     /// </summary>
-    public interface IEncryption
+    internal interface IEncryption
     {
         /// <summary>
         /// Gets the encryption method.

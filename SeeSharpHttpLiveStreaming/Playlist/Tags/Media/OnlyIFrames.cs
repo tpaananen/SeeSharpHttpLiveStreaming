@@ -37,7 +37,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// Use of the EXT-X-I-FRAMES-ONLY REQUIRES a compatibility version
     /// number of 4 or greater.
     /// </remarks>
-    public class OnlyIFrames : BaseTag
+    internal class OnlyIFrames : BaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OnlyIFrames"/> class.

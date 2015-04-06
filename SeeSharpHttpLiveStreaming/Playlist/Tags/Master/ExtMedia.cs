@@ -19,7 +19,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// Its format is:
     /// #EXT-X-MEDIA:&lt;attribute-list&gt;
     /// </summary>
-    public class ExtMedia : BaseTag
+    internal class ExtMedia : BaseTag
     {
 
         /// <summary>

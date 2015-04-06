@@ -30,7 +30,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// See Section 3, Section 6.2.1, and Section 6.3.3 for more information
     /// about the EXT-X-DISCONTINUITY tag.
     /// </remarks>
-    public class Discontinuity : BaseTag
+    internal class Discontinuity : BaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Discontinuity"/> class.

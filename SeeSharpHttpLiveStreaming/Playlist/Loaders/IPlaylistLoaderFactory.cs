@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents playlist loader factory interface.
     /// </summary>
-    public interface IPlaylistLoaderFactory
+    internal interface IPlaylistLoaderFactory
     {
         /// <summary>
         /// Creates a new instance of <see cref="IPlaylistLoader"/>.

@@ -25,7 +25,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// 
     /// EXT-X-PROGRAM-DATE-TIME tags SHOULD provide millisecond accuracy.
     /// </remarks>
-    public class ProgramDateTime : BaseTag
+    internal class ProgramDateTime : BaseTag
     {
         private const string Formatter = "O";
 

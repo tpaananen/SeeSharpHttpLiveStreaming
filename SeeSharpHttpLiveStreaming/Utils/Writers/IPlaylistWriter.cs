@@ -5,7 +5,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.Writers
     /// <summary>
     /// Represents playlist writer interface.
     /// </summary>
-    public interface IPlaylistWriter : IDisposable
+    internal interface IPlaylistWriter : IDisposable
     {
         /// <summary>
         /// Writes to the line.

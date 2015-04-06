@@ -33,7 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     /// Use of the EXT-X-BYTERANGE tag REQUIRES a compatibility version
     /// number of 4 or greater.
     /// </remarks>
-    public class ByteRange : BaseTag, IEquatable<ByteRange>
+    internal class ByteRange : BaseTag, IEquatable<ByteRange>
     {
 
         /// <summary>

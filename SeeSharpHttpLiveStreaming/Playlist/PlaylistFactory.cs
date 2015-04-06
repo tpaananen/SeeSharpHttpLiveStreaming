@@ -16,22 +16,21 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// Creates a specific playlist depending on content of the <paramref name="content" />.
         /// </summary>
         /// <param name="content">The content.</param>
+        /// <param name="uri">The URI.</param>
         /// <returns>
         /// The <see cref="PlaylistBase" /> instance.
         /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown when the <paramref name="content"/> is <b>null</b>.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown when the <paramref name="content"/> is empty string.
-        /// </exception>
+        /// <exception cref="System.Runtime.Serialization.SerializationException">Failed to create playlist.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="content" /> is <b>null</b>.</exception>
+        /// <exception cref="ArgumentException">Thrown when the <paramref name="content" /> is empty string.</exception>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
-        internal static PlaylistBase Create(string content)
+        internal static PlaylistBase Create(string content, Uri uri)
         {
             content.RequireNotEmpty("content");
+            uri.RequireNotNull("uri");
             try
             {
-                IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content);
+                IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content, uri);
                 string firstTag = GetFirstNonCommonTag(playlist);
                 return CreatePlaylistByTag(firstTag, playlist);
             }

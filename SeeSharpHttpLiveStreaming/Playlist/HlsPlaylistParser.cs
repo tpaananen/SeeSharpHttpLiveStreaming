@@ -1,18 +1,24 @@
-﻿namespace SeeSharpHttpLiveStreaming.Playlist
+﻿using System;
+using SeeSharpHttpLiveStreaming.Utils;
+
+namespace SeeSharpHttpLiveStreaming.Playlist
 {
     /// <summary>
     /// Represents a HTTP Live streaming playlist parser.
     /// </summary>
-    public static class HlsPlaylistParser
+    internal static class HlsPlaylistParser
     {
         /// <summary>
         /// Parses the specified content.
         /// </summary>
         /// <param name="content">The content.</param>
-        /// <returns></returns>
-        public static IHlsPlaylist Parse(string content)
+        /// <param name="baseUri">The base URI.</param>
+        /// <returns>
+        /// The <see cref="IHlsPlaylist"/>.
+        /// </returns>
+        internal static IHlsPlaylist Parse(string content, Uri baseUri)
         {
-            var playlist = new HlsPlaylist();
+            var playlist = new HlsPlaylist(baseUri);
             playlist.Parse(content);
             return playlist;
         }
