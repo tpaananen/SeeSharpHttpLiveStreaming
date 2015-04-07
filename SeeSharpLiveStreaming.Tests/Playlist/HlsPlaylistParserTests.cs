@@ -145,7 +145,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         }
 
         [Theory]
-        public void TestParserCreatesMasterPlaylistWithRenditionsTwoGroups(string newLine)
+        public void TestParserCreatesMasterPlaylistWithRenditionsThreeGroups(string newLine)
         {
             var playlist = CreateValidMasterPlaylistWithAlternativeRenditionsTwoGroups(newLine);
             var playlistObject = HlsPlaylistParser.Parse(playlist, _uri);
@@ -155,9 +155,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.IsNotNull(playlistObject.Playlist);
             Assert.That(playlistObject.IsMaster);
             Assert.AreEqual(7, playlistObject.Version);
-            Assert.AreEqual(10, playlistObject.Playlist.Tags.Count);
+            Assert.AreEqual(12, playlistObject.Playlist.Tags.Count);
             var master = (MasterPlaylist) playlistObject.Playlist;
-            Assert.AreEqual(2, master.RenditionGroups.Count);
+            Assert.AreEqual(4, master.RenditionGroups.Count);
         }
 
         [Test]

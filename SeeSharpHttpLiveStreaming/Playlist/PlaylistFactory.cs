@@ -20,7 +20,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <returns>
         /// The <see cref="PlaylistBase" /> instance.
         /// </returns>
-        /// <exception cref="System.Runtime.Serialization.SerializationException">Failed to create playlist.</exception>
         /// <exception cref="ArgumentNullException">Thrown when the <paramref name="content" /> is <b>null</b>.</exception>
         /// <exception cref="ArgumentException">Thrown when the <paramref name="content" /> is empty string.</exception>
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
@@ -31,8 +30,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             try
             {
                 IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content, uri);
-                string firstTag = GetFirstNonCommonTag(playlist);
-                return CreatePlaylistByTag(firstTag, playlist);
+                return CreatePlaylist(playlist);
             }
             catch (SerializationException)
             {
@@ -55,16 +53,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         }
 
         /// <summary>
-        /// Creates the playlist by tag.
+        /// Creates the playlist by tags in the playlist.
         /// </summary>
-        /// <param name="tag">The tag.</param>
         /// <param name="playlist">The playlist.</param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentException">
-        /// Thrown when the second tag is invalid. The playlist cannot be parsed.
+        /// <exception cref="ArgumentException">
+        /// Thrown when playlist type cannot be determined by the tags in the <paramref name="playlist"/>.
         /// </exception>
-        private static PlaylistBase CreatePlaylistByTag(string tag, IReadOnlyCollection<PlaylistLine> playlist)
+        private static PlaylistBase CreatePlaylist(IReadOnlyCollection<PlaylistLine> playlist)
         {
+            string tag = GetFirstNonCommonTag(playlist);
             if (Tag.IsMasterTag(tag))
             {
                 return new MasterPlaylist(playlist);

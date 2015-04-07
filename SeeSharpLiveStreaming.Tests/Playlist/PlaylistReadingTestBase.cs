@@ -181,6 +181,13 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "DEFAULT=NO,AUTOSELECT=NO,LANGUAGE=\"en\"," + 
                 "URI=\"http://example.com/commentary/audio-only.m3u8\"" + lineFeed +
 
+                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-1\",NAME=\"Video Angle 1\"," + 
+                "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
+                "URI=\"http://example.com/main/english-audio.m3u8\"" + lineFeed +
+                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-2\",NAME=\"Video Angle 2\"," + 
+                "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
+                "URI=\"http://example.com/main/german-audio.m3u8\"" + lineFeed +
+
                 "#EXT-X-STREAM-INF:BANDWIDTH=1280000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
                 "http://example.com/low/video-only.m3u8" + lineFeed +
                 "#EXT-X-STREAM-INF:BANDWIDTH=2560000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
