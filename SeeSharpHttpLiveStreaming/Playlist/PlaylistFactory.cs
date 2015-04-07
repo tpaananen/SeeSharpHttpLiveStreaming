@@ -30,7 +30,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             try
             {
                 IReadOnlyCollection<PlaylistLine> playlist = TagParser.ReadLines(content, uri);
-                return CreatePlaylist(playlist);
+                return CreatePlaylist(playlist, uri);
             }
             catch (SerializationException)
             {
@@ -56,20 +56,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// Creates the playlist by tags in the playlist.
         /// </summary>
         /// <param name="playlist">The playlist.</param>
+        /// <param name="baseUri">The base URI.</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException">
-        /// Thrown when playlist type cannot be determined by the tags in the <paramref name="playlist"/>.
-        /// </exception>
-        private static PlaylistBase CreatePlaylist(IReadOnlyCollection<PlaylistLine> playlist)
+        /// <exception cref="ArgumentException">Thrown when playlist type cannot be determined by the tags in the <paramref name="playlist" />.</exception>
+        private static PlaylistBase CreatePlaylist(IReadOnlyCollection<PlaylistLine> playlist, Uri baseUri)
         {
             string tag = GetFirstNonCommonTag(playlist);
             if (Tag.IsMasterTag(tag))
             {
-                return new MasterPlaylist(playlist);
+                return new MasterPlaylist(playlist, baseUri);
             }
             if (Tag.IsMediaPlaylistTag(tag))
             {
-                return new MediaPlaylist(playlist);
+                return new MediaPlaylist(playlist, baseUri);
             }
 
             throw new ArgumentException("Invalid second tag. Cannot create a playlist instance.");

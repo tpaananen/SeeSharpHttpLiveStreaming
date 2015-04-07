@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
+using SeeSharpHttpLiveStreaming.Utils;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
 
 namespace SeeSharpHttpLiveStreaming.Playlist
@@ -10,10 +12,22 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// </summary>
     internal abstract class PlaylistBase
     {
-        protected PlaylistBase()
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlaylistBase"/> class.
+        /// </summary>
+        /// <param name="baseUri">The base URI.</param>
+        protected PlaylistBase(Uri baseUri)
         {
+            baseUri.RequireNotNull("baseUri");
+            BaseUri = baseUri;
             Version = Playlist.Tags.BasicTags.Version.InitialVersionNumber;
         }
+
+        /// <summary>
+        /// Gets the base URI.
+        /// </summary>
+        protected Uri BaseUri { get; private set; }
 
         /// <summary>
         /// The list of tags.
@@ -51,7 +65,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </remarks>
         protected virtual BaseTag ProcessSingleLine(PlaylistLine line)
         {
-            var tag = TagFactory.Create(line, Version);
+            var tag = TagFactory.Create(line, BaseUri, Version);
             if (tag.TagType != TagType.ExtXVersion)
             {
                 _tags.Add(tag);

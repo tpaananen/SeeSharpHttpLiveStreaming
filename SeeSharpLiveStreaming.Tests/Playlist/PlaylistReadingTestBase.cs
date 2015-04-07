@@ -113,10 +113,10 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             return
                 "#EXTM3U" + lineFeed +
                 "#EXT-X-VERSION:7" + lineFeed + 
-                "#EXT-X-STREAM-INF:BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + " http://example.com/low.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000" + lineFeed + "http://example.com/mid.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000" + lineFeed + "http://example.com/hi.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\"" + lineFeed + "http://example.com/audio-only.m3u8" + lineFeed;
+                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1280000,AVERAGE-BANDWIDTH=1000000" + lineFeed + " http://example.com/low.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2560000,AVERAGE-BANDWIDTH=2000000" + lineFeed + "http://example.com/mid.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=7680000,AVERAGE-BANDWIDTH=6000000" + lineFeed + "http://example.com/hi.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=65000,CODECS=\"mp4a.40.5\"" + lineFeed + "http://example.com/audio-only.m3u8" + lineFeed;
         }
 
         protected static string CreateInvalidMasterPlaylist(string lineFeed)
@@ -138,21 +138,21 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-VERSION:7" + lineFeed +
                 "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"English\"," + 
                 "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
-                "URI=\"http://example.com/main/english-audio.m3u8\"" + lineFeed +
+                "URI=\"main/english-audio.m3u8\"" + lineFeed +
                 "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"Deutsch\"," + 
                 "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
-                "URI=\"http://example.com/main/german-audio.m3u8\"" + lineFeed +
+                "URI=\"main/german-audio.m3u8\"" + lineFeed +
                 "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"Commentary\"," +
                 "DEFAULT=NO,AUTOSELECT=NO,LANGUAGE=\"en\"," + 
-                "URI=\"http://example.com/commentary/audio-only.m3u8\"" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=1280000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "http://example.com/low/video-only.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "http://example.com/mid/video-only.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=7680000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "http://example.com/hi/video-only.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\",AUDIO=\"aac\"" + lineFeed +
-                "http://example.com/main/english-audio.m3u8" + lineFeed + lineFeed;
+                "URI=\"commentary/audio-only.m3u8\"" + lineFeed +
+                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1280000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
+                "low/video-only.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2560000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
+                "mid/video-only.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=7680000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
+                "hi/video-only.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=65000,CODECS=\"mp4a.40.5\",AUDIO=\"aac\"" + lineFeed +
+                "main/english-audio.m3u8" + lineFeed + lineFeed;
         }
 
         protected static string CreateValidMasterPlaylistWithAlternativeRenditionsTwoGroups(string lineFeed)
@@ -304,6 +304,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.AreEqual(4, playlistObject.Playlist.Tags.Count);
             var master = (MasterPlaylist) playlistObject.Playlist;
             Assert.AreEqual(0, master.RenditionGroups.Count);
+            Assert.AreEqual(4, master.VariantStreams.Count);
         }
 
         internal static void AssertMediaPlaylist(IHlsPlaylist playlistObject)

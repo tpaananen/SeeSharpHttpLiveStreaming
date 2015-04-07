@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -13,15 +14,36 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// </summary>
     internal sealed class MasterPlaylist : PlaylistBase
     {
-        private readonly List<RenditionGroup> _renditionGroups = new List<RenditionGroup>(); 
+        /// <summary>
+        /// Specifies the alternative media selection groups.
+        /// </summary>
+        private readonly List<RenditionGroup> _renditionGroups = new List<RenditionGroup>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MasterPlaylist"/> class.
+        /// Specifies the default variant streams available.
+        /// </summary>
+        private readonly List<StreamInf> _variantStreams = new List<StreamInf>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MasterPlaylist" /> class.
         /// </summary>
         /// <param name="playlist">The playlist.</param>
-        public MasterPlaylist(IReadOnlyCollection<PlaylistLine> playlist)
+        /// <param name="baseUri">The base URI.</param>
+        public MasterPlaylist(IReadOnlyCollection<PlaylistLine> playlist, Uri baseUri)
+            : base(baseUri)
         {
             Parse(playlist);
+        }
+
+        /// <summary>
+        /// Gets the variant streams.
+        /// </summary>
+        public IReadOnlyCollection<StreamInf> VariantStreams
+        {
+            get
+            {
+                return new ReadOnlyCollection<StreamInf>(_variantStreams);
+            }
         }
 
         /// <summary>
@@ -44,7 +66,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             content.RequireNotEmpty("content");
             ReadTags(content);
+            CreateVariantStreams();
             CreateRenditionGroups();
+        }
+
+        private void CreateVariantStreams()
+        {
+            _variantStreams.AddRange(_tags.OfType<StreamInf>());
         }
 
         private void CreateRenditionGroups()

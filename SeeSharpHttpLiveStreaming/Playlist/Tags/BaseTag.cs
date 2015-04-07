@@ -13,6 +13,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
     /// </summary>
     internal abstract class BaseTag : ISerializable
     {
+
+        /// <summary>
+        /// Gets or sets the base URI.
+        /// </summary>
+        internal Uri BaseUri { get; set; }
+
         /// <summary>
         /// The attribute separator.
         /// </summary>
@@ -180,10 +186,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// <returns>
         /// The <see cref="Uri"/> parsed from the content.
         /// </returns>
-        protected static Uri ParseUri(string attributeName, string content, bool required)
+        protected Uri ParseUri(string attributeName, string content, bool required)
         {
             var value = ValueParser.ParseQuotedString(attributeName, content, required);
-            return value != string.Empty ? new Uri(WebUtility.UrlDecode(value)) : null;
+            if (value == string.Empty)
+            {
+                return null;
+            }
+            var uri = WebUtility.UrlDecode(value);
+            return UriUtils.CreateUri(uri, BaseUri);
         }
     }
 }

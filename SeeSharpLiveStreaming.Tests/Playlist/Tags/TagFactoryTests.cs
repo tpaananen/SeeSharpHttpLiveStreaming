@@ -10,12 +10,13 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
     [TestFixture]
     public class TagFactoryTests
     {
+        private static readonly Uri BaseUri = new Uri("http://www.example.com/");
 
         [Test]
         public void TestBaseTagCreateThrowsIfStartTagIsTriedToCreate()
         {
             var line = new PlaylistLine(Tag.StartLine, Tag.StartLine);
-            Assert.Throws<InvalidOperationException>(() => TagFactory.Create(line, 0));
+            Assert.Throws<InvalidOperationException>(() => TagFactory.Create(line, BaseUri, 0));
         }
 
         [Test]
@@ -29,7 +30,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         public void TestTagFactoryCreatesTagFromLine()
         {
             var line = new PlaylistLine("#EXT-X-VERSION", "#EXT-X-VERSION:3");
-            var tag = TagFactory.Create(line, Version.InitialVersionNumber);
+            var tag = TagFactory.Create(line, BaseUri, Version.InitialVersionNumber);
             Assert.AreEqual(typeof(Version), tag.GetType());
             Assert.AreEqual(3, ((Version)tag).VersionNumber);
             Assert.IsTrue(tag.UsingDefaultCtor);

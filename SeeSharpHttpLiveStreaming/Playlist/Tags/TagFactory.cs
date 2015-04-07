@@ -119,25 +119,25 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         }
 
         /// <summary>
-        /// Creates the tag specified by the <paramref name="line"/>.
+        /// Creates the tag specified by the <paramref name="line" />.
         /// </summary>
         /// <param name="line">The line.</param>
+        /// <param name="baseUri">The base URI.</param>
         /// <param name="version">The version.</param>
         /// <returns></returns>
-        /// <exception cref="System.InvalidOperationException">
-        /// Thrown when the <paramref name="line"/> contains only <see cref="Tag.StartLine"/>.
-        /// </exception>
-        /// <exception cref="System.Runtime.Serialization.SerializationException">
-        /// Thrown if parsing of the content fails.
-        /// </exception>
-        internal static BaseTag Create(PlaylistLine line, int version)
+        /// <exception cref="InvalidOperationException">The start tag cannot be created.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown when the <paramref name="line" /> contains only <see cref="Tag.StartLine" />.</exception>
+        /// <exception cref="System.Runtime.Serialization.SerializationException">Thrown if parsing of the content fails.</exception>
+        internal static BaseTag Create(PlaylistLine line, Uri baseUri, int version)
         {
+            baseUri.RequireNotNull("baseUri");
             if (line.Tag == Tag.StartLine)
             {
                 throw new InvalidOperationException("The start tag cannot be created.");
             }
 
             var tagObject = Create(line.Tag);
+            tagObject.BaseUri = baseUri;
             tagObject.Deserialize(line.GetParameters(), version);
             return tagObject;
         }

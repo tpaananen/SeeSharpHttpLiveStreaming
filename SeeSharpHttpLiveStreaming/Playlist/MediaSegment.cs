@@ -55,22 +55,23 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// which will accept the tag.
         /// </summary>
         /// <param name="line">The line.</param>
+        /// <param name="baseUri">The base URI.</param>
         /// <param name="version">The version.</param>
         /// <returns>
-        /// When this method returns <b>false</b> it indicates that the 
-        /// segment is ready and a new segment should be created for 
+        /// When this method returns <b>false</b> it indicates that the
+        /// segment is ready and a new segment should be created for
         /// next lines.
         /// </returns>
-        public bool ReadTag(PlaylistLine line, int version)
+        public bool ReadTag(PlaylistLine line, Uri baseUri, int version)
         {
             // Accept tags as long there is a URI on the line
-            CreateTag(line, version);
+            CreateTag(line, baseUri, version);
             return line.Uri == null;
         }
 
-        private void CreateTag(PlaylistLine line, int version)
+        private void CreateTag(PlaylistLine line, Uri baseUri, int version)
         {
-            var tag = TagFactory.Create(line, version);
+            var tag = TagFactory.Create(line, baseUri, version);
             if (line.Uri != null)
             {
                 Uri = line.Uri;

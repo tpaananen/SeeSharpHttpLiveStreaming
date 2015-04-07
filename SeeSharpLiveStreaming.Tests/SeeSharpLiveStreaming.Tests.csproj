@@ -87,6 +87,7 @@
     <Compile Include="Utils\PlaylistWriterTests.cs" />
     <Compile Include="Utils\RequireTests.cs" />
     <Compile Include="Utils\ResolutionTests.cs" />
+    <Compile Include="Utils\UriUtilsTests.cs" />
     <Compile Include="Utils\ValueParserTests.cs" />
   </ItemGroup>
   <ItemGroup>

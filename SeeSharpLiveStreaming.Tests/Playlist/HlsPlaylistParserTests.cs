@@ -142,6 +142,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.AreEqual(7, playlistObject.Playlist.Tags.Count);
             var master = (MasterPlaylist) playlistObject.Playlist;
             Assert.AreEqual(1, master.RenditionGroups.Count);
+            Assert.AreEqual(4, master.VariantStreams.Count);
         }
 
         [Theory]
@@ -158,6 +159,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.AreEqual(12, playlistObject.Playlist.Tags.Count);
             var master = (MasterPlaylist) playlistObject.Playlist;
             Assert.AreEqual(4, master.RenditionGroups.Count);
+            Assert.AreEqual(4, master.VariantStreams.Count);
         }
 
         [Test]

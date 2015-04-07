@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -14,13 +15,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     internal sealed class MediaPlaylist : PlaylistBase
     {
 
-        private readonly List<MediaSegment> _mediaSegments = new List<MediaSegment>(); 
+        private readonly List<MediaSegment> _mediaSegments = new List<MediaSegment>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MediaPlaylist"/> class.
+        /// Initializes a new instance of the <see cref="MediaPlaylist" /> class.
         /// </summary>
         /// <param name="playlist">The playlist.</param>
-        public MediaPlaylist(IEnumerable<PlaylistLine> playlist)
+        /// <param name="baseUri">The base URI.</param>
+        public MediaPlaylist(IEnumerable<PlaylistLine> playlist, Uri baseUri)
+            : base(baseUri)
         {
             Parse(playlist);
         }
@@ -108,7 +111,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 mediaSegment = new MediaSegment();
             }
 
-            if (!mediaSegment.ReadTag(line, Version))
+            if (!mediaSegment.ReadTag(line, BaseUri, Version))
             {
                 _mediaSegments.Add(mediaSegment);
                 mediaSegment = null;

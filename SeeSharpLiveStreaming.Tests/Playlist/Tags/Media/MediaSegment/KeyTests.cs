@@ -14,7 +14,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
     [TestFixture]
     public class KeyTests
     {
-
+        private static readonly Uri BaseUri = new Uri("http://www.example.com/");
         private Key _key;
 
         [SetUp]
@@ -33,7 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
                 return value;
             }
 
-            value += ",URI=\"https://example.com/encryption\"";
+            value += ",URI=\"https://example.com/encryption/\"";
             value += ",IV=0x1234";
             value += ",KEYFORMAT=\"somevalue\"";
             value += ",KEYFORMATVERSIONS=\"1/4/6\"";
@@ -45,7 +45,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         public void TestKeyIsCreated(EncryptionMethod encryptionMethod)
         {
             var value = GetLine(encryptionMethod);
-            _key = (Key)TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), 5);
+            _key = (Key)TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), BaseUri, 5);
             Assert.AreEqual(encryptionMethod, _key.Method);
 
             if (_key.Method == EncryptionMethod.None)
@@ -53,7 +53,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
                 return;
             }
 
-            Assert.AreEqual("https://example.com/encryption", _key.Uri.AbsoluteUri);
+            Assert.AreEqual(new Uri("https://example.com/encryption/"), _key.Uri);
             Assert.AreEqual("0x" + "1234".PadLeft(16, '0'), _key.InitializationVector);
             Assert.AreEqual("somevalue", _key.KeyFormat);
             Assert.AreEqual(new List<int>{1,4,6}, _key.KeyFormatVersions);
@@ -64,9 +64,9 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         {
             var value = GetLine(EncryptionMethod.Aes128);
             value = value.Replace(",IV=0x1234", "");
-            _key = (Key)TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), 5);
+            _key = (Key)TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), BaseUri, 5);
 
-            Assert.AreEqual("https://example.com/encryption", _key.Uri.AbsoluteUri);
+            Assert.AreEqual("https://example.com/encryption/", _key.Uri.AbsoluteUri);
             Assert.AreEqual("", _key.InitializationVector);
             Assert.AreEqual("somevalue", _key.KeyFormat);
             Assert.AreEqual(new List<int>{1,4,6}, _key.KeyFormatVersions);
@@ -76,7 +76,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         public void TestKeyCreationFailsIfVersionNumberIsLessThanRequiredVersion([Range(0, 1)] int version)
         {
             var value = GetLine(EncryptionMethod.Aes128);
-            var exception = Assert.Throws<SerializationException>(() => TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), version));
+            var exception = Assert.Throws<SerializationException>(() => TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), BaseUri, version));
             Assert.AreEqual(typeof(IncompatibleVersionException), exception.InnerException.GetType());
 
             var ex = (IncompatibleVersionException) exception.InnerException;
@@ -88,7 +88,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         public void TestKeyCreationFailsIfKeyFormatIsLessThanRequiredVersion([Range(0, 4)] int version)
         {
             var value = GetLine(EncryptionMethod.Aes128).Replace(",IV=0x1234", "");
-            var exception = Assert.Throws<SerializationException>(() => TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), version));
+            var exception = Assert.Throws<SerializationException>(() => TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), BaseUri, version));
             Assert.AreEqual(typeof(IncompatibleVersionException), exception.InnerException.GetType());
 
             var ex = (IncompatibleVersionException) exception.InnerException;
@@ -101,7 +101,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         {
             var value = GetLine(EncryptionMethod.Aes128);
             value = value.Replace(",KEYFORMAT=\"somevalue\"", "").Replace(",IV=0x1234", "");
-            var exception = Assert.Throws<SerializationException>(() => TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), version));
+            var exception = Assert.Throws<SerializationException>(() => TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), BaseUri, version));
             Assert.AreEqual(typeof(IncompatibleVersionException), exception.InnerException.GetType());
 
             var ex = (IncompatibleVersionException) exception.InnerException;
@@ -114,7 +114,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         {
             var value = GetLine(EncryptionMethod.Aes128);
             value = value.Replace(",KEYFORMATVERSIONS=\"1/4/6\"", "");
-            var key = (Key)TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), 5);
+            var key = (Key)TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), BaseUri, 5);
             Assert.IsEmpty(key.KeyFormatVersions);
         }
 

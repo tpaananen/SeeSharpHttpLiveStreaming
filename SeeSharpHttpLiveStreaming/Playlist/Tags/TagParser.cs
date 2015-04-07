@@ -131,7 +131,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                     {
                         throw new SerializationException("The URI is missing.");
                     }
-                    var uri = CreateUri(uriOrTag, baseUri);
+                    var uri = UriUtils.CreateUri(uriOrTag, baseUri);
                     lines.Add(new PlaylistLine(tag, line, uri));
                 }
                 else
@@ -141,13 +141,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 }
                 break;
             }
-        }
-
-        private static Uri CreateUri(string uriString, Uri baseUri)
-        {
-            return Uri.IsWellFormedUriString(uriString, UriKind.Absolute) 
-                ? new Uri(uriString) 
-                : new Uri(baseUri, uriString);
         }
 
         private static string ReadUri(TextReader reader)
