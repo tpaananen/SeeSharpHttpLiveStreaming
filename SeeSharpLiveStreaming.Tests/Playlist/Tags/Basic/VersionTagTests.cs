@@ -26,32 +26,32 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Basic
         public void ExtXVersionTagParsesTheVersionNumber([Range(0, 7)] int version)
         {
             string parameters = version.ToString(CultureInfo.InvariantCulture);
-            _tag.Deserialize(parameters, 0);
+            _tag.Deserialize(parameters, Version.InitialVersionNumber);
             Assert.AreEqual(version, _tag.VersionNumber);
         }
 
         [Test]
-        public void ExtXVersionTagThrowsInvalidOperationExceptionIfIncomingVersionIsNonZero()
+        public void ExtXVersionTagThrowsInvalidOperationExceptionIfIncomingVersionIsNotDefault()
         {
-            Assert.Throws<InvalidOperationException>(() => _tag.Deserialize("3", 1));
+            Assert.Throws<InvalidOperationException>(() => _tag.Deserialize("3", Version.InitialVersionNumber + 1));
         }
 
         [Test]
         public void ExtXVersionTagThrowsSerializationExceptionIfParsingOfVersioNumberFails()
         {
-            Assert.Throws<FormatException>(() => _tag.Deserialize("NA", 0));
+            Assert.Throws<FormatException>(() => _tag.Deserialize("NA", Version.InitialVersionNumber));
         }
 
         [Test]
         public void TestVersionNumberThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => _tag.Deserialize(null, 0));
+            Assert.Throws<ArgumentNullException>(() => _tag.Deserialize(null, Version.InitialVersionNumber));
         }
 
         [Test]
         public void TestVersionNumberThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => _tag.Deserialize(string.Empty, 0));
+            Assert.Throws<ArgumentException>(() => _tag.Deserialize(string.Empty, Version.InitialVersionNumber));
         }
 
         [Test]

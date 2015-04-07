@@ -29,7 +29,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags
         public void TestTagFactoryCreatesTagFromLine()
         {
             var line = new PlaylistLine("#EXT-X-VERSION", "#EXT-X-VERSION:3");
-            var tag = TagFactory.Create(line, 0);
+            var tag = TagFactory.Create(line, Version.InitialVersionNumber);
             Assert.AreEqual(typeof(Version), tag.GetType());
             Assert.AreEqual(3, ((Version)tag).VersionNumber);
             Assert.IsTrue(tag.UsingDefaultCtor);

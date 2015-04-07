@@ -10,6 +10,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// </summary>
     internal abstract class PlaylistBase
     {
+        protected PlaylistBase()
+        {
+            Version = Playlist.Tags.BasicTags.Version.InitialVersionNumber;
+        }
 
         /// <summary>
         /// The list of tags.
@@ -29,7 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// Gets the compatibility level version number.
         /// </summary>
         /// <remarks>
-        /// Defaults to zero (0) if that tag is not included when deserializing from server.
+        /// Defaults to one (1) if that tag is not included when deserializing from server.
         /// Server can set the the version accoring to supported level (TBD).
         /// </remarks>
         public int Version { get; private set; }

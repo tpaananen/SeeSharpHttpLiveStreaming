@@ -26,6 +26,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
     /// </summary>
     internal class Version : BaseTag
     {
+        internal const int InitialVersionNumber = 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Version"/> class.
@@ -78,10 +79,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
         /// </exception>
         public override void Deserialize(string content, int version)
         {
-            if (version != 0)
+            if (version != InitialVersionNumber)
             {
                 // this is for check against multiple version tags in a playlist file
-                throw new InvalidOperationException("The version number must be zero when deserializing EXT-X-VERSION tag.");
+                throw new InvalidOperationException("The version number must be " + InitialVersionNumber 
+                    + " when deserializing EXT-X-VERSION tag.");
             }
 
             content.RequireNotEmpty("content");
