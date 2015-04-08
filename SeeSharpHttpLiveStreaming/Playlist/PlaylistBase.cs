@@ -30,20 +30,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         protected Uri BaseUri { get; private set; }
 
         /// <summary>
-        /// The list of tags.
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        protected readonly List<BaseTag> _tags = new List<BaseTag>();
-
-        /// <summary>
-        /// Gets the tags.
-        /// </summary>
-        public IReadOnlyCollection<BaseTag> Tags
-        {
-            get { return new ReadOnlyCollection<BaseTag>(_tags); }
-        }
-
-        /// <summary>
         /// Gets the compatibility level version number.
         /// </summary>
         /// <remarks>
@@ -59,18 +45,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <returns>
         /// The tag created from the line.
         /// </returns>
-        /// <remarks>
-        /// If the tag is not a <see cref="Version"/> tag, it is added to the list 
-        /// of tags.
-        /// </remarks>
         protected virtual BaseTag ProcessSingleLine(PlaylistLine line)
         {
             var tag = TagFactory.Create(line, BaseUri, Version);
-            if (tag.TagType != TagType.ExtXVersion)
-            {
-                _tags.Add(tag);
-            }
-            else
+            if (tag.TagType == TagType.ExtXVersion)
             {
                 var versionTag = (Version) tag;
                 Version = versionTag.VersionNumber;

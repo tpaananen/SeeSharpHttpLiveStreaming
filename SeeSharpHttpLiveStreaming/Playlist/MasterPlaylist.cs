@@ -65,22 +65,22 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         private void Parse(IReadOnlyCollection<PlaylistLine> content)
         {
             content.RequireNotEmpty("content");
-            ReadTags(content);
-            CreateVariantStreams();
-            CreateRenditionGroups();
+            var tags = ReadTags(content);
+            CreateVariantStreams(tags);
+            CreateRenditionGroups(tags);
         }
 
-        private void CreateVariantStreams()
+        private void CreateVariantStreams(IEnumerable<BaseTag> tags)
         {
-            _variantStreams.AddRange(_tags.OfType<StreamInf>());
+            _variantStreams.AddRange(tags.OfType<StreamInf>());
         }
 
-        private void CreateRenditionGroups()
+        private void CreateRenditionGroups(IReadOnlyCollection<BaseTag> tags)
         {
-            var groupIds = _tags.OfType<ExtMedia>().Select(x => new { x.GroupId, x.Type }).Distinct();
+            var groupIds = tags.OfType<ExtMedia>().Select(x => new { x.GroupId, x.Type }).Distinct();
             foreach (var groupDetail in groupIds)
             {
-                var renditionGroup = new RenditionGroup(groupDetail.GroupId, groupDetail.Type, _tags);
+                var renditionGroup = new RenditionGroup(groupDetail.GroupId, groupDetail.Type, tags);
                 _renditionGroups.Add(renditionGroup);
             }
 
@@ -121,16 +121,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             }
         }
 
-        private void ReadTags(IEnumerable<PlaylistLine> content)
+        private List<BaseTag> ReadTags(IEnumerable<PlaylistLine> content)
         {
+            var collection = new List<BaseTag>();
             foreach (var line in content)
             {
                 if (!Tag.IsMasterTag(line.Tag) && !Tag.IsBasicTag(line.Tag))
                 {
                     throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist tag must not contain other than master playlist tags or basic tags.");
                 }
-                ProcessSingleLine(line);
+                collection.Add(ProcessSingleLine(line));
             }
+            return collection;
         }
     }
 }
