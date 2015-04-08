@@ -113,17 +113,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </exception>
         private static void ValidateGroup(IEnumerable<RenditionGroup> @group)
         {
-            // go throw medias, there must be equally many (-1 for self) medias with the same attributes as there is groups
             foreach (var media in @group.SelectMany(x => x.ExtMedias))
             {
-                if (!media.EqualityCheck(@group.SelectMany(x => x.ExtMedias).Where(d => d != media)))
+                // check all other groups than the one the media exists and find equal attributes from each other group
+                if (!@group.Where(d => !d.ExtMedias.Contains(media)).All(d => media.EqualityCheck(d.ExtMedias)))
                 {
                     throw new SerializationException("Could not find matching EXT-X-MEDIA tag from the list of renditions.");
                 }
             }
         }
-        // throw new SerializationException("Could not find matching EXT-X-MEDIA tag from the list of renditions.");
-
 
         private void ReadTags(IEnumerable<PlaylistLine> content)
         {
