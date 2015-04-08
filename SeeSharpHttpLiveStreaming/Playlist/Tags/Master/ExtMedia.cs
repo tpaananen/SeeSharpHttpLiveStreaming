@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
@@ -460,6 +461,33 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
                 throw new InvalidOperationException(
                     "Invalid INSTREAM-ID attribute value. The number of the service value is out of range.");
             }
+        }
+
+        /// <summary>
+        /// Check whether any of the <paramref name="others"/> has the same set of attributes.
+        /// </summary>
+        /// <param name="others">The others.</param>
+        /// <returns>
+        /// <b>True</b> if the same set of attributes are found; otherwise, <b>false</b>.
+        /// </returns>
+        internal bool EqualityCheck(IEnumerable<ExtMedia> others)
+        {
+            foreach (var other in others)
+            {
+                if (Default == other.Default && 
+                    AutoSelect == other.AutoSelect && 
+                    Forced == other.Forced && 
+                    string.Equals(Language, other.Language) && 
+                    string.Equals(AssocLanguage, other.AssocLanguage) && 
+                    string.Equals(Name, other.Name) && 
+                    string.Equals(InstreamId, other.InstreamId) && 
+                    Characteristics.SequenceEqual(other.Characteristics))
+                {
+                    return true;
+                }
+                
+            }
+            return false;
         }
     }
 }

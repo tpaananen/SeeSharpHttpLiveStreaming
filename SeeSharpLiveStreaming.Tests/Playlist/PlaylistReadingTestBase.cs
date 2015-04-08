@@ -136,15 +136,19 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             return 
                 "#EXTM3U" + lineFeed +
                 "#EXT-X-VERSION:7" + lineFeed +
+
                 "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"English\"," + 
                 "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
                 "URI=\"main/english-audio.m3u8\"" + lineFeed +
+
                 "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"Deutsch\"," + 
                 "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
                 "URI=\"main/german-audio.m3u8\"" + lineFeed +
+
                 "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"Commentary\"," +
                 "DEFAULT=NO,AUTOSELECT=NO,LANGUAGE=\"en\"," + 
                 "URI=\"commentary/audio-only.m3u8\"" + lineFeed +
+
                 "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1280000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
                 "low/video-only.m3u8" + lineFeed +
                 "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2560000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
@@ -187,7 +191,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-1\",NAME=\"Video Angle 1\"," + 
                 "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
                 "URI=\"http://example.com/main/english-audio.m3u8\"" + lineFeed +
-                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-2\",NAME=\"Video Angle 2\"," + 
+                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-1\",NAME=\"Video Angle 2\"," + 
                 "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
                 "URI=\"http://example.com/main/german-audio.m3u8\"" + lineFeed +
 
@@ -224,6 +228,54 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "http://example.com/hi/video-only.m3u8" + lineFeed +
                 "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\",AUDIO=\"aac\"" + lineFeed +
                 "http://example.com/main/english-audio.m3u8" + lineFeed + lineFeed;
+        }
+
+        protected string CreateInvalidMasterPlaylistWithAlternativeRenditionsTwoGroups(string lineFeed)
+        {
+            return 
+                "#EXTM3U" + lineFeed +
+                "#EXT-X-VERSION:7" + lineFeed +
+
+                // Alternative audio "aac"
+                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"English\"," + 
+                "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
+                "URI=\"http://example.com/main/english-audio.m3u8\"" + lineFeed +
+                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"Deutsch\"," + 
+                "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
+                "URI=\"http://example.com/main/german-audio.m3u8\"" + lineFeed +
+                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"aac\",NAME=\"Commentary\"," +
+                "DEFAULT=NO,AUTOSELECT=NO,LANGUAGE=\"en\"," + 
+                "URI=\"http://example.com/commentary/audio-only.m3u8\"" + lineFeed +
+
+                // Alternative audio "mp3"
+                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"mp3\",NAME=\"English\"," + 
+                "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
+                "URI=\"http://example.com/main/english-audio.m3u8\"" + lineFeed +
+                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"mp3\",NAME=\"Deutsch\"," + 
+                "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
+                "URI=\"http://example.com/main/german-audio.m3u8\"" + lineFeed +
+                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"mp3\",NAME=\"Commentary\"," +
+                "DEFAULT=NO,AUTOSELECT=NO,LANGUAGE=\"de\"," +  // should be en to be valid
+                "URI=\"http://example.com/commentary/audio-only.m3u8\"" + lineFeed +
+
+                // Alternative video angles
+                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-1\",NAME=\"Video Angle 1\"," + 
+                "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
+                "URI=\"http://example.com/main/english-audio.m3u8\"" + lineFeed +
+                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-1\",NAME=\"Video Angle 2\"," + 
+                "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
+                "URI=\"http://example.com/main/german-audio.m3u8\"" + lineFeed +
+
+                // Variant streams
+                "#EXT-X-STREAM-INF:BANDWIDTH=1280000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
+                "http://example.com/low/video-only.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
+                "http://example.com/mid/video-only.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=7680000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
+                "http://example.com/hi/video-only.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\",AUDIO=\"aac\"" + lineFeed +
+                "http://example.com/main/english-audio.m3u8" + lineFeed + lineFeed;
+
         }
 
         protected static string CreateInvalidMasterPlaylistWithAlternativeRenditionsMultipleDefaults(string lineFeed)

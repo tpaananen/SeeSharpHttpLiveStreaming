@@ -87,9 +87,43 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             ValidateGroups();
         }
 
-        private static void ValidateGroups()
+        private void ValidateGroups()
         {
+            // Each member of the media group must be replicated 
+            // in each media group for that media type.
+
+            // Validate that each group of ExtMedia tags have  attributes 
+            // in each group having the same TYPE (except URI and GROUP-ID)
+            var grouping = _renditionGroups.GroupBy(d => d.Type);
+            foreach (var group in grouping)
+            {
+                if (group.Count() > 1)
+                {
+                    ValidateGroup(group);
+                }
+            }
         }
+
+        /// <summary>
+        /// Validates the groups having the same type attribute.
+        /// </summary>
+        /// <param name="group">The group.</param>
+        /// <exception cref="SerializationException">
+        /// Thrown when no matching EXT-X-MEDIA tag from the list of renditions.
+        /// </exception>
+        private static void ValidateGroup(IEnumerable<RenditionGroup> @group)
+        {
+            // go throw medias, there must be equally many (-1 for self) medias with the same attributes as there is groups
+            foreach (var media in @group.SelectMany(x => x.ExtMedias))
+            {
+                if (!media.EqualityCheck(@group.SelectMany(x => x.ExtMedias).Where(d => d != media)))
+                {
+                    throw new SerializationException("Could not find matching EXT-X-MEDIA tag from the list of renditions.");
+                }
+            }
+        }
+        // throw new SerializationException("Could not find matching EXT-X-MEDIA tag from the list of renditions.");
+
 
         private void ReadTags(IEnumerable<PlaylistLine> content)
         {

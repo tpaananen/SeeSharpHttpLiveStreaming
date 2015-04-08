@@ -158,8 +158,15 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.AreEqual(7, playlistObject.Version);
             Assert.AreEqual(12, playlistObject.Playlist.Tags.Count);
             var master = (MasterPlaylist) playlistObject.Playlist;
-            Assert.AreEqual(4, master.RenditionGroups.Count);
+            Assert.AreEqual(3, master.RenditionGroups.Count);
             Assert.AreEqual(4, master.VariantStreams.Count);
+        }
+
+        [Theory]
+        public void TestMasterPlaylistIsNotCreatedIfRenditionsDoNotMathchingAttributes(string newLine)
+        {
+            var playlist = CreateInvalidMasterPlaylistWithAlternativeRenditionsTwoGroups(newLine);
+            Assert.Throws<SerializationException>(() => HlsPlaylistParser.Parse(playlist, _uri));
         }
 
         [Test]
