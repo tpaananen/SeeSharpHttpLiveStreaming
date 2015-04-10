@@ -63,6 +63,7 @@
     <Compile Include="Playlist\Tags\Master\SessionData.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInf.cs" />
     <Compile Include="Playlist\Tags\Master\StreamInfBaseTag.cs" />
+    <Compile Include="Playlist\Tags\Master\VariantStream.cs" />
     <Compile Include="Playlist\Tags\Media\DiscontinuitySequence.cs" />
     <Compile Include="Playlist\Tags\Media\EndList.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\Discontinuity.cs" />

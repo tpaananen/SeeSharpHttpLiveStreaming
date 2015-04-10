@@ -6,11 +6,11 @@ using SeeSharpHttpLiveStreaming.Utils;
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
     /// <summary>
-    /// Represents rendition group where each EXT-X-MEDIA tags have the same GROUP-ID attribute value..
+    /// Represents rendition group where each EXT-X-MEDIA tags have the same GROUP-ID and TYPE attribute value.
     /// </summary>
     /// <remarks>
     /// A set of EXT-X-MEDIA tags with the same GROUP-ID value and the same
-    /// TYPE value forms a group of Renditions.Each member of the group
+    /// TYPE value forms a group of Renditions. Each member of the group
     /// MUST be an alternative rendition of the same content; otherwise
     /// playback errors can occur.
     /// All EXT-X-MEDIA tags in a Playlist MUST meet the following
@@ -18,13 +18,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// o All EXT-X-MEDIA tags in the same group MUST have different NAME
     ///   attributes.
     ///
-    /// o  A group MUST NOT have more than one member with a DEFAULT
-    ///    attribute of YES.
+    /// o A group MUST NOT have more than one member with a DEFAULT
+    ///   attribute of YES.
     ///
     /// o All members of a group whose AUTOSELECT attribute has a value of
     ///   YES MUST have LANGUAGE[RFC5646] attributes with unique values.
     ///
-    /// TODO: validate
     /// A Playlist MAY contain multiple groups of the same TYPE in order to
     /// provide multiple encodings of that media type. If it does so, each
     /// group of the same TYPE MUST have the same set of members, and each
@@ -32,8 +31,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// exception of the URI attribute.
     ///
     /// Each member in a group of Renditions MAY have a different sample
-    /// format.  However, any EXT-X-STREAM-INF (Section 4.3.4.2) tag or EXT-
-    /// X-I-FRAME-STREAM-INF(Section 4.3.4.3) tag which references that
+    /// format. However, any EXT-X-STREAM-INF (Section 4.3.4.2) tag or EXT-
+    /// X-I-FRAME-STREAM-INF (Section 4.3.4.3) tag which references that
     /// group MUST have a CODECS attribute that lists every sample format
     /// present in any Rendition in the group, or client playback failures
     /// can occur.
@@ -47,8 +46,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <param name="groupId">The group identifier.</param>
         /// <param name="type">The type.</param>
         /// <param name="tags">The tags.</param>
-        /// <exception cref="SerializationException">Thrown if the EXT-X-MEDIA tags in a Playlist do not meet the specified requirements.
-        /// See remarks of the <see cref="RenditionGroup" />.</exception>
+        /// <exception cref="SerializationException">
+        /// Thrown if the EXT-X-MEDIA tags in a Playlist do not meet the specified requirements.
+        /// See remarks of the <see cref="RenditionGroup" /> class.
+        /// </exception>
         public RenditionGroup(string groupId, string type, IReadOnlyCollection<BaseTag> tags)
         {
             groupId.RequireNotEmpty("groupId");
@@ -141,6 +142,5 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
                 throw new SerializationException("All members of a rendition group whose AUTOSELECT attribute has a value of YES MUST have LANGUAGE [RFC5646] attributes with unique values.");
             }
         }
-
     }
 }

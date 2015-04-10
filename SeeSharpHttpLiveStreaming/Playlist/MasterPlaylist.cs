@@ -14,15 +14,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// </summary>
     internal sealed class MasterPlaylist : PlaylistBase
     {
-        /// <summary>
-        /// Specifies the alternative media selection groups.
-        /// </summary>
-        private readonly List<RenditionGroup> _renditionGroups = new List<RenditionGroup>();
-
-        /// <summary>
-        /// Specifies the default variant streams available.
-        /// </summary>
-        private readonly List<StreamInf> _variantStreams = new List<StreamInf>();
+        private readonly List<VariantStream> _variantStreams = new List<VariantStream>(); 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MasterPlaylist" /> class.
@@ -38,22 +30,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets the variant streams.
         /// </summary>
-        public IReadOnlyCollection<StreamInf> VariantStreams
+        public IReadOnlyCollection<VariantStream> VariantStreams
         {
             get
             {
-                return new ReadOnlyCollection<StreamInf>(_variantStreams);
-            }
-        }
-
-        /// <summary>
-        /// Gets the rendition groups.
-        /// </summary>
-        public IReadOnlyCollection<RenditionGroup> RenditionGroups
-        {
-            get
-            {
-                return new ReadOnlyCollection<RenditionGroup>(_renditionGroups);
+                return new ReadOnlyCollection<VariantStream>(_variantStreams);
             }
         }
 
@@ -66,32 +47,41 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             content.RequireNotEmpty("content");
             var tags = ReadTags(content);
-            CreateVariantStreams(tags);
-            CreateRenditionGroups(tags);
+            var streamInfs = CreateVariantStreams(tags);
+            var renditionGroups = CreateRenditionGroups(tags);
+            LinkVariantStreamAndRenditionGroups(streamInfs, renditionGroups);
         }
 
-        private void CreateVariantStreams(IEnumerable<BaseTag> tags)
+        private void LinkVariantStreamAndRenditionGroups(IEnumerable<StreamInf> streamInfs, IReadOnlyCollection<RenditionGroup> renditionGroups)
         {
-            _variantStreams.AddRange(tags.OfType<StreamInf>());
+            foreach (var streamInf in streamInfs)
+            {
+                var video = renditionGroups.FirstOrDefault(x => x.GroupId == streamInf.Video && x.Type == MediaTypes.Video);
+                var audio = renditionGroups.FirstOrDefault(x => x.GroupId == streamInf.Audio && x.Type == MediaTypes.Audio);
+                var subtitles = renditionGroups.FirstOrDefault(x => x.GroupId == streamInf.Subtitles && x.Type == MediaTypes.Subtitles);
+                var closedCaptions = renditionGroups.FirstOrDefault(x => x.GroupId == streamInf.ClosedCaptions && x.Type == MediaTypes.ClosedCaptions);
+                _variantStreams.Add(new VariantStream(streamInf, video, audio, subtitles, closedCaptions));
+            }
         }
 
-        private void CreateRenditionGroups(IReadOnlyCollection<BaseTag> tags)
+        private static IEnumerable<StreamInf> CreateVariantStreams(IEnumerable<BaseTag> tags)
+        {
+            return tags.OfType<StreamInf>().ToList();
+        }
+
+        private static IReadOnlyCollection<RenditionGroup> CreateRenditionGroups(IReadOnlyCollection<BaseTag> tags)
         {
             var groupIds = tags.OfType<ExtMedia>().Select(x => new { x.GroupId, x.Type }).Distinct();
-            foreach (var groupDetail in groupIds)
-            {
-                var renditionGroup = new RenditionGroup(groupDetail.GroupId, groupDetail.Type, tags);
-                _renditionGroups.Add(renditionGroup);
-            }
-
-            ValidateGroups();
+            var renditionGroups = groupIds.Select(groupDetail => new RenditionGroup(groupDetail.GroupId, groupDetail.Type, tags)).ToList();
+            ValidateGroups(renditionGroups);
+            return renditionGroups;
         }
 
-        private void ValidateGroups()
+        private static void ValidateGroups(IEnumerable<RenditionGroup> renditionGroups)
         {
             // Each member of the media group must be replicated 
             // in each media group for that media type.
-            var grouping = _renditionGroups.GroupBy(d => d.Type);
+            var grouping = renditionGroups.GroupBy(d => d.Type);
             foreach (var group in grouping)
             {
                 var list = group.ToList();
@@ -109,12 +99,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <exception cref="SerializationException">
         /// Thrown when no matching EXT-X-MEDIA tag from the list of renditions.
         /// </exception>
-        private static void ValidateGroup(ICollection<RenditionGroup> @group)
+        private static void ValidateGroup(ICollection<RenditionGroup> group)
         {
-            foreach (var media in @group.SelectMany(x => x.ExtMedias))
+            foreach (var media in group.SelectMany(x => x.ExtMedias))
             {
                 // check all other groups than the one the media exists and find equal attributes from each other group
-                if (!@group.Where(d => !d.ExtMedias.Contains(media)).All(d => media.EqualityCheck(d.ExtMedias)))
+                if (!group.Where(d => !d.ExtMedias.Contains(media)).All(d => media.EqualityCheck(d.ExtMedias)))
                 {
                     throw new SerializationException("Could not find matching EXT-X-MEDIA tag from other media groups with TYPE " + media.Type + ", GROUP-ID " + media.GroupId + ", NAME " + media.Name);
                 }

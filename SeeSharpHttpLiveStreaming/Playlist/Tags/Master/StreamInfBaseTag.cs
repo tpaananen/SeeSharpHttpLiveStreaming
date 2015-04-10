@@ -23,7 +23,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// The value is a quoted-string. It MUST match the value of the GROUP-
         /// ID attribute of an EXT-X-MEDIA tag elsewhere in the Master Playlist
         /// whose TYPE attribute is VIDEO. It indicates the set of video
-        /// Renditions that MAY be used when playing the presentation.See
+        /// Renditions that MAY be used when playing the presentation. See
         /// Section 4.3.4.2.1. of the specification.
         /// The VIDEO attribute is OPTIONAL.
         /// </summary>
