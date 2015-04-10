@@ -38,11 +38,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             }
         }
 
-        /// <summary>
-        /// Deserializes a <see cref="MasterPlaylist"/>.
-        /// </summary>
-        /// <param name="content"></param>
-        /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
         private void Parse(IReadOnlyCollection<PlaylistLine> content)
         {
             content.RequireNotEmpty("content");
@@ -111,6 +106,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             }
         }
 
+        /// <summary>
+        /// Reads the tags.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        /// <returns></returns>
+        /// <exception cref="SerializationException">
+        /// The tag is not a master playlist tag.
+        /// </exception>
         private List<BaseTag> ReadTags(IEnumerable<PlaylistLine> content)
         {
             var collection = new List<BaseTag>();

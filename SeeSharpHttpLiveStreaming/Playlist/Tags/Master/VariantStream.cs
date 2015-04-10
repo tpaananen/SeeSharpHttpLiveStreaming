@@ -32,7 +32,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         public StreamInf DefaultStream { get; private set; }
         
         /// <summary>
-        /// Gets the rendition.
+        /// Gets the alternative video.
         /// </summary>
         public RenditionGroup AlternativeVideo { get; private set; }
 

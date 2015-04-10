@@ -150,11 +150,11 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "URI=\"commentary/audio-only.m3u8\"" + lineFeed +
 
                 "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1280000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "low/video-only.m3u8" + lineFeed +
+                "low/audio-only.m3u8" + lineFeed +
                 "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2560000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "mid/video-only.m3u8" + lineFeed +
+                "mid/audio-only.m3u8" + lineFeed +
                 "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=7680000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "hi/video-only.m3u8" + lineFeed +
+                "hi/audio-only.m3u8" + lineFeed +
                 "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=65000,CODECS=\"mp4a.40.5\",AUDIO=\"aac\"" + lineFeed +
                 "main/english-audio.m3u8" + lineFeed + lineFeed;
         }
@@ -176,32 +176,21 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "DEFAULT=NO,AUTOSELECT=NO,LANGUAGE=\"en\"," + 
                 "URI=\"http://example.com/commentary/audio-only.m3u8\"" + lineFeed +
 
-                // Alternative audio "mp3"
-                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"mp3\",NAME=\"English\"," + 
-                "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
-                "URI=\"http://example.com/main/english-audio.m3u8\"" + lineFeed +
-                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"mp3\",NAME=\"Deutsch\"," + 
-                "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
-                "URI=\"http://example.com/main/german-audio.m3u8\"" + lineFeed +
-                "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"mp3\",NAME=\"Commentary\"," +
-                "DEFAULT=NO,AUTOSELECT=NO,LANGUAGE=\"en\"," + 
-                "URI=\"http://example.com/commentary/audio-only.m3u8\"" + lineFeed +
-
                 // Alternative video angles
-                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-1\",NAME=\"Video Angle 1\"," + 
+                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle\",NAME=\"Video Angle 1\"," + 
                 "DEFAULT=YES,AUTOSELECT=YES,LANGUAGE=\"en\"," +
                 "URI=\"http://example.com/main/english-audio.m3u8\"" + lineFeed +
-                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle-1\",NAME=\"Video Angle 2\"," + 
+                "#EXT-X-MEDIA:TYPE=VIDEO,GROUP-ID=\"angle\",NAME=\"Video Angle 2\"," + 
                 "DEFAULT=NO,AUTOSELECT=YES,LANGUAGE=\"de\"," +
                 "URI=\"http://example.com/main/german-audio.m3u8\"" + lineFeed +
 
                 // Variant streams
-                "#EXT-X-STREAM-INF:BANDWIDTH=1280000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "http://example.com/low/video-only.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "http://example.com/mid/video-only.m3u8" + lineFeed +
-                "#EXT-X-STREAM-INF:BANDWIDTH=7680000,CODECS=\"aac\",AUDIO=\"aac\"" + lineFeed +
-                "http://example.com/hi/video-only.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=1280000,CODECS=\"aac\",AUDIO=\"aac\",VIDEO=\"angle\"" + lineFeed +
+                "http://example.com/low/low.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=2560000,CODECS=\"aac\",AUDIO=\"aac\",VIDEO=\"angle\"" + lineFeed +
+                "http://example.com/mid/mid.m3u8" + lineFeed +
+                "#EXT-X-STREAM-INF:BANDWIDTH=7680000,CODECS=\"aac\",AUDIO=\"aac\",VIDEO=\"angle\"" + lineFeed +
+                "http://example.com/hi/hi.m3u8" + lineFeed +
                 "#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS=\"mp4a.40.5\",AUDIO=\"aac\"" + lineFeed +
                 "http://example.com/main/english-audio.m3u8" + lineFeed + lineFeed;
         }
