@@ -128,7 +128,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             {
                 if (!Tag.IsMasterTag(line.Tag) && !Tag.IsBasicTag(line.Tag))
                 {
-                    throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist tag must not contain other than master playlist tags or basic tags.");
+                    throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist must not contain other than master or basic tags.");
                 }
                 collection.Add(ProcessSingleLine(line));
             }
