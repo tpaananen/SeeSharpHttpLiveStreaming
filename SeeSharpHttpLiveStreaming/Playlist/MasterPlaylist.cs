@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
@@ -49,14 +50,44 @@ namespace SeeSharpHttpLiveStreaming.Playlist
 
         private void LinkVariantStreamAndRenditionGroups(IEnumerable<StreamInf> streamInfs, IReadOnlyCollection<RenditionGroup> renditionGroups)
         {
+            bool? closedCaptionsStatus = null;
             foreach (var streamInf in streamInfs)
             {
-                var video = renditionGroups.FirstOrDefault(x => x.GroupId == streamInf.Video && x.Type == MediaTypes.Video);
-                var audio = renditionGroups.FirstOrDefault(x => x.GroupId == streamInf.Audio && x.Type == MediaTypes.Audio);
-                var subtitles = renditionGroups.FirstOrDefault(x => x.GroupId == streamInf.Subtitles && x.Type == MediaTypes.Subtitles);
-                var closedCaptions = renditionGroups.FirstOrDefault(x => x.GroupId == streamInf.ClosedCaptions && x.Type == MediaTypes.ClosedCaptions);
+                var hasClosedCaptions = ValidateClosedCaptions(streamInf, ref closedCaptionsStatus);
+                var video = streamInf.Video != string.Empty ? GetRenditionGroup(renditionGroups, streamInf, x => x.Video, MediaTypes.Video) : null;
+                var audio = streamInf.Audio != string.Empty ? GetRenditionGroup(renditionGroups, streamInf, x => x.Audio, MediaTypes.Audio) : null;
+                var subtitles = streamInf.Subtitles != string.Empty ? GetRenditionGroup(renditionGroups, streamInf, x => x.Subtitles, MediaTypes.Subtitles) : null;
+                var closedCaptions = hasClosedCaptions ? GetRenditionGroup(renditionGroups, streamInf, x => x.ClosedCaptions, MediaTypes.ClosedCaptions) : null;
                 _variantStreams.Add(new VariantStream(streamInf, video, audio, subtitles, closedCaptions));
             }
+        }
+
+        private static RenditionGroup GetRenditionGroup(IEnumerable<RenditionGroup> renditionGroups, StreamInf streamInf, Func<StreamInf, string> selector, string mediaType)
+        {
+            var groupId = selector(streamInf);
+            var group = renditionGroups.FirstOrDefault(x => x.GroupId == groupId && x.Type == mediaType);
+            if (group == null)
+            {
+                throw new SerializationException(string.Format("Could not find matching alternative media group from the playlist for TYPE {0} and GROUP-ID {1}.", mediaType, groupId));
+            }
+            return group;
+        }
+
+        private static bool ValidateClosedCaptions(StreamInf streamInf, ref bool? closedCaptionsStatus)
+        {
+            bool currentClosedCaptions = streamInf.ClosedCaptions != StreamInf.ClosedCaptionsNone;
+            if (closedCaptionsStatus == null)
+            {
+                closedCaptionsStatus = currentClosedCaptions;
+                return currentClosedCaptions;
+            }
+
+            if (currentClosedCaptions != closedCaptionsStatus)
+            {
+                throw new SerializationException(
+                    "Each EXT-X-STREAM-INF must have CLOSED-CAPTIONS as NONE if one has value NONE.");
+            }
+            return currentClosedCaptions;
         }
 
         private static IEnumerable<StreamInf> CreateVariantStreams(IEnumerable<BaseTag> tags)
@@ -80,10 +111,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             foreach (var group in grouping)
             {
                 var list = group.ToList();
-                if (list.Count > 1)
+                if (list.Count <= 1)
                 {
-                    ValidateGroup(list);
+                    continue;
                 }
+                ValidateGroup(list);
             }
         }
 

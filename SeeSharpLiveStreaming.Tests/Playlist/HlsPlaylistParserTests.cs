@@ -185,5 +185,19 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             var playlist = CreateInvalidMasterPlaylistWithAlternativeRenditionsNonUniqueNames(Environment.NewLine);
             Assert.Throws<SerializationException>(() => HlsPlaylistParser.Parse(playlist, _uri));
         }
+
+        [Test]
+        public void MasterPlaylistIsNotCreatedIfAlternativeMediaGroupIsMissing()
+        {
+            var playlist = CreateInvalidMasterPlaylistWithMissingMatchingAlternativeMediaGroups(Environment.NewLine);
+            Assert.Throws<SerializationException>(() => HlsPlaylistParser.Parse(playlist, _uri));
+        }
+
+        [Test]
+        public void MasterPlaylistIsNotCreatedIfClosedCaptionsExistsWithNoneAndSomeValue()
+        {
+            var playlist = CreateInvalidMasterPlaylistWithNoneAndValidClosedCaptionsName(Environment.NewLine);
+            Assert.Throws<SerializationException>(() => HlsPlaylistParser.Parse(playlist, _uri));
+        }
     }
 }

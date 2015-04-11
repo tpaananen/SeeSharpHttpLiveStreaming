@@ -18,6 +18,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// </summary>
     internal class StreamInf : StreamInfBaseTag
     {
+        internal const string ClosedCaptionsNone = "NONE";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamInf"/> class.
@@ -76,7 +77,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 
         /// <summary>
         /// The value can be either a quoted-string or an enumerated-string with
-        /// the value NONE.If the value is a quoted-string, it MUST match the
+        /// the value NONE. If the value is a quoted-string, it MUST match the
         /// value of the GROUP-ID attribute of an EXT-X-MEDIA tag elsewhere in
         /// the Playlist whose TYPE attribute is CLOSED-CAPTIONS, and indicates
         /// the set of closed-caption Renditions that MAY be used when playlist
@@ -98,7 +99,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             get
             {
                 return ClosedCaptions != null &&
-                       !ClosedCaptions.Equals("NONE", StringComparison.Ordinal);
+                       !ClosedCaptions.Equals(ClosedCaptionsNone, StringComparison.Ordinal);
             }
         }
 
@@ -174,7 +175,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void WriteClosedCaptions(IPlaylistWriter writer, ref bool hasPreviousAttributes)
         {
             WriteAttributeSeparator(writer, hasPreviousAttributes);
-            if (ClosedCaptions != "NONE")
+            if (ClosedCaptions != ClosedCaptionsNone)
             {
                 const string name = "CLOSED-CAPTIONS";
                 WriteQuotedString(writer, name, ClosedCaptions, ref hasPreviousAttributes);
@@ -182,7 +183,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             else
             {
                 const string name = "CLOSED-CAPTIONS";
-                WriteEnumeratedString(writer, name, "NONE", ref hasPreviousAttributes);
+                WriteEnumeratedString(writer, name, ClosedCaptionsNone, ref hasPreviousAttributes);
             }
         }
 
