@@ -33,13 +33,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
     internal class Discontinuity : BaseTag
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Discontinuity"/> class.
-        /// </summary>
-        internal Discontinuity()
-        {
-        }
-
-        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName

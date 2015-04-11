@@ -472,6 +472,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// </returns>
         internal bool EqualityCheck(IEnumerable<ExtMedia> others)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var other in others)
             {
                 if (Default == other.Default && 

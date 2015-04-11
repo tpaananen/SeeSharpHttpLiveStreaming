@@ -40,13 +40,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     internal class OnlyIFrames : BaseTag
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OnlyIFrames"/> class.
-        /// </summary>
-        internal OnlyIFrames()
-        {
-        }
-
-        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName

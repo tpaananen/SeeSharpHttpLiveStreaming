@@ -18,13 +18,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
     /// </summary>
     internal class IndependentSegments : BaseTag
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IndependentSegments"/> class.
-        /// </summary>
-        internal IndependentSegments()
-        {
-            // since this has no attributes, lets default UsingdefaultCtor as false
-        }
 
         /// <summary>
         /// Gets the name of the tag.

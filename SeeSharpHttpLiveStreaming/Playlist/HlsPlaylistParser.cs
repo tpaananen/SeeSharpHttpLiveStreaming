@@ -1,5 +1,4 @@
 ﻿using System;
-using SeeSharpHttpLiveStreaming.Utils;
 
 namespace SeeSharpHttpLiveStreaming.Playlist
 {

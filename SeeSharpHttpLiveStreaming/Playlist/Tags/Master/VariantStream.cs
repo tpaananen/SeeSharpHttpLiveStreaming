@@ -1,6 +1,4 @@
-﻿using SeeSharpHttpLiveStreaming.Utils;
-
-namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
+﻿namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
     /// <summary>
     /// Represents a variant stream in a master playlist.

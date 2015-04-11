@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Utils;
 using Version = SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags.Version;
@@ -21,7 +19,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             baseUri.RequireNotNull("baseUri");
             BaseUri = baseUri;
-            Version = Playlist.Tags.BasicTags.Version.InitialVersionNumber;
+            Version = Tags.BasicTags.Version.InitialVersionNumber;
         }
 
         /// <summary>
