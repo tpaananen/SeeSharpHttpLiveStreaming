@@ -20,6 +20,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
     {
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="IndependentSegments"/> class.
+        /// </summary>
+        internal IndependentSegments()
+        {
+        }
+
+        /// <summary>
         /// Gets the name of the tag.
         /// </summary>
         public override string TagName
