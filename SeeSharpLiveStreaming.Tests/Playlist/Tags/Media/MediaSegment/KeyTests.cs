@@ -54,7 +54,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
             }
 
             Assert.AreEqual(new Uri("https://example.com/encryption/"), _key.Uri);
-            Assert.AreEqual("0x" + "1234".PadLeft(16, '0'), _key.InitializationVector);
+            Assert.AreEqual("0x" + "1234".PadLeft(32, '0'), _key.InitializationVector);
             Assert.AreEqual("somevalue", _key.KeyFormat);
             Assert.AreEqual(new List<int>{1,4,6}, _key.KeyFormatVersions);
         }

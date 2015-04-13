@@ -154,6 +154,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             WriteClosedCaptions(writer, ref hasPreviousAttributes);
         }
 
+        /// <summary>
+        /// Adds the tag properties to playlist properties.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MasterPlaylist playlist)
+        {
+        }
+
         private void WriteAudio(IPlaylistWriter writer, ref bool hasPreviousAttributes)
         {
             const string name = "AUDIO";

@@ -35,6 +35,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         /// <summary>
         /// Initializes a new instance of the <see cref="Discontinuity"/> class.
         /// </summary>
+        // ReSharper disable once EmptyConstructor
         internal Discontinuity()
         {
         }

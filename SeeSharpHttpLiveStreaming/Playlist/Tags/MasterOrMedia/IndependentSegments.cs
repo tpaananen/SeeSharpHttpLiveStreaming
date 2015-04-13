@@ -22,6 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
         /// <summary>
         /// Initializes a new instance of the <see cref="IndependentSegments"/> class.
         /// </summary>
+        // ReSharper disable once EmptyConstructor
         internal IndependentSegments()
         {
         }

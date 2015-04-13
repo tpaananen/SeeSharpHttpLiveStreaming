@@ -21,7 +21,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// where s is a decimal-integer indicating the target duration in
     /// seconds.The EXT-X-TARGETDURATION tag is REQUIRED.
     /// </remarks>
-    internal class TargetDuration : BaseTag
+    internal class TargetDuration : MediaBaseTag
     {
         internal TargetDuration()
         {
@@ -92,6 +92,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
             writer.Write(Duration.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// Adds the tag properties to the playlist.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MediaPlaylist playlist)
+        {
+            playlist.TargetDuration = Duration;
         }
     }
 }

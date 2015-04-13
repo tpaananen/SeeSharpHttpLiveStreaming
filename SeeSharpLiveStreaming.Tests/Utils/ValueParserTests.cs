@@ -106,16 +106,16 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         public void TestParseHexadecimal([Values("0x", "0X")] string prefix)
         {
             var actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE="+ prefix + "1212,SECOND=2121", false, 128);
-            Assert.AreEqual(prefix + "1212".PadLeft(16, '0'), actual);
+            Assert.AreEqual(prefix + "1212".PadLeft(32, '0'), actual);
 
             actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=" + prefix + "1212", false, 128);
-            Assert.AreEqual(prefix + "1212".PadLeft(16, '0'), actual);
+            Assert.AreEqual(prefix + "1212".PadLeft(32, '0'), actual);
 
             actual = ValueParser.ParseHexadecimal("ATTRIBUTET", "ATTRIBUTE=" + prefix + "0", false, 128);
             Assert.AreEqual("", actual);
 
             actual = ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=" + prefix + "0", false, 128);
-            Assert.AreEqual( prefix + "0".PadLeft(16, '0'), actual);
+            Assert.AreEqual( prefix + "0".PadLeft(32, '0'), actual);
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         [Test]
         public void TestParseHexadecimalFailsIfProvidedInputIsLongerThanGivenBits()
         {
-            Assert.Throws<SerializationException>(() => ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0xFFFFFFFFFFFFFFFFF", false, 128));
+            Assert.Throws<SerializationException>(() => ValueParser.ParseHexadecimal("ATTRIBUTE", "ATTRIBUTE=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", false, 128));
         }
 
         [Test]

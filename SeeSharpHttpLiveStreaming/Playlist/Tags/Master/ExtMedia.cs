@@ -20,7 +20,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// Its format is:
     /// #EXT-X-MEDIA:&lt;attribute-list&gt;
     /// </summary>
-    internal class ExtMedia : BaseTag
+    internal class ExtMedia : MasterBaseTag
     {
 
         /// <summary>
@@ -284,6 +284,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             WriteForcedAttribute(writer, ref hasPreviousAttributes);
             WriteAutoSelect(writer, ref hasPreviousAttributes);
             WriteCharacteristics(writer, ref hasPreviousAttributes);
+        }
+
+        /// <summary>
+        /// Adds the tag properties to playlist properties.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MasterPlaylist playlist)
+        {
         }
 
         private void WriteCharacteristics(IPlaylistWriter writer, ref bool hasPreviousAttributes)

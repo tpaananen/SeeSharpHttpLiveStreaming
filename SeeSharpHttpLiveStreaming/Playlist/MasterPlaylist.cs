@@ -158,5 +158,21 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             }
             return collection;
         }
+
+        /// <summary>
+        /// Processes the playlist line.
+        /// </summary>
+        /// <param name="line">The playlist line.</param>
+        protected override BaseTag ProcessSingleLine(PlaylistLine line)
+        {
+            var tag = base.ProcessSingleLine(line);
+            var mediaTag = tag as MasterBaseTag;
+            if (mediaTag != null)
+            {
+                mediaTag.AddToPlaylist(this);
+            }
+
+            return tag;
+        }
     }
 }

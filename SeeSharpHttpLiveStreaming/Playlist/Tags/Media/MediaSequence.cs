@@ -30,7 +30,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// See Section 6.2.1 and Section 6.3.5 for more information on setting
     /// the EXT-X-MEDIA-SEQUENCE tag.
     /// </remarks>
-    internal class MediaSequence : BaseTag
+    internal class MediaSequence : MediaBaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaSequence"/> class.
@@ -95,6 +95,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
             writer.Write(Number.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// Adds the tag properties to the playlist.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MediaPlaylist playlist)
+        {
+            playlist.SequenceNumber = Number;
         }
     }
 }

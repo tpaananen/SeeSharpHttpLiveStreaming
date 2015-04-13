@@ -37,11 +37,12 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// Use of the EXT-X-I-FRAMES-ONLY REQUIRES a compatibility version
     /// number of 4 or greater.
     /// </remarks>
-    internal class OnlyIFrames : BaseTag
+    internal class OnlyIFrames : MediaBaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OnlyIFrames"/> class.
         /// </summary>
+        // ReSharper disable once EmptyConstructor
         internal OnlyIFrames()
         {
         }
@@ -94,6 +95,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         /// <param name="writer">The writer.</param>
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
+        }
+
+        /// <summary>
+        /// Adds the tag properties to the playlist.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MediaPlaylist playlist)
+        {
+            playlist.IFramesOnly = true;
         }
     }
 }

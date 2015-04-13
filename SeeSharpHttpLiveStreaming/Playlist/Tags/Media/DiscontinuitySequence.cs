@@ -33,7 +33,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// See Section 6.2.1 and Section 6.2.2 for more information about
     /// setting the value of the EXT-X-DISCONTINUITY-SEQUENCE tag.
     /// </remarks>
-    internal class DiscontinuitySequence : BaseTag
+    internal class DiscontinuitySequence : MediaBaseTag
     {
 
         /// <summary>
@@ -103,6 +103,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
             writer.Write(Number.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// Adds the tag to playlist.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MediaPlaylist playlist)
+        {
+            playlist.DiscontinuitySequence = Number;
         }
     }
 }

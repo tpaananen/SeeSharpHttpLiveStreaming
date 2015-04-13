@@ -19,7 +19,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// added to the end of the Media Playlist.  If the EXT-X-PLAYLIST-TYPE
     /// value is VOD, the Media Playlist cannot change.
     /// </remarks>
-    internal class PlaylistType : BaseTag
+    internal class PlaylistType : MediaBaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaylistType"/> class.
@@ -93,6 +93,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
             writer.Write(PlaylistTypeValue);
+        }
+
+        /// <summary>
+        /// Adds the tag properties to the playlist.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MediaPlaylist playlist)
+        {
+            playlist.PlaylistType = MediaPlaylistTypeCode.ToType(PlaylistTypeValue);
         }
     }
 }

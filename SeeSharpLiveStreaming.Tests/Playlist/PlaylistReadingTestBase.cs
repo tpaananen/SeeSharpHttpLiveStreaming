@@ -391,6 +391,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXTM3U" + lineFeed + 
                 "#EXT-X-TARGETDURATION:10" + lineFeed + 
                 "#EXT-X-VERSION:3" + lineFeed + 
+                "#EXT-X-DISCONTINUITY-SEQUENCE:0" + lineFeed +
                 "#EXT-X-MEDIA-SEQUENCE:0" + lineFeed + 
                 "#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\",IV=0x9c7db8778570d05c3177c349fd9236aa" + lineFeed + 
                 "#EXTINF:10.0," + lineFeed + 
@@ -403,6 +404,19 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "movieA.ts" + lineFeed + 
                 "#EXTINF:10.0," + lineFeed + 
                 "movieB.ts" + lineFeed;
+        }
+
+        protected static string CreateValidMasterPlaylistWithExtIFramesStreamInf(string lineFeed)
+        {
+            return "#EXTM3U" + lineFeed +
+                   "#EXT-X-VERSION:4" + lineFeed + 
+                   "#EXT-X-I-FRAME-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=80000,CODECS=\"avc1.42e00a,mp4a.40.2\",URI=\"lo/iframes.m3u8\"" + lineFeed +
+                   "#EXT-X-I-FRAME-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=200000,CODECS=\"avc1.42e00a,mp4a.40.2\",URI=\"mid/iframes.m3u8\"" + lineFeed + 
+                   "#EXT-X-I-FRAME-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=380000,CODECS=\"avc1.42e00a,mp4a.40.2\",URI=\"hi/iframes.m3u8\"" + lineFeed + 
+                   // do not know how to use this tag in a playlist, just test it is parsed
+                   "#EXT-X-SESSION-DATA:DATA-ID=\"com.example.lyrics\",URI=\"lyrics.json\"" + lineFeed +
+                   "#EXT-X-SESSION-DATA:DATA-ID=\"com.example.title\",LANGUAGE=\"en\",VALUE=\"This is an example\"" + lineFeed +
+                   "#EXT-X-SESSION-DATA:DATA-ID=\"com.example.title\",LANGUAGE=\"sp\",VALUE=\"Este es un ejemplo\"";
         }
 
         internal static void AssertMasterPlaylist(IHlsPlaylist playlistObject)

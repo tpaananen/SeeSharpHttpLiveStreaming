@@ -39,17 +39,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets the type of the playlist. Defaults to <see cref="MediaPlaylistType.None"/>.
         /// </summary>
-        public MediaPlaylistType PlaylistType { get; private set; }
+        public MediaPlaylistType PlaylistType { get; internal set; }
 
         /// <summary>
         /// Gets the sequence number.
         /// </summary>
-        public long SequenceNumber { get; private set; }
+        public long SequenceNumber { get; internal set; }
 
         /// <summary>
         /// Gets the max duration of each segment in the playlist.
         /// </summary>
-        public long TargetDuration { get; private set; }
+        public long TargetDuration { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether the EXT-X-I-FRAMES-ONLY tag is present.
@@ -57,14 +57,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// tag present.
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        public bool IFramesOnly { get; private set; }
+        public bool IFramesOnly { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether this is the final playlist / segment.
         /// When the playlist contains the final segment of the presentation, there 
         /// must be a #EXT-X-ENDLIST tag.
         /// </summary>
-        public bool IsFinal { get; private set; }
+        public bool IsFinal { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets the discontinuity sequence.
+        /// </summary>
+        public long DiscontinuitySequence { get; internal set; }
 
         /// <summary>
         /// Deserializes a <see cref="MediaPlaylist"/>.
@@ -125,28 +130,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         protected override BaseTag ProcessSingleLine(PlaylistLine line)
         {
             var tag = base.ProcessSingleLine(line);
-            if (tag.TagType == TagType.ExtXPlaylistType)
+            var mediaTag = tag as MediaBaseTag;
+            if (mediaTag != null)
             {
-                var type = (PlaylistType) tag;
-                PlaylistType = MediaPlaylistTypeCode.ToType(type.PlaylistTypeValue);
-            }
-            else if (tag.TagType == TagType.ExtXMediaSequence)
-            {
-                var seq = (MediaSequence) tag;
-                SequenceNumber = seq.Number;
-            }
-            else if (tag.TagType == TagType.ExtXTargetDuration)
-            {
-                var duration = (TargetDuration) tag;
-                TargetDuration = duration.Duration;
-            }
-            else if (tag.TagType == TagType.ExtXIFramesOnly)
-            {
-                IFramesOnly = true;
-            }
-            else if (tag.TagType == TagType.ExtXEndList)
-            {
-                IsFinal = true;
+                mediaTag.AddToPlaylist(this);
             }
 
             return tag;

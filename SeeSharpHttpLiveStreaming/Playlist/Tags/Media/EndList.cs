@@ -8,16 +8,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
     /// </summary>
     /// <remarks>
     /// The EXT-X-ENDLIST tag indicates that no more Media Segments will be
-    /// added to the Media Playlist file.  It MAY occur anywhere in the Media
+    /// added to the Media Playlist file. It MAY occur anywhere in the Media
     /// Playlist file.  Its format is:
     ///
     /// #EXT-X-ENDLIST
     /// </remarks>
-    internal class EndList : BaseTag
+    internal class EndList : MediaBaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EndList"/> class.
         /// </summary>
+        // ReSharper disable once EmptyConstructor
         internal EndList()
         {
         }
@@ -65,6 +66,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
         /// <param name="writer">The writer.</param>
         protected override void SerializeAttributes(IPlaylistWriter writer)
         {
+        }
+
+        /// <summary>
+        /// Adds the tag properties to the playlist.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MediaPlaylist playlist)
+        {
+            playlist.IsFinal = true;
         }
     }
 }

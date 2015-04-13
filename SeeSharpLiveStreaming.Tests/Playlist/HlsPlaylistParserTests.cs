@@ -186,17 +186,43 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         }
 
         [Test]
-        public void MasterPlaylistIsNotCreatedIfAlternativeMediaGroupIsMissing()
+        public void TestMasterPlaylistIsNotCreatedIfAlternativeMediaGroupIsMissing()
         {
             var playlist = CreateInvalidMasterPlaylistWithMissingMatchingAlternativeMediaGroups(Environment.NewLine);
             Assert.Throws<SerializationException>(() => HlsPlaylistParser.Parse(playlist, Uri));
         }
 
         [Test]
-        public void MasterPlaylistIsNotCreatedIfClosedCaptionsExistsWithNoneAndSomeValue()
+        public void TestMasterPlaylistIsNotCreatedIfClosedCaptionsExistsWithNoneAndSomeValue()
         {
             var playlist = CreateInvalidMasterPlaylistWithNoneAndValidClosedCaptionsName(Environment.NewLine);
             Assert.Throws<SerializationException>(() => HlsPlaylistParser.Parse(playlist, Uri));
+        }
+
+        [Theory]
+        public void TestMasterPlaylistIsParsedWithIFramesStreamInf(string lineFeed)
+        {
+            var playlist = CreateValidMasterPlaylistWithExtIFramesStreamInf(lineFeed);
+            var playlistObject = HlsPlaylistParser.Parse(playlist, Uri);
+
+            Assert.IsNotNull(playlistObject);
+            Assert.That(playlistObject is HlsPlaylist);
+            Assert.IsNotNull(playlistObject.Playlist);
+            Assert.That(playlistObject.IsMaster);
+            Assert.AreEqual(4, playlistObject.Version);
+            // TODO: validate and implement missing part
+        }
+
+        [Theory]
+        public void TestMediaPlaylistIsCreatedWithEncryptionDetails(string lineFeed)
+        {
+            var playlist = CreateValidMediaPlaylistWithEncryptionDetails(lineFeed);
+            var playlistObject = HlsPlaylistParser.Parse(playlist, Uri);
+            Assert.IsNotNull(playlistObject);
+            Assert.That(playlistObject is HlsPlaylist);
+            Assert.IsNotNull(playlistObject.Playlist);
+            Assert.IsFalse(playlistObject.IsMaster);
+            // TODO: validate and implement missing part
         }
     }
 }

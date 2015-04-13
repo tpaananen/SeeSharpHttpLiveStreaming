@@ -17,7 +17,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     ///
     /// #EXT-X-SESSION-DATA:&lt;attribute list&gt;
     /// </remarks>
-    internal class SessionData : BaseTag
+    internal class SessionData : MasterBaseTag
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SessionData"/> class.
@@ -138,6 +138,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             WriteUri(writer, "URI", Uri, ref hasPreviousAttributes);
             WriteQuotedString(writer, "VALUE", Value, ref hasPreviousAttributes);
             WriteQuotedString(writer, "LANGUAGE", Language, ref hasPreviousAttributes);
+        }
+
+        /// <summary>
+        /// Adds the tag properties to playlist properties.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MasterPlaylist playlist)
+        {
         }
 
         private void AssertUriOrValueExistsButNotBoth()

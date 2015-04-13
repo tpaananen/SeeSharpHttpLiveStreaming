@@ -18,7 +18,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                                                                 NumberStyles.Number | 
                                                                 NumberStyles.Integer;
 
-        private const int SizeOfByte = 8; // bits
+        private const int SizeOfChar = 4; // hex 2 chars per byte
         private const string HexPrefixIdentifier = "0x"; // case ignored
 
         /// <summary>
@@ -279,9 +279,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         internal static string CreateHexValue(string value, int bits)
         {
             value.RequireNotNull("value");
-            if (bits < SizeOfByte)
+            if (bits < SizeOfChar)
             {
-                throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than " + SizeOfByte + ".");
+                throw new ArgumentOutOfRangeException("bits", bits, "The bits parameter cannot be less than " + SizeOfChar + ".");
             }
 
             if (!value.StartsWith(HexPrefixIdentifier, StringComparison.OrdinalIgnoreCase))
@@ -291,7 +291,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
 
             var prefix = value.Substring(0, HexPrefixIdentifier.Length);
             value = value.Substring(HexPrefixIdentifier.Length);
-            int sizeInBytes = bits / SizeOfByte;
+            int sizeInBytes = bits / SizeOfChar;
             if (value.Length > sizeInBytes)
             {
                 throw new SerializationException("The value " + value + " to be parsed is longer than the number of bits " +

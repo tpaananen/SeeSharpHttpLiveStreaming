@@ -109,5 +109,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             SerializeBaseAttributes(writer, out hasPreviousAttributes);
             WriteUri(writer, "URI", Uri, ref hasPreviousAttributes);
         }
+
+        /// <summary>
+        /// Adds the tag properties to playlist properties.
+        /// </summary>
+        /// <param name="playlist">The playlist.</param>
+        internal override void AddToPlaylist(MasterPlaylist playlist)
+        {
+        }
     }
 }
