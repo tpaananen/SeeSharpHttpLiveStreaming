@@ -22,19 +22,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// The provisions in Section 4.3.4.2.1 also apply to EXT-X-I-FRAME-
     /// STREAM-INF tags with a VIDEO attribute.
     /// </remarks>
-    internal class ExtIFrameStreamInf : StreamInfBaseTag
+    internal class IntraFrameStreamInf : StreamInfBaseTag
     {
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamInf"/> class.
         /// </summary>
-        internal ExtIFrameStreamInf()
+        internal IntraFrameStreamInf()
         {
             UsingDefaultCtor = true;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtIFrameStreamInf" /> class.
+        /// Initializes a new instance of the <see cref="IntraFrameStreamInf" /> class.
         /// </summary>
         /// <param name="bandwidth">The bandwidth.</param>
         /// <param name="averageBandwidth">The average bandwidth.</param>
@@ -43,7 +43,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <param name="uri">The URI.</param>
         /// <param name="video">The video.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="uri" /> is <b>null</b>.</exception>
-        public ExtIFrameStreamInf(long bandwidth, long averageBandwidth, IEnumerable<string> codecs,
+        public IntraFrameStreamInf(long bandwidth, long averageBandwidth, IEnumerable<string> codecs,
                          Resolution resolution, Uri uri, string video)
         {
             uri.RequireNotNull("uri");

@@ -11,16 +11,16 @@ using SeeSharpHttpLiveStreaming.Tests.Helpers;
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
 {
     [TestFixture]
-    public class ExtIFrameStreamInfTests
+    public class IntraFrameStreamInfTests
     {
         private const string ValidIFrameStreamInf = "URI=\"http://example.com/iframestreaminf/\",BANDWIDTH=454545,AVERAGE-BANDWIDTH=98989,CODECS=\"AAC,H264,OGG\",RESOLUTION=1920x1080";
 
-        private ExtIFrameStreamInf _frame;
+        private IntraFrameStreamInf _frame;
 
         [SetUp]
         public void SetUp()
         {
-            _frame = new ExtIFrameStreamInf();
+            _frame = new IntraFrameStreamInf();
             Assert.AreEqual("#EXT-X-I-FRAME-STREAM-INF", _frame.TagName);
             Assert.AreEqual(TagType.ExtXIFrameStreamInf, _frame.TagType);
         }
@@ -78,7 +78,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         {
             StringBuilder sb;
             var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
-            var frame = new ExtIFrameStreamInf(454545, 98989, new[] {"AAC", "H264", "OGG"}, 
+            var frame = new IntraFrameStreamInf(454545, 98989, new[] {"AAC", "H264", "OGG"}, 
                                                new Resolution(1920, 1080),
                                                new Uri("http://example.com/iframestreaminf/"), "VID");
             frame.Serialize(writer);
@@ -100,7 +100,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
             var codecArray = codecs == null ? null : new string[0];
             StringBuilder sb;
             var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
-            var frame = new ExtIFrameStreamInf(454545, 98989, codecArray, 
+            var frame = new IntraFrameStreamInf(454545, 98989, codecArray, 
                                                new Resolution(1920, 1080),
                                                new Uri("http://example.com/iframestreaminf/"), video);
             frame.Serialize(writer);
@@ -117,7 +117,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         [Test]
         public void TestIFrameStreamInfConstructorThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new ExtIFrameStreamInf(0, 0, new [] { "" }, Resolution.Default, null, ""));
+            Assert.Throws<ArgumentNullException>(() => new IntraFrameStreamInf(0, 0, new [] { "" }, Resolution.Default, null, ""));
         }
     }
 }

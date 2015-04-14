@@ -211,7 +211,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.That(playlistObject.IsMaster);
             Assert.AreEqual(4, playlistObject.Version);
             var master = (MasterPlaylist) playlistObject.Playlist;
-            Assert.AreEqual(3, master.IFrameStreams.Count);
+            Assert.AreEqual(3, master.IntraFrames.Count);
 
             // TODO: validate and implement missing part
         }

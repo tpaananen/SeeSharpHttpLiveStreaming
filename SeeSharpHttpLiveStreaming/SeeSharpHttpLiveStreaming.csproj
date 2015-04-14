@@ -57,7 +57,7 @@
     <Compile Include="Playlist\Tags\BasicTags\Version.cs" />
     <Compile Include="Playlist\Tags\MasterOrMedia\IndependentSegments.cs" />
     <Compile Include="Playlist\Tags\MasterOrMedia\StartTag.cs" />
-    <Compile Include="Playlist\Tags\Master\ExtIFrameStreamInf.cs" />
+    <Compile Include="Playlist\Tags\Master\IntraFrameStreamInf.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMedia.cs" />
     <Compile Include="Playlist\Tags\Master\MasterBaseTag.cs" />
     <Compile Include="Playlist\Tags\Master\RenditionGroup.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="Playlist\MediaSegment.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ProgramDateTime.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSequence.cs" />
-    <Compile Include="Playlist\Tags\Media\OnlyIFrames.cs" />
+    <Compile Include="Playlist\Tags\Media\OnlyIntraFrames.cs" />
     <Compile Include="Playlist\Tags\Media\PlaylistType.cs" />
     <Compile Include="Playlist\Tags\Media\TargetDuration.cs" />
     <Compile Include="Playlist\Tags\Resolution.cs" />

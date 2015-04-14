@@ -15,7 +15,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     internal sealed class MasterPlaylist : PlaylistBase
     {
         private readonly List<VariantStream> _variantStreams = new List<VariantStream>();
-        private readonly List<ExtIFrameStreamInf> _extIFrames = new List<ExtIFrameStreamInf>(); 
+        private readonly List<IntraFrameStreamInf> _intraFrameLists = new List<IntraFrameStreamInf>(); 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MasterPlaylist" /> class.
@@ -40,14 +40,14 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         }
 
         /// <summary>
-        /// Gets the EXT-X-I-FRAME-STREAM details.
+        /// Gets the pointers to intra frame playlists.
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        public IReadOnlyCollection<ExtIFrameStreamInf> IFrameStreams
+        public IReadOnlyCollection<IntraFrameStreamInf> IntraFrames
         {
             get
             {
-                return new ReadOnlyCollection<ExtIFrameStreamInf>(_extIFrames);
+                return new ReadOnlyCollection<IntraFrameStreamInf>(_intraFrameLists);
             }
         }
 
@@ -192,9 +192,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// Adds the frame to the I-FRAME list.
         /// </summary>
         /// <param name="frame">The frame.</param>
-        internal void AddIFrame(ExtIFrameStreamInf frame)
+        internal void AddIFrame(IntraFrameStreamInf frame)
         {
-            _extIFrames.Add(frame);
+            _intraFrameLists.Add(frame);
         }
     }
 }

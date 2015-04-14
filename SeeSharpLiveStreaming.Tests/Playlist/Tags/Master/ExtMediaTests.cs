@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -256,6 +257,60 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
                          media1.InstreamId == (mediaType == MediaTypes.ClosedCaptions ? "CC1" : "");
             
             Assert.AreEqual(isTrue, media1.EqualityCheck(new [] { media2 }));
+        }
+
+        [Test]
+        public void TestExtMediaEqualityChecking2([Values(MediaTypes.Audio, MediaTypes.Subtitles, MediaTypes.ClosedCaptions)] string mediaType)
+        {
+            var expected = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, true, false, GetInstreamId(mediaType), null);
+            var media1 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, true, false, GetInstreamId(mediaType), null);
+            AssertMediaEquality(expected, media1, "1");
+
+            media1 = new ExtMedia(mediaType, "groupId", "", "aen", "Suomi", true, true, false, GetInstreamId(mediaType), null);
+            AssertMediaEquality(expected, media1, "2");
+
+            media1 = new ExtMedia(mediaType, "groupId", "en", "", "Suomi", true, true, false, GetInstreamId(mediaType), null);
+            AssertMediaEquality(expected, media1, "3");
+
+            media1 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi2", true, true, false, GetInstreamId(mediaType), null);
+            AssertMediaEquality(expected, media1, "4");
+
+            media1 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", false, true, false, GetInstreamId(mediaType), null);
+            AssertMediaEquality(expected, media1, "5");
+
+            media1 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, false, false, GetInstreamId(mediaType), null);
+            AssertMediaEquality(expected, media1, "6");
+
+            media1 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, true, true, GetInstreamId(mediaType), null);
+            AssertMediaEquality(expected, media1, "7");
+
+            media1 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, true, false, GetInstreamId(mediaType), null);
+            AssertMediaEquality(expected, media1, "8");
+
+            media1 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, true, false, mediaType == MediaTypes.ClosedCaptions ? "CC2" : "", null);
+            AssertMediaEquality(expected, media1, "9");
+
+            media1 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, true, false, mediaType == MediaTypes.ClosedCaptions ? "CC2" : "", new ReadOnlyCollection<string>(new []{ "huu" }));
+            AssertMediaEquality(expected, media1, "10");
+        }
+
+        private static string GetInstreamId(string mediaType)
+        {
+            return mediaType == MediaTypes.ClosedCaptions ? "CC1" : "";
+        }
+
+        private static void AssertMediaEquality(ExtMedia expected, ExtMedia actual, string message)
+        {
+            var isTrue = actual.Language == "en" &&
+                         actual.AssocLanguage == "aen" &&
+                         actual.Name == "Suomi" &&
+                         actual.Default &&
+                         actual.AutoSelect &&
+                         !actual.Forced &&
+                         new ReadOnlyCollection<string>(new string[0]).SequenceEqual(actual.Characteristics) &&
+                         actual.InstreamId == (actual.Type == MediaTypes.ClosedCaptions ? "CC1" : "");
+
+            Assert.AreEqual(isTrue, expected.EqualityCheck(new[] {actual}), message);
         }
 
         private static void AssertAreEqual(ExtMedia expected, ExtMedia actual)

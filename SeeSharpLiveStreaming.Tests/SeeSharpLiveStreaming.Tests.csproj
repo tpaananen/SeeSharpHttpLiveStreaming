@@ -63,7 +63,7 @@
     <Compile Include="Playlist\Tags\BaseTagTests.cs" />
     <Compile Include="Playlist\Tags\MasterOrMedia\IndependentSegmentsTests.cs" />
     <Compile Include="Playlist\Tags\MasterOrMedia\StartTagTests.cs" />
-    <Compile Include="Playlist\Tags\Master\ExtIFrameStreamInfTests.cs" />
+    <Compile Include="Playlist\Tags\Master\IntraFrameStreamInfTests.cs" />
     <Compile Include="Playlist\Tags\Master\ExtMediaTests.cs" />
     <Compile Include="Playlist\Tags\Master\SessionDataTests.cs" />
     <Compile Include="Playlist\Tags\Media\DiscontinuitySequenceTests.cs" />
@@ -74,7 +74,7 @@
     <Compile Include="Playlist\Tags\Media\MediaSegment\MapTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSegment\ProgramDateTimeTests.cs" />
     <Compile Include="Playlist\Tags\Media\MediaSequenceTests.cs" />
-    <Compile Include="Playlist\Tags\Media\OnlyIFramesTests.cs" />
+    <Compile Include="Playlist\Tags\Media\OnlyIntraFramesTests.cs" />
     <Compile Include="Playlist\Tags\Media\PlaylistTypeTests.cs" />
     <Compile Include="Playlist\Tags\Media\TargetDurationTests.cs" />
     <Compile Include="Playlist\Tags\Basic\VersionTagTests.cs" />

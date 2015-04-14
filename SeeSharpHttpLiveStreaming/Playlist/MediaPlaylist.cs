@@ -56,8 +56,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// This indicates that each media segment must have <see cref="ByteRange"/>
         /// tag present.
         /// </summary>
-        // ReSharper disable once InconsistentNaming
-        public bool IFramesOnly { get; internal set; }
+        public bool IntraFramesOnly { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether this is the final playlist / segment.
@@ -103,7 +102,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
 
         private void ValidateMediaSegments()
         {
-            if (IFramesOnly && _mediaSegments.Any(d => d.ByteRange == null))
+            if (IntraFramesOnly && _mediaSegments.Any(d => d.ByteRange == null))
             {
                 throw new SerializationException("The EXT-X-I-FRAMES-ONLY tag is present but byte range tag is missing from the media segment.");
             }

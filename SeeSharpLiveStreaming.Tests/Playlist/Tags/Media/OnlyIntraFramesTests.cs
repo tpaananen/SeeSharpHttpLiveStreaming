@@ -7,14 +7,14 @@ using SeeSharpHttpLiveStreaming.Utils;
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media
 {
     [TestFixture]
-    public class OnlyIFramesTests
+    public class OnlyIntraFramesTests
     {
-        private OnlyIFrames _frames;
+        private OnlyIntraFrames _frames;
 
         [SetUp]
         public void SetUp()
         {
-            _frames = new OnlyIFrames();
+            _frames = new OnlyIntraFrames();
             
         }
 
