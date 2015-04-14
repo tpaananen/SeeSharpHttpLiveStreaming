@@ -131,8 +131,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </returns>
         internal static bool IsMediaPlaylistTag(string tag)
         {
-            return MediaPlaylistTags.Contains(tag) || 
-                   MasterOrMediaPlaylistTags.Contains(tag);
+            return MediaPlaylistTags.Contains(tag);
         }
 
         /// <summary>
@@ -156,8 +155,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         /// </returns>
         internal static bool IsMasterTag(string tag)
         {
-            return MasterPlaylistTags.Contains(tag) || 
-                   MasterOrMediaPlaylistTags.Contains(tag);
+            return MasterPlaylistTags.Contains(tag);
+        }
+
+        /// <summary>
+        /// Determines whether the tag is a master or media playlist tag.
+        /// </summary>
+        /// <param name="tag">The tag.</param>
+        /// <returns>
+        /// <b>True</b> if the <paramref name="tag"/> is a valid master or media playlist tag; otserwise, <b>false</b>.
+        /// </returns>
+        internal static bool IsMasterOrMediaTag(string tag)
+        {
+            return MasterOrMediaPlaylistTags.Contains(tag);
         }
 
         /// <summary>
@@ -171,7 +181,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
         {
             return IsMasterTag(tag) ||
                    IsMediaPlaylistTag(tag) ||
-                   IsBasicTag(tag) ||
+                   IsBasicTag(tag) || 
+                   IsMasterOrMediaTag(tag) || 
                    IsMediaSegmentTag(tag);
         }
 

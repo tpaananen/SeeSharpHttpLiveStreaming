@@ -49,7 +49,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <returns></returns>
         private static string GetFirstNonCommonTag(IEnumerable<PlaylistLine> playlist)
         {
-            return playlist.FirstOrDefault(x => !Tag.IsBasicTag(x.Tag)).Tag ?? string.Empty;
+            return playlist.FirstOrDefault(x => !Tag.IsBasicTag(x.Tag) && !Tag.IsMasterOrMediaTag(x.Tag)).Tag ?? string.Empty;
         }
 
         /// <summary>

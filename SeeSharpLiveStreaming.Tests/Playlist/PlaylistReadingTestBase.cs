@@ -393,6 +393,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-VERSION:3" + lineFeed + 
                 "#EXT-X-DISCONTINUITY-SEQUENCE:0" + lineFeed +
                 "#EXT-X-MEDIA-SEQUENCE:0" + lineFeed + 
+                "#EXT-X-INDEPENDENT-SEGMENTS" + lineFeed + 
                 "#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\",IV=0x9c7db8778570d05c3177c349fd9236aa" + lineFeed + 
                 "#EXTINF:10.0," + lineFeed + 
                 "bumper0.ts" + lineFeed + 

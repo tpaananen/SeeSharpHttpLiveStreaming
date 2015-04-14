@@ -29,10 +29,6 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.That(Tag.IsMediaPlaylistTag("#EXT-X-ENDLIST"));
             Assert.That(Tag.IsMediaPlaylistTag("#EXT-X-PLAYLIST-TYPE"));
             Assert.That(Tag.IsMediaPlaylistTag("#EXT-X-I-FRAMES-ONLY"));
-
-            Assert.That(Tag.IsMediaPlaylistTag("#EXT-X-INDEPENDENT-SEGMENTS"));
-            Assert.That(Tag.IsMediaPlaylistTag("#EXT-X-START"));
-
         }
 
         [Test]
@@ -44,6 +40,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.IsFalse(Tag.IsMediaPlaylistTag("EXT-X-ENDLIST"));
             Assert.IsFalse(Tag.IsMediaPlaylistTag("EXT-X-PLAYLIST-TYPE"));
             Assert.IsFalse(Tag.IsMediaPlaylistTag("EXT-X-I-FRAMES-ONLY"));
+            Assert.IsFalse(Tag.IsMediaPlaylistTag("#EXT-X-INDEPENDENT-SEGMENTS"));
+            Assert.IsFalse(Tag.IsMediaPlaylistTag("#EXT-X-START"));
         }
 
         [Test]
@@ -75,9 +73,13 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.That(Tag.IsMasterTag("#EXT-X-STREAM-INF"));
             Assert.That(Tag.IsMasterTag("#EXT-X-I-FRAME-STREAM-INF"));
             Assert.That(Tag.IsMasterTag("#EXT-X-SESSION-DATA"));
+        }
 
-            Assert.That(Tag.IsMasterTag("#EXT-X-INDEPENDENT-SEGMENTS"));
-            Assert.That(Tag.IsMasterTag("#EXT-X-START"));
+        [Test]
+        public void TestIsMasterOrMediaPlaylistTag()
+        {
+            Assert.That(Tag.IsMasterOrMediaTag("#EXT-X-INDEPENDENT-SEGMENTS"));
+            Assert.That(Tag.IsMasterOrMediaTag("#EXT-X-START"));
         }
 
         [Test]
@@ -87,6 +89,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.IsFalse(Tag.IsMasterTag("EXT-X-STREAM-INF"));
             Assert.IsFalse(Tag.IsMasterTag("EXT-X-I-FRAME-STREAM-INF"));
             Assert.IsFalse(Tag.IsMasterTag("EXT-X-SESSION-DATA"));
+            Assert.IsFalse(Tag.IsMasterTag("#EXT-X-INDEPENDENT-SEGMENTS"));
+            Assert.IsFalse(Tag.IsMasterTag("#EXT-X-START"));
         }
 
         [Test]

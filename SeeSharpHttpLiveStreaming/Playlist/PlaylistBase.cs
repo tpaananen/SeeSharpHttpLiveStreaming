@@ -37,6 +37,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         public int Version { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether all media samples
+        /// in a Media Segment can be decoded without information from other
+        /// segments.
+        /// </summary>
+        public bool IndependentSegments { get; private set; }
+
+        /// <summary>
         /// Processes the playlist line.
         /// </summary>
         /// <param name="line">The playlist line.</param>
@@ -50,6 +57,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             {
                 var versionTag = (Version) tag;
                 Version = versionTag.VersionNumber;
+            }
+            else if (tag.TagType == TagType.ExtXIndependentSegments)
+            {
+                IndependentSegments = true;
             }
             return tag;
         }

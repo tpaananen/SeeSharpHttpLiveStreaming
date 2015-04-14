@@ -222,6 +222,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.That(playlistObject is HlsPlaylist);
             Assert.IsNotNull(playlistObject.Playlist);
             Assert.IsFalse(playlistObject.IsMaster);
+            var media = (MediaPlaylist) playlistObject.Playlist;
+            Assert.That(media.IndependentSegments);
             // TODO: validate and implement missing part
         }
     }
