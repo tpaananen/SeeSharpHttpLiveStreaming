@@ -232,34 +232,6 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         }
 
         [Test]
-        public void TestExtMediaEqualityChecking(
-            [Values(MediaTypes.Audio, MediaTypes.ClosedCaptions, MediaTypes.Subtitles)] string mediaType,
-            [Values("en", "de")] string lang,
-            [Values("aen", "ade")] string assoc,
-            [Values("English", "Suomi")] string name,
-            [Values(true, false)] bool isDefault,
-            [Values(true, false)] bool autoselect,
-            [Values(true, false)] bool forced,
-            [Values("CC1", "CC2")] string streamId,
-            [Values("as", null)] string characteristics)
-        {
-            var c = characteristics == null ? null : new[] {characteristics};
-            var media1 = new ExtMedia(mediaType, "groupId", lang, assoc, name, isDefault, autoselect, forced, streamId, c);
-            var media2 = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, true, false, mediaType == MediaTypes.ClosedCaptions ? "CC1" : "", null);
-
-            var isTrue = media1.Language == "en" &&
-                         media1.AssocLanguage == "aen" &&
-                         media1.Name == "Suomi" &&
-                         media1.Default &&
-                         media1.AutoSelect &&
-                         !media1.Forced &&
-                         c == null &&
-                         media1.InstreamId == (mediaType == MediaTypes.ClosedCaptions ? "CC1" : "");
-            
-            Assert.AreEqual(isTrue, media1.EqualityCheck(new [] { media2 }));
-        }
-
-        [Test]
         public void TestExtMediaEqualityChecking2([Values(MediaTypes.Audio, MediaTypes.Subtitles, MediaTypes.ClosedCaptions)] string mediaType)
         {
             var expected = new ExtMedia(mediaType, "groupId", "en", "aen", "Suomi", true, true, false, GetInstreamId(mediaType), null);
