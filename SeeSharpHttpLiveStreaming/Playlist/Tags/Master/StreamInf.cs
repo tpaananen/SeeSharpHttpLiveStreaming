@@ -48,7 +48,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             Audio = audio ?? string.Empty;
             Video = video ?? string.Empty;
             Subtitles = subtitles ?? string.Empty;
-            ClosedCaptions = string.IsNullOrEmpty(closedCaptions) ? "NONE" : closedCaptions;
+            ClosedCaptions = string.IsNullOrEmpty(closedCaptions) ? ClosedCaptionsNone : closedCaptions;
             if (codecs != null)
             {
                 _codecs.AddRange(codecs);

@@ -11,9 +11,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// </summary>
     /// <remarks>
     /// The EXT-X-I-FRAME-STREAM-INF tag identifies a Media Playlist file
-    /// containing the I-frames of a multimedia presentation.  It stands
+    /// containing the I-frames of a multimedia presentation. It stands
     /// alone, in that it does not apply to a particular URI in the Master
-    /// Playlist.  Its format is:
+    /// Playlist. Its format is:
     /// #EXT-X-I-FRAME-STREAM-INF:&lt;attribute-list&gt;
     /// 
     /// Every EXT-X-I-FRAME-STREAM-INF tag MUST include a BANDWIDTH attribute
@@ -116,6 +116,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         /// <param name="playlist">The playlist.</param>
         internal override void AddToPlaylist(MasterPlaylist playlist)
         {
+            playlist.AddIFrame(this);
         }
     }
 }

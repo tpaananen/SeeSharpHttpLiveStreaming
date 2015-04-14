@@ -14,7 +14,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// </summary>
     internal sealed class MasterPlaylist : PlaylistBase
     {
-        private readonly List<VariantStream> _variantStreams = new List<VariantStream>(); 
+        private readonly List<VariantStream> _variantStreams = new List<VariantStream>();
+        private readonly List<ExtIFrameStreamInf> _extIFrames = new List<ExtIFrameStreamInf>(); 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MasterPlaylist" /> class.
@@ -35,6 +36,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             get
             {
                 return new ReadOnlyCollection<VariantStream>(_variantStreams);
+            }
+        }
+
+        /// <summary>
+        /// Gets the EXT-X-I-FRAME-STREAM details.
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        public IReadOnlyCollection<ExtIFrameStreamInf> IFrameStreams
+        {
+            get
+            {
+                return new ReadOnlyCollection<ExtIFrameStreamInf>(_extIFrames);
             }
         }
 
@@ -150,9 +163,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             var collection = new List<BaseTag>();
             foreach (var line in content)
             {
-                if (!Tag.IsMasterTag(line.Tag) && !Tag.IsBasicTag(line.Tag))
+                if (!Tag.IsMasterTag(line.Tag) && !Tag.IsBasicTag(line.Tag) && !Tag.IsMasterOrMediaTag(line.Tag))
                 {
-                    throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist must not contain other than master or basic tags.");
+                    throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist must not contain other than master, master or media, or basic tags.");
                 }
                 collection.Add(ProcessSingleLine(line));
             }
@@ -173,6 +186,15 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             }
 
             return tag;
+        }
+
+        /// <summary>
+        /// Adds the frame to the I-FRAME list.
+        /// </summary>
+        /// <param name="frame">The frame.</param>
+        internal void AddIFrame(ExtIFrameStreamInf frame)
+        {
+            _extIFrames.Add(frame);
         }
     }
 }

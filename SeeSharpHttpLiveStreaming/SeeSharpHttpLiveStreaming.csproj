@@ -84,6 +84,9 @@
     <Compile Include="Playlist\Tags\TagFactory.cs" />
     <Compile Include="Playlist\Tags\TagParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session\AbstractSessionBase.cs" />
+    <Compile Include="Session\MasterSession.cs" />
+    <Compile Include="Session\MediaSession.cs" />
     <Compile Include="Utils\IncompatibleVersionException.cs" />
     <Compile Include="Utils\Require.cs" />
     <Compile Include="Utils\UriUtils.cs" />
