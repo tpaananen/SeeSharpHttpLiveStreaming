@@ -11,7 +11,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
     internal abstract class ValueParserBase<T>
     {
 
-        protected const char QuatationMark = '\"';
+        protected const string QuatationMark = "\"";
 
         /// <summary>
         /// Parses the specified attribute value from the string provided.
@@ -76,9 +76,9 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
             }
 
             int endPosition;
-            if (quotedString && line[position] == QuatationMark)
+            if (quotedString && line[position] == QuatationMark[0])
             {
-                endPosition = line.IndexOf("\"", position + 1, StringComparison.Ordinal);
+                endPosition = line.IndexOf(QuatationMark, position + 1, StringComparison.Ordinal);
                 if (endPosition < 0)
                 {
                     return string.Empty;
@@ -99,7 +99,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 return string.Empty;
             }
 
-            var substring  = endPosition < position 
+            var substring = endPosition < position 
                 ? line.Substring(position) 
                 : line.Substring(position, endPosition - position);
             return substring;

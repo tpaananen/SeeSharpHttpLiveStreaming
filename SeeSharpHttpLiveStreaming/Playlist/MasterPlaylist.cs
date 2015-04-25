@@ -55,9 +55,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             content.RequireNotEmpty("content");
             var tags = ReadTags(content);
-            var streamInfs = CreateVariantStreams(tags);
             var renditionGroups = CreateRenditionGroups(tags);
-            LinkVariantStreamAndRenditionGroups(streamInfs, renditionGroups);
+            LinkVariantStreamAndRenditionGroups(tags.OfType<StreamInf>(), renditionGroups);
         }
 
         private void LinkVariantStreamAndRenditionGroups(IEnumerable<StreamInf> streamInfs, IReadOnlyCollection<RenditionGroup> renditionGroups)
@@ -102,11 +101,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             return currentClosedCaptions;
         }
 
-        private static IEnumerable<StreamInf> CreateVariantStreams(IEnumerable<BaseTag> tags)
-        {
-            return tags.OfType<StreamInf>().ToList();
-        }
-
         private static IReadOnlyCollection<RenditionGroup> CreateRenditionGroups(IReadOnlyCollection<BaseTag> tags)
         {
             var groupIds = tags.OfType<ExtMedia>().Select(x => new { x.GroupId, x.Type }).Distinct();
@@ -122,12 +116,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             var grouping = renditionGroups.GroupBy(d => d.Type);
             foreach (var group in grouping)
             {
-                var list = group.ToList();
-                if (list.Count <= 1)
-                {
-                    continue;
-                }
-                ValidateGroup(list);
+                ValidateGroup(group);
             }
         }
 
@@ -138,15 +127,18 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <exception cref="SerializationException">
         /// Thrown when no matching EXT-X-MEDIA tag from the list of renditions.
         /// </exception>
-        private static void ValidateGroup(ICollection<RenditionGroup> group)
+        private static void ValidateGroup(IEnumerable<RenditionGroup> group)
         {
-            foreach (var media in group.SelectMany(x => x.ExtMedias))
+            // ReSharper disable PossibleMultipleEnumeration
+            var media = group.SelectMany(x => x.ExtMedias)
+                             .FirstOrDefault(m => !group.Where(d => !d.ExtMedias.Contains(m))
+                                                        .All(d => m.EqualityCheck(d.ExtMedias)));
+            // ReSharper restore PossibleMultipleEnumeration
+            if (media != null)
             {
-                // check all other groups than the one the media exists and find equal attributes from each other group
-                if (!group.Where(d => !d.ExtMedias.Contains(media)).All(d => media.EqualityCheck(d.ExtMedias)))
-                {
-                    throw new SerializationException("Could not find matching EXT-X-MEDIA tag from other media groups with TYPE " + media.Type + ", GROUP-ID " + media.GroupId + ", NAME " + media.Name);
-                }
+                throw new SerializationException(
+                    "Could not find matching EXT-X-MEDIA tag from other media groups with TYPE " + media.Type +
+                    ", GROUP-ID " + media.GroupId + ", NAME " + media.Name);
             }
         }
 
@@ -165,7 +157,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             {
                 if (!Tag.IsMasterTag(line.Tag) && !Tag.IsBasicTag(line.Tag) && !Tag.IsMasterOrMediaTag(line.Tag))
                 {
-                    throw new SerializationException("The tag " + line.Tag + " is not a master playlist tag. Master playlist must not contain other than master, master or media, or basic tags.");
+                    throw new SerializationException(
+                        "The tag " + line.Tag + " is not a master playlist tag. " + 
+                        "Master playlist must not contain other than master, master or media, or basic tags.");
                 }
                 collection.Add(ProcessSingleLine(line));
             }
@@ -179,10 +173,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         protected override BaseTag ProcessSingleLine(PlaylistLine line)
         {
             var tag = base.ProcessSingleLine(line);
-            var mediaTag = tag as MasterBaseTag;
-            if (mediaTag != null)
+            var masterTag = tag as MasterBaseTag;
+            if (masterTag != null)
             {
-                mediaTag.AddToPlaylist(this);
+                masterTag.AddToPlaylist(this);
             }
 
             return tag;
