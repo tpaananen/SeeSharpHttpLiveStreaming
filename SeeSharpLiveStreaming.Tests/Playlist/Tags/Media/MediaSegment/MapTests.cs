@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
@@ -16,7 +17,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         [SetUp]
         public void SetUp()
         {
-            _map = new Map();
+            _map = (Map)TagFactory.Create("#EXT-X-MAP");
+            _map.BaseUri = new Uri("http://example.com/");
             Assert.AreEqual("#EXT-X-MAP", _map.TagName);
             Assert.AreEqual(TagType.ExtXMap, _map.TagType);
         }

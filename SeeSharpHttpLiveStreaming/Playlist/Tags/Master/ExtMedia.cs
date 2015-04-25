@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
+using UriParser = SeeSharpHttpLiveStreaming.Utils.ValueParsers.UriParser;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
@@ -22,6 +23,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// </summary>
     internal class ExtMedia : MasterBaseTag
     {
+
+        private readonly QuotedStringParser _parser = new QuotedStringParser();
+        private readonly EnumeratedStringParser _enumeratedParser = new EnumeratedStringParser();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtMedia"/> class.
@@ -325,7 +329,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseType(string content)
         {
             const string name = "TYPE";
-            Type = ValueParser.ParseEnumeratedString(name, content, true);
+            Type = new EnumeratedStringParser().Parse(name, content, true);
 
             if (!MediaTypes.IsValid(Type))
             {
@@ -337,7 +341,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         {
             const string name = "URI";
             bool mustNotExist = Type == MediaTypes.ClosedCaptions;
-            var uri = ParseUri(name, content, false);
+            var uri = new UriParser(BaseUri).Parse(name, content, false);
             if (mustNotExist)
             {
                 if (uri != null)
@@ -351,31 +355,31 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseGroupId(string content)
         {
             const string name = "GROUP-ID";
-            GroupId = ValueParser.ParseQuotedString(name, content, true);
+            GroupId = _parser.Parse(name, content, true);
         }
 
         private void ParseLanguage(string content)
         {
             const string name = "LANGUAGE";
-            Language = ValueParser.ParseQuotedString(name, content, false);
+            Language = _parser.Parse(name, content, false);
         }
 
         private void ParseAssocLanguage(string content)
         {
             const string name = "ASSOC-LANGUAGE";
-            AssocLanguage = ValueParser.ParseQuotedString(name, content, false);
+            AssocLanguage = _parser.Parse(name, content, false);
         }
 
         private void ParseName(string content)
         {
             const string name = "NAME";
-            Name = ValueParser.ParseQuotedString(name, content, true);
+            Name = _parser.Parse(name, content, true);
         }
 
         private void ParseDefault(string content)
         {
             const string name = "DEFAULT";
-            var defaultValue = ValueParser.ParseEnumeratedString(name, content, false);
+            var defaultValue = _enumeratedParser.Parse(name, content, false);
             if (defaultValue != string.Empty && !YesNo.IsValid(defaultValue))
             {
                 throw new SerializationException("Invalid value provided in DEFAULT attribute.");
@@ -386,7 +390,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseAutoSelect(string content)
         {
             const string name = "AUTOSELECT";
-            var value = ValueParser.ParseEnumeratedString(name, content, false);
+            var value = _enumeratedParser.Parse(name, content, false);
             if (value != string.Empty && !YesNo.IsValid(value))
             {
                 throw new SerializationException("Invalid value provided in AUTOSELECT attribute.");
@@ -407,7 +411,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseForced(string content)
         {
             const string name = "FORCED";
-            var value = ValueParser.ParseEnumeratedString(name, content, false);
+            var value = _enumeratedParser.Parse(name, content, false);
             if (value != string.Empty && !YesNo.IsValid(value))
             {
                 throw new SerializationException("Invalid value provided in FORCED attribute.");
@@ -424,7 +428,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             // see property comments describing the parsing logic
             const string name = "INSTREAM-ID";
             var isRequired = Type == MediaTypes.ClosedCaptions;
-            var value = ValueParser.ParseQuotedString(name, content, isRequired);
+            var value = new QuotedStringParser().Parse(name, content, isRequired);
             ValidateInstreamId(value, isRequired);
             InstreamId = value;
         }
@@ -432,7 +436,9 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseCharacteristics(string content)
         {
             const string name = "CHARACTERISTICS";
-            Characteristics = new ReadOnlyCollection<string>(ValueParser.ParseSeparatedQuotedString(name, content, false));
+            var parser = new StringWithSeparatorParser<string>(x => x);
+            var values = parser.Parse(name, content, false);
+            Characteristics = new ReadOnlyCollection<string>(values);
         }
 
         #endregion
@@ -463,7 +469,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             }
 
             var number = value.Substring("SERVICE".Length);
-            var temp = ValueParser.ParseInt(number);
+            var temp = int.Parse(number);
             if (temp < 1 || temp > 63)
             {
                 throw new InvalidOperationException(

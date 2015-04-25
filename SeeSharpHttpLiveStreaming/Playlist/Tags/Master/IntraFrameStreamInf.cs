@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
+using UriParser = SeeSharpHttpLiveStreaming.Utils.ValueParsers.UriParser;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
@@ -91,7 +92,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
             try
             {
                 base.Deserialize(content, version);
-                Uri = ParseUri("URI", content, true);
+                Uri = new UriParser(BaseUri).Parse("URI", content, true);
             }
             catch (Exception ex)
             {

@@ -20,6 +20,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     {
         internal const string ClosedCaptionsNone = "NONE";
 
+        private readonly QuotedStringParser _parser = new QuotedStringParser();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamInf"/> class.
         /// </summary>
@@ -200,19 +202,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseAudio(string content)
         {
             const string name = "AUDIO";
-            Audio = ValueParser.ParseQuotedString(name, content, false);
+            Audio = _parser.Parse(name, content, false);
         }
 
         private void ParseSubtitles(string content)
         {
             const string name = "SUBTITLES";
-            Subtitles = ValueParser.ParseQuotedString(name, content, false);
+            Subtitles = _parser.Parse(name, content, false);
         }
 
         private void ParseClosedCaptions(string content)
         {
             const string name = "CLOSED-CAPTIONS";
-            var value = ValueParser.ParseQuotedString(name, content, false);
+            var value = _parser.Parse(name, content, false);
             ClosedCaptions = value == string.Empty ? "NONE" : value;
         }
 

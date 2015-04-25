@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
-using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
@@ -103,7 +102,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             {
                 var split = content.Split(',');
                 var durationString = split[0];
-                var duration = ValueParser.ParseDecimal(durationString);
+                var duration = decimal.Parse(durationString, CultureInfo.InvariantCulture);
                 
                 Duration = GetDuration(duration, version);
                 Information = split.Length > 1 ? split[1] : string.Empty;

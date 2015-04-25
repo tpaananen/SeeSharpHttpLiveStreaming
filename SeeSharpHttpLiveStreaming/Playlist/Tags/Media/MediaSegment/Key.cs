@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
+using UriParser = SeeSharpHttpLiveStreaming.Utils.ValueParsers.UriParser;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -68,7 +69,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         {
             return string.IsNullOrEmpty(initializationVector) 
                     ? string.Empty 
-                    : ValueParser.CreateHexValue(initializationVector, SizeOfKey);
+                    : HexParser.CreateHexValue(initializationVector, SizeOfKey);
         }
 
         // ReSharper disable once UnusedParameter.Local
@@ -228,13 +229,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         private void ParseUri(string content)
         {
             const string name = "URI";
-            Uri = ParseUri(name, content, true);
+            Uri = new UriParser(BaseUri).Parse(name, content, true);
         }
 
         private void ParseMethod(string content)
         {
             const string name = "METHOD";
-            var value = ValueParser.ParseEnumeratedString(name, content, true);
+            var value = new EnumeratedStringParser().Parse(name, content, true);
             Method = value.ToEncryptionMethod();
             RequireNoAttributesIfNoEncryption(content);
         }
@@ -242,7 +243,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         private void ParseInitializationVector(string content, int version)
         {
             const string name = "IV";
-            var value = ValueParser.ParseHexadecimal(name, content, false, SizeOfKey);
+            var value = new HexParser(SizeOfKey).Parse(name, content, false);
             if (value != string.Empty && version < RequiredIvVersion)
             {
                 throw new IncompatibleVersionException(TagName, name, version, RequiredIvVersion);
@@ -253,7 +254,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         private void ParseKeyFormat(string content, int version)
         {
             const string name = "KEYFORMAT";
-            var value = ValueParser.ParseQuotedString(name, content, false);
+            var value = new QuotedStringParser().Parse(name, content, false);
             if (value != string.Empty && version < RequiredKeyFormatVersion)
             {
                 throw new IncompatibleVersionException(TagName, name, version, RequiredKeyFormatVersion);
@@ -264,7 +265,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         private void ParseKeyFormatVersions(string content, int version)
         {
             const string name = "KEYFORMATVERSIONS";
-            var values = ValueParser.ParseSeparatedQuotedString(name, content, false, int.Parse, KeyFormatVersionSeparator[0]);
+            var values = new StringWithSeparatorParser<int>(int.Parse, KeyFormatVersionSeparator[0]).Parse(name, content, false);
             if (values.Count != 0)
             {
                 if (version < RequiredKeyFormatVersion)

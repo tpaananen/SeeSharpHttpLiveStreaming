@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Net;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
-using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags
@@ -175,26 +174,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags
                 writer.Write(string.Format(template, attribute, value));
                 hasPreviousAttribute = true;
             }
-        }
-
-        /// <summary>
-        /// Parses the URI.
-        /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        /// <param name="content">The content.</param>
-        /// <param name="required">if set to <c>true</c> the URI is required.</param>
-        /// <returns>
-        /// The <see cref="Uri"/> parsed from the content.
-        /// </returns>
-        protected Uri ParseUri(string attributeName, string content, bool required)
-        {
-            var value = ValueParser.ParseQuotedString(attributeName, content, required);
-            if (value == string.Empty)
-            {
-                return null;
-            }
-            var uri = WebUtility.UrlDecode(value);
-            return UriUtils.CreateUri(uri, BaseUri);
         }
     }
 }

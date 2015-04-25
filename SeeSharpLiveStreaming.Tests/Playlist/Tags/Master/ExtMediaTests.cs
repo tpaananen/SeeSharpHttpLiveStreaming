@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Master;
 using SeeSharpHttpLiveStreaming.Tests.Helpers;
 
@@ -19,7 +20,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         [SetUp]
         public void SetUp()
         {
-            _extMedia = new ExtMedia();
+            _extMedia = (ExtMedia) TagFactory.Create("#EXT-X-MEDIA");
+            _extMedia.BaseUri = new Uri("http://example.com/");
             Assert.AreEqual("#EXT-X-MEDIA", _extMedia.TagName);
             Assert.AreEqual(TagType.ExtXMedia, _extMedia.TagType);
         }

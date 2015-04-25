@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
-using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
@@ -114,13 +113,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 {
                     throw new FormatException("Invalid format in EXT-X-BYTERANGE value.");
                 }
-                var length = ValueParser.ParseInt(split[0]);
+                var length = int.Parse(split[0]);
                 ValidateLength(length);
                 Length = length;
 
                 if (split.Length == 2)
                 {
-                    var startIndex = ValueParser.ParseInt(split[1]);
+                    var startIndex = int.Parse(split[1]);
                     ValidateStartIndex(startIndex);
                     StartIndex = startIndex;
                 }

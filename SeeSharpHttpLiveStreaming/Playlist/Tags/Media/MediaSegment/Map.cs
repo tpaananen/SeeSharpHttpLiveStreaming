@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
+using UriParser = SeeSharpHttpLiveStreaming.Utils.ValueParsers.UriParser;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
 {
@@ -137,13 +138,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
         private void ParseUri(string content)
         {
             const string name = "URI";
-            Uri = ParseUri(name, content, true);
+            Uri = new UriParser(BaseUri).Parse(name, content, true);
         }
 
         private void ParseByteRange(string content, int version)
         {
             const string name = "BYTERANGE";
-            var value = ValueParser.ParseQuotedString(name, content, false);
+            var value = new QuotedStringParser().Parse(name, content, false);
             ByteRange = new ByteRange();
             if (value != string.Empty)
             {

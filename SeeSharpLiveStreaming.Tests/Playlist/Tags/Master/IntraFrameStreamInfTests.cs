@@ -20,7 +20,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         [SetUp]
         public void SetUp()
         {
-            _frame = new IntraFrameStreamInf();
+            _frame = (IntraFrameStreamInf)TagFactory.Create("#EXT-X-I-FRAME-STREAM-INF");
+            _frame.BaseUri = new Uri("http://example.com/");
             Assert.AreEqual("#EXT-X-I-FRAME-STREAM-INF", _frame.TagName);
             Assert.AreEqual(TagType.ExtXIFrameStreamInf, _frame.TagType);
         }
@@ -69,8 +70,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         [Test]
         public void TestIFrameStreamInfFailsToParse()
         {
-            var invalid = ValidIFrameStreamInf.Replace("http://example.com/iframestreaminf/", "jshdjshd");
-            Assert.Throws<SerializationException>(() => _frame.Deserialize(invalid, 0));
+            Assert.Throws<SerializationException>(() => _frame.Deserialize("dsjfhdskjfhsdkhfksdjhfkshsdf", 0));
         }
 
         [Test]

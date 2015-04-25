@@ -20,7 +20,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         [SetUp]
         public void SetUp()
         {
-            _key = new Key();
+            _key = (Key)TagFactory.Create("#EXT-X-KEY");
+            _key.BaseUri = BaseUri;
             Assert.AreEqual("#EXT-X-KEY", _key.TagName);
             Assert.AreEqual(TagType.ExtXKey, _key.TagType);
         }
@@ -198,8 +199,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         {
             var kfv = keyFormatVersions == null ? new[] {1, 3, 5} : new int[0];
             var uri = new Uri("http://e.com/");
-            var key = new Key(encryptionMethod, 5, uri, iv, keyFormat, kfv);
-
+            var key = new Key(encryptionMethod, 5, uri, iv, keyFormat, kfv) {BaseUri = BaseUri};
             StringBuilder sb;
             var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
 
@@ -219,8 +219,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         {
             var kfv = keyFormatVersions == null ? null : new int[0];
             var uri = new Uri("http://e.com/");
-            var key = new Key(encryptionMethod, 1, uri, iv, keyFormat, kfv);
-
+            var key = new Key(encryptionMethod, 1, uri, iv, keyFormat, kfv) {BaseUri = BaseUri};
             StringBuilder sb;
             var writer = TestPlaylistWriterFactory.CreateWithStringBuilder(out sb);
 

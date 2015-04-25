@@ -117,13 +117,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.MasterOrMedia
         private void ParseTimeOffset(string content)
         {
             const string name = "TIME-OFFSET";
-            TimeOffset = ValueParser.ParseDecimal(name, content, true);
+            TimeOffset = new DecimalParser().Parse(name, content, true);
         }
 
         private void ParsePrecise(string content)
         {
             const string name = "PRECISE";
-            var value = ValueParser.ParseEnumeratedString(name, content, false);
+            var value = new EnumeratedStringParser().Parse(name, content, false);
             if (value != string.Empty && !YesNo.IsValid(value))
             {
                 throw new SerializationException("Invalid value " + value + " for PRECISE attribute.");

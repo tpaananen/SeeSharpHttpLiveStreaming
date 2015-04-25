@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
-using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
@@ -80,7 +79,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             content.RequireNotEmpty("content");
             try
             {
-                Number = ValueParser.ParseInt(content);
+                Number = int.Parse(content);
             }
             catch (Exception ex)
             {

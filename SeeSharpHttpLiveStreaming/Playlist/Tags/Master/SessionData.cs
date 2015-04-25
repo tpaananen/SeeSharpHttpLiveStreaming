@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
 using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
+using UriParser = SeeSharpHttpLiveStreaming.Utils.ValueParsers.UriParser;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
 {
@@ -19,6 +20,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
     /// </remarks>
     internal class SessionData : MasterBaseTag
     {
+        private readonly QuotedStringParser _parser = new QuotedStringParser();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SessionData"/> class.
         /// </summary>
@@ -163,19 +166,19 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseDataId(string content)
         {
             const string name = "DATA-ID";
-            DataId = ValueParser.ParseQuotedString(name, content, true);
+            DataId = _parser.Parse(name, content, true);
         }
 
         private void ParseUri(string content)
         {
             const string name = "URI";
-            Uri = ParseUri(name, content, false);
+            Uri = new UriParser(BaseUri).Parse(name, content, false);
         }
 
         private void ParseValue(string content)
         {
             const string name = "VALUE";
-            var value = ValueParser.ParseQuotedString(name, content, false);
+            var value = _parser.Parse(name, content, false);
             if (value != string.Empty)
             {
                 Value = value;
@@ -185,7 +188,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         private void ParseLanguage(string content)
         {
             const string name = "LANGUAGE";
-            Language = ValueParser.ParseQuotedString(name, content, false);
+            Language = _parser.Parse(name, content, false);
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
-using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
@@ -73,7 +72,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media
             content.RequireNotEmpty("content");
             try
             {
-                Duration = ValueParser.ParseInt(content);
+                Duration = int.Parse(content);
                 if (Duration <= 0)
                 {
                     throw new SerializationException("The duration is required to be a positive value.");

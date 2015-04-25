@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using SeeSharpHttpLiveStreaming.Utils;
-using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 using SeeSharpHttpLiveStreaming.Utils.Writers;
 
 namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
@@ -87,7 +86,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.BasicTags
             }
 
             content.RequireNotEmpty("content");
-            VersionNumber = ValueParser.ParseInt(content);
+            VersionNumber = int.Parse(content);
         }
 
         /// <summary>

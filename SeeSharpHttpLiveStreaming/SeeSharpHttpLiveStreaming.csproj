@@ -90,7 +90,15 @@
     <Compile Include="Utils\IncompatibleVersionException.cs" />
     <Compile Include="Utils\Require.cs" />
     <Compile Include="Utils\UriUtils.cs" />
-    <Compile Include="Utils\ValueParsers\ValueParser.cs" />
+    <Compile Include="Utils\ValueParsers\DecimalParser.cs" />
+    <Compile Include="Utils\ValueParsers\EnumeratedStringParser.cs" />
+    <Compile Include="Utils\ValueParsers\HexParser.cs" />
+    <Compile Include="Utils\ValueParsers\IntegerParser.cs" />
+    <Compile Include="Utils\ValueParsers\QuotedStringParser.cs" />
+    <Compile Include="Utils\ValueParsers\ResolutionParser.cs" />
+    <Compile Include="Utils\ValueParsers\StringWithSeparatorParser.cs" />
+    <Compile Include="Utils\ValueParsers\UriParser.cs" />
+    <Compile Include="Utils\ValueParsers\ValueParserBase.cs" />
     <Compile Include="Utils\Writers\IPlaylistWriter.cs" />
     <Compile Include="Utils\Writers\PlaylistWriter.cs" />
   </ItemGroup>

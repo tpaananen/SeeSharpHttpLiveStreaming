@@ -21,7 +21,8 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Master
         [SetUp]
         public void SetUp()
         {
-            _sessionData = new SessionData();
+            _sessionData = (SessionData) TagFactory.Create("#EXT-X-SESSION-DATA");
+            _sessionData.BaseUri = new Uri("http://example.com/");
             Assert.AreEqual("#EXT-X-SESSION-DATA", _sessionData.TagName);
             Assert.AreEqual(TagType.ExtXSessionData, _sessionData.TagType);
         }

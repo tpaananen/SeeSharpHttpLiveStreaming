@@ -175,7 +175,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         protected virtual void ParseVideo(string content)
         {
             const string name = "VIDEO";
-            Video = ValueParser.ParseQuotedString(name, content, false);
+            Video = new QuotedStringParser().Parse(name, content, false);
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         protected virtual void ParseBandwidth(string content)
         {
             const string name = "BANDWIDTH";
-            Bandwidth = ValueParser.ParseInt(name, content, true);
+            Bandwidth = new IntegerParser().Parse(name, content, true);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         protected virtual void ParseAverageBandwidth(string content)
         {
             const string name = "AVERAGE-BANDWIDTH";
-            AverageBandwidth = ValueParser.ParseInt(name, content, false);
+            AverageBandwidth = new IntegerParser().Parse(name, content, false);
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         protected virtual void ParseCodecs(string content)
         {
             const string name = "CODECS";
-            _codecs.AddRange(ValueParser.ParseSeparatedQuotedString(name, content, false)); // SHOULD
+            _codecs.AddRange(new StringWithSeparatorParser<string>(x => x).Parse(name, content, false)); // SHOULD
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Master
         protected virtual void ParseResolution(string content)
         {
             const string name = "RESOLUTION";
-            Resolution = ValueParser.ParseResolution(name, content, false); // RECOMMENDED IF VIDEO
+            Resolution = new ResolutionParser().Parse(name, content, false); // RECOMMENDED IF VIDEO
         }
     }
 }
