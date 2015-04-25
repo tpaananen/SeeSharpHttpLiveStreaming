@@ -111,8 +111,8 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Loaders
             {
                 throw new SerializationException("Failed to get content type for validation.");
             }
-            // Get the first instance of splitted string which should be the actual content type
-            // There can be charset included in the content type
+            // Get the first instance of split string which should be the actual content type
+            // There may be charset included in the content type
             contentType = contentType.Split(ContentTypeSplitter, StringSplitOptions.RemoveEmptyEntries)[0];
             if (!ValidContentTypes.Contains(contentType))
             {
