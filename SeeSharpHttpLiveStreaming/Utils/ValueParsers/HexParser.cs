@@ -7,7 +7,7 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
     {
 
         internal const int SizeOfChar = 4; // hex 2 chars per byte
-        private const string HexPrefixIdentifier = "0x"; // case ignored
+        internal const string HexPrefixIdentifier = "0x"; // case ignored
 
         private readonly int _bits;
 
@@ -66,12 +66,11 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
         /// Thrown when <paramref name="value"/> is <b>null</b>.
         /// </exception>
         /// <exception cref="SerializationException">
-        /// Thrown when the <paramref name="value"/> is longer than value represented by <paramref name="bits"/>
+        /// Thrown when the <paramref name="value"/> is greater than value represented by <paramref name="bits"/>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when the <paramref name="bits"/> is less than 8.
-        /// </exception>
-        /// <returns></returns>
+        /// <returns>
+        /// The hex value
+        /// </returns>
         internal static string CreateHexValue(string value, int bits)
         {
             value.RequireNotNull("value");
@@ -81,16 +80,19 @@ namespace SeeSharpHttpLiveStreaming.Utils.ValueParsers
                 throw new SerializationException("The hex value does not have prefix of " + HexPrefixIdentifier + ", case ignored.");
             }
 
-            var prefix = value.Substring(0, HexPrefixIdentifier.Length);
-            value = value.Substring(HexPrefixIdentifier.Length);
-            int sizeInBytes = bits / SizeOfChar;
-            if (value.Length > sizeInBytes)
+            int length = bits / SizeOfChar;
+            if (value.Length - HexPrefixIdentifier.Length != length)
             {
-                throw new SerializationException("The value " + value + " to be parsed is longer than the number of bits " +
-                                                 bits + ".");
-            }
+                if (value.Length - HexPrefixIdentifier.Length > length)
+                {
+                    throw new SerializationException("The value " + value + 
+                        " to be parsed is greater than the number of bits " +
+                        bits + ".");
+                }
 
-            value = prefix + value.PadLeft(sizeInBytes, '0');
+                value = value.Substring(HexPrefixIdentifier.Length);
+                value = HexPrefixIdentifier + value.PadLeft(length, '0');
+            }
             return value;
         }
     }

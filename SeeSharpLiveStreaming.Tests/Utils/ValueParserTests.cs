@@ -107,16 +107,16 @@ namespace SeeSharpHttpLiveStreaming.Tests.Utils
         public void TestParseHexadecimal([Values("0x", "0X")] string prefix)
         {
             var actual = new HexParser(128).Parse("ATTRIBUTE", "ATTRIBUTE="+ prefix + "1212,SECOND=2121", false);
-            Assert.AreEqual(prefix + "1212".PadLeft(32, '0'), actual);
+            Assert.AreEqual(HexParser.HexPrefixIdentifier + "1212".PadLeft(32, '0'), actual);
 
-            actual = new HexParser(128).Parse("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=" + prefix + "1212", false);
-            Assert.AreEqual(prefix + "1212".PadLeft(32, '0'), actual);
+            actual = new HexParser(128).Parse("ATTRIBUTE", "FIRST=12121,ATTRIBUTE=" + prefix + "".PadLeft(32, 'F'), false);
+            Assert.AreEqual(prefix + "".PadLeft(32, 'F'), actual);
 
             actual = new HexParser(128).Parse("ATTRIBUTET", "ATTRIBUTE=" + prefix + "0", false);
             Assert.AreEqual("", actual);
 
             actual = new HexParser(128).Parse("ATTRIBUTE", "ATTRIBUTE=" + prefix + "0", false);
-            Assert.AreEqual( prefix + "0".PadLeft(32, '0'), actual);
+            Assert.AreEqual(HexParser.HexPrefixIdentifier + "0".PadLeft(32, '0'), actual);
         }
 
         [Test]
