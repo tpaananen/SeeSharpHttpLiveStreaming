@@ -13,8 +13,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         private static readonly Uri Uri = new Uri("http://example.com/playlist/load.m3u8");
 
         [Datapoints]
-        // ReSharper disable once UnusedMember.Local
-        private static string[] _lineFeeds = {"\r\n", "\n"};
+        internal static readonly string[] LineFeeds = {"\r\n", "\n"};
 
         private static string GetPlaylist(string lineFeed)
         {
