@@ -112,7 +112,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             if (mediaSegment == null)
             {
-                mediaSegment = new MediaSegment();
+                mediaSegment = new MediaSegment(SequenceNumber + _mediaSegments.Count);
             }
 
             if (!mediaSegment.ReadTag(line, BaseUri, Version))

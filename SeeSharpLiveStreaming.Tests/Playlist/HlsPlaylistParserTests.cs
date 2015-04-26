@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
@@ -227,7 +228,31 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             Assert.IsFalse(playlistObject.IsMaster);
             var media = (MediaPlaylist) playlistObject.Playlist;
             Assert.That(media.IndependentSegments);
-            // TODO: validate and implement missing part
+            Assert.AreEqual(14, media.DiscontinuitySequence);
+
+            var segment = media.MediaSegments.ElementAt(0);
+            Assert.AreEqual(10, segment.SequenceNumber);
+            AssertSegmentWithKey(segment, "0x9c7db8778570d05c3177c349fd9236aa", EncryptionMethod.Aes128);
+
+            segment = media.MediaSegments.ElementAt(1);
+            Assert.AreEqual(11, segment.SequenceNumber);
+            AssertSegmentWithKey(segment, "", EncryptionMethod.None);
+
+            segment = media.MediaSegments.ElementAt(2);
+            Assert.AreEqual(12, segment.SequenceNumber);
+            AssertSegmentWithKey(segment, "0xc055ee9f6c1eb7aa50bfab02b0814972", EncryptionMethod.Aes128);
+        }
+
+        private static void AssertSegmentWithKey(MediaSegment segment, string iv, EncryptionMethod method)
+        {
+            var count = method == EncryptionMethod.None ? 0 : 1;
+            Assert.AreEqual(count, segment.Keys.Count);
+            if (count > 0)
+            {
+                var key = segment.Keys.ElementAt(0);
+                Assert.AreEqual(method, key.Value.Method);
+                Assert.AreEqual(iv, key.Value.InitializationVector);
+            }
         }
     }
 }

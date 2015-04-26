@@ -8,6 +8,7 @@ using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 using SeeSharpHttpLiveStreaming.Tests.Helpers;
 using SeeSharpHttpLiveStreaming.Utils;
+using SeeSharpHttpLiveStreaming.Utils.ValueParsers;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
 {
@@ -111,12 +112,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
         }
 
         [Test]
-        public void TestKeyCreationSucceedsEvenWithoutKeFormatVersions()
+        public void TestKeyCreationSucceedsEvenWithoutKeyFormatVersions()
         {
             var value = GetLine(EncryptionMethod.Aes128);
             value = value.Replace(",KEYFORMATVERSIONS=\"1/4/6\"", "");
             var key = (Key)TagFactory.Create(new PlaylistLine("#EXT-X-KEY", value), BaseUri, 5);
-            Assert.IsEmpty(key.KeyFormatVersions);
+            CollectionAssert.AreEquivalent(new [] { 1 }, key.KeyFormatVersions);
         }
 
         [Test]
@@ -228,6 +229,22 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
             _key.Deserialize(line.GetParameters(), 5);
 
             AssertAreEqual(_key, key);
+        }
+
+        [Test]
+        public void TestSetSequenceNumberAsIv()
+        {
+            var key = new Key(EncryptionMethod.Aes128, 0, new Uri("http://example.com/"));
+            key.SetSequenceNumber(1234);
+            Assert.AreEqual(HexParser.HexPrefixIdentifier + 1234.ToString("X").PadLeft(32, '0'), key.InitializationVector);
+        }
+
+        [Test]
+        public void TestSetSequenceNumberDoesNothingIfIvIsPresent()
+        {
+            var key = new Key(EncryptionMethod.Aes128, 2, new Uri("http://example.com/"), "0xFFFFFFFFFFFFFFF");
+            key.SetSequenceNumber(1234);
+            Assert.AreEqual(HexParser.HexPrefixIdentifier + "FFFFFFFFFFFFFFF".PadLeft(32, '0'), key.InitializationVector);
         }
 
         private static void AssertAreEqual(Key expected, Key actual)

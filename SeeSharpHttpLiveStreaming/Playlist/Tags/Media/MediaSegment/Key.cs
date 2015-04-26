@@ -60,7 +60,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                 Uri = uri;
                 InitializationVector = CreateHexValue(initializationVector);
                 KeyFormat = string.IsNullOrEmpty(keyFormat) ? DefaultKeyFormatValue : keyFormat;
-                KeyFormatVersions = keyFormatVersions ?? new ReadOnlyCollection<int>(new int[0]);
+                KeyFormatVersions = keyFormatVersions;
+                if (KeyFormatVersions == null || KeyFormatVersions.Count == 0)
+                {
+                    KeyFormatVersions = new ReadOnlyCollection<int>(new[] {1});
+                }
             }
             Method = method;
         }
@@ -273,6 +277,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
                     throw new IncompatibleVersionException(TagName, name, version, RequiredKeyFormatVersion);
                 }
             }
+            else
+            {
+                values.Add(1);
+            }
             KeyFormatVersions = new ReadOnlyCollection<int>(values);
         }
 
@@ -283,6 +291,30 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             if (Method == EncryptionMethod.None && content != validNoneAttributeList)
             {
                 throw new SerializationException("The EXT-X-KEY tag must not have any other attributes than METHOD if the METHOD is NONE.");
+            }
+        }
+
+        /// <summary>
+        /// Converts the media sequence number into IV in case when IV has not been provided.
+        /// </summary>
+        /// <param name="sequenceNumber">The sequence number.</param>
+        internal void SetSequenceNumber(long sequenceNumber)
+        {
+            if (KeyFormat == DefaultKeyFormatValue && 
+                InitializationVector == string.Empty)
+            {
+                // An EXT-X-KEY tag with a KEYFORMAT of "identity" that does not have an
+                // IV attribute indicates that the Media Sequence Number is to be used
+                // as the IV when decrypting a Media Segment, by putting its big-endian
+                // binary representation into a 16-octet (128-bit) buffer and padding
+                // (on the left) with zeros.
+                var bytes = BitConverter.GetBytes(sequenceNumber);
+                if (BitConverter.IsLittleEndian)
+                {
+                    Array.Reverse(bytes);
+                }
+                var s = HexParser.HexPrefixIdentifier + BitConverter.ToString(bytes).Replace("-", "");
+                InitializationVector = HexParser.CreateHexValue(s, SizeOfKey);
             }
         }
     }

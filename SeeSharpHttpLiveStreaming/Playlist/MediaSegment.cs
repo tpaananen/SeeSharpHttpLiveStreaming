@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 
@@ -19,8 +21,21 @@ namespace SeeSharpHttpLiveStreaming.Playlist
     /// </remarks>
     internal class MediaSegment
     {
+        private readonly IDictionary<string, Key> _keys = new Dictionary<string, Key>();
 
-        // TODO: create constructor that takes key and map as optional parameters when there is test data available
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MediaSegment"/> class.
+        /// </summary>
+        /// <param name="sequenceNumber">The sequence number.</param>
+        public MediaSegment(long sequenceNumber)
+        {
+            SequenceNumber = sequenceNumber;
+        }
+
+        /// <summary>
+        /// Gets the sequence number.
+        /// </summary>
+        public long SequenceNumber { get; private set; }
 
         /// <summary>
         /// Gets the duration of the segment.
@@ -47,7 +62,13 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </summary>
         public ProgramDateTime ProgramDateTime { get; private set; }
 
-        // TBD: map, key
+        /// <summary>
+        /// Gets the keys. There may be multiple keys with different key formats.
+        /// </summary>
+        public IReadOnlyDictionary<string, Key> Keys
+        {
+            get { return new ReadOnlyDictionary<string, Key>(_keys); }
+        }
 
         /// <summary>
         /// Reads the tag and either accepts or rejects it.
@@ -91,7 +112,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             {
                 ProgramDateTime = tag as ProgramDateTime;
             }
-            // TBD: key, map
+            else if (tag.TagType == TagType.ExtXKey)
+            {
+                var key = (Key) tag;
+                if (!string.IsNullOrEmpty(key.KeyFormat))
+                {
+                    key.SetSequenceNumber(SequenceNumber);
+                    _keys[key.KeyFormat] = key;
+                }
+            }
+            // TBD: map
         }
     }
 }
