@@ -22,6 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-BYTERANGE:1024@0" + lineFeed + 
                 "http://media.example.com/first.ts" + lineFeed +
                 "#EXT-X-DISCONTINUITY" + lineFeed +
+                "#EXT-X-PROGRAM-DATE-TIME:2015-03-21T12:22:31.221+02:00" + lineFeed + 
                 "#EXT-X-MAP:URI=\"http://www.target.com/load.php\"" + lineFeed + 
                 "#EXTINF:9.009,Some other info" + lineFeed +
                 "http://media.example.com/second.ts" + lineFeed +

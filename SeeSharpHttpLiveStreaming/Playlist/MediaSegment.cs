@@ -64,7 +64,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <summary>
         /// Gets the program date time.
         /// </summary>
-        public ProgramDateTime ProgramDateTime { get; private set; }
+        public DateTimeOffset ProgramDateTime { get; private set; }
 
         /// <summary>
         /// Gets the keys. There may be multiple keys with different key formats.
@@ -94,45 +94,52 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// </returns>
         public bool ReadTag(PlaylistLine line, Uri baseUri, int version)
         {
-            // Accept tags as long there is a URI on the line
-            CreateTag(line, baseUri, version);
-            return line.Uri == null;
-        }
-
-        private void CreateTag(PlaylistLine line, Uri baseUri, int version)
-        {
-            var tag = TagFactory.Create(line, baseUri, version);
+            ProcessTag(TagFactory.Create(line, baseUri, version));
             if (line.Uri != null)
             {
+                // Accept tags as long there is a URI on the line
                 Uri = line.Uri;
+                return false;
             }
+            return true;
+        }
 
+        private void ProcessTag(BaseTag tag)
+        {
             if (tag.TagType == TagType.ExtXByteRange)
             {
                 ByteRange = (ByteRange) tag;
             }
             else if (tag.TagType == TagType.ExtInf)
             {
-                var inf = (ExtInf) tag;
-                Information = inf.Information;
-                Duration = inf.Duration;
+                HandleExtInf((ExtInf)tag);
             }
             else if (tag.TagType == TagType.ExtXProgramDateTime)
             {
-                ProgramDateTime = tag as ProgramDateTime;
+                ProgramDateTime = ((ProgramDateTime)tag).DateTime;
             }
             else if (tag.TagType == TagType.ExtXKey)
             {
-                var key = (Key) tag;
-                if (!string.IsNullOrEmpty(key.KeyFormat))
-                {
-                    key.SetSequenceNumber(SequenceNumber);
-                    _keys[key.KeyFormat] = key;
-                }
+                HandleKey((Key)tag);
             }
             else if (tag.TagType == TagType.ExtXMap)
             {
                 Map = tag as Map;
+            }
+        }
+
+        private void HandleExtInf(ExtInf inf)
+        {
+            Information = inf.Information;
+            Duration = inf.Duration;
+        }
+
+        private void HandleKey(Key key)
+        {
+            if (!string.IsNullOrEmpty(key.KeyFormat))
+            {
+                key.SetSequenceNumber(SequenceNumber);
+                _keys[key.KeyFormat] = key;
             }
         }
     }

@@ -32,7 +32,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
         {
             var playlist = CreateValidMediaPlaylist(newLine);
             var playlistObject = HlsPlaylistParser.Parse(playlist, Uri);
-
+            
             AssertMediaPlaylist(playlistObject);
         }
 
