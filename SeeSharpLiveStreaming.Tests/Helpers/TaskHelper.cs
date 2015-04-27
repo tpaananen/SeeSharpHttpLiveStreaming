@@ -8,12 +8,17 @@ namespace SeeSharpHttpLiveStreaming.Tests.Helpers
     /// </summary>
     internal static class TaskHelper
     {
-        internal static Task<T> CreateFrom<T>(T result)
+        internal static Task<T> CreateTaskFrom<T>(T result)
         {
             return Task.Delay(10).ContinueWith(res => result);
         }
 
-        internal static Task<T> ThrowFrom<T, TException>(T result) where TException : Exception
+        internal static Task<T> CreateCompletedTaskFrom<T>(T result)
+        {
+            return Task.FromResult(result);
+        }
+
+        internal static Task<T> ThrowFromTask<T, TException>(T result) where TException : Exception
         {
             return Task.Delay(10).ContinueWith<T>(res =>
             {

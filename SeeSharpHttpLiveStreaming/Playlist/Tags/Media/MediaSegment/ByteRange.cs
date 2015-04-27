@@ -227,6 +227,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment
             return !Equals(left, right);
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format("{0}@{1}", Length, StartIndex);
+        }
+
         private static void ValidateStartIndex(long startIndex)
         {
             if (startIndex < 0)

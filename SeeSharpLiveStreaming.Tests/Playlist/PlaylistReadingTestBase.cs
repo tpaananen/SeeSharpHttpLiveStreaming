@@ -22,6 +22,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-BYTERANGE:1024@0" + lineFeed + 
                 "http://media.example.com/first.ts" + lineFeed +
                 "#EXT-X-DISCONTINUITY" + lineFeed +
+                "#EXT-X-MAP:URI=\"http://www.target.com/load.php\"" + lineFeed + 
                 "#EXTINF:9.009,Some other info" + lineFeed +
                 "http://media.example.com/second.ts" + lineFeed +
                 "#EXTINF:3.003,Some short take" + lineFeed +
@@ -37,14 +38,16 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
                 "#EXT-X-VERSION:6" + lineFeed +
                 "#EXT-X-I-FRAMES-ONLY" + lineFeed +
                 "#EXT-X-TARGETDURATION:10" + lineFeed +
-                "#EXT-X-MEDIA-SEQUENCE:0" + lineFeed +
-                "" + lineFeed +
+                "#EXT-X-MEDIA-SEQUENCE:121" + lineFeed +
+                "#EXT-X-MAP:URI=\"http://www.source.com/init.php?id=121\",BYTERANGE=\"8192@0\"" + lineFeed +
+                "" + lineFeed + 
                 "#EXTINF:9.009,Some info" + lineFeed +
                 "#EXT-X-BYTERANGE:1024" + lineFeed +
                 "http://media.example.com/media.ts" + lineFeed +
                 "#EXTINF:9.009,Some other info" + lineFeed +
                 "#EXT-X-BYTERANGE:1024@1024" + lineFeed +
                 "http://media.example.com/media.ts" + lineFeed +
+                "#EXT-X-MAP:URI=\"http://www.source.com/init.php?id=122\",BYTERANGE=\"8192@128\"" + lineFeed +
                 "#EXTINF:8.121,Some short take" + lineFeed +
                 "#EXT-X-BYTERANGE:889@2048" + lineFeed +
                 "http://media.example.com/media.ts" + lineFeed +

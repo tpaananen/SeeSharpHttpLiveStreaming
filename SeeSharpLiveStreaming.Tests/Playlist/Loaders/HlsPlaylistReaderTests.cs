@@ -44,7 +44,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
         [Test]
         public async Task TestHlsPlaylistReaderReadsAsync()
         {
-            _mockLoader.Setup(d => d.LoadAsync(_uri)).Returns(TaskHelper.CreateFrom(Tag.StartLine)).Verifiable();
+            _mockLoader.Setup(d => d.LoadAsync(_uri)).Returns(TaskHelper.CreateTaskFrom(Tag.StartLine)).Verifiable();
             var content = await _reader.ReadAsync(_uri);
             Assert.AreEqual(Tag.StartLine, content);
             _mockLoader.VerifyAll();
@@ -54,7 +54,7 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Loaders
         [Test]
         public async Task TestHlsPlaylistReaderReadsAsync2()
         {
-            _mockLoader.Setup(d => d.LoadAsync(_uri)).Returns(Task.FromResult(Tag.StartLine)).Verifiable();
+            _mockLoader.Setup(d => d.LoadAsync(_uri)).Returns(TaskHelper.CreateCompletedTaskFrom(Tag.StartLine)).Verifiable();
             var content = await _reader.ReadAsync(_uri);
             Assert.AreEqual(Tag.StartLine, content);
             _mockLoader.VerifyAll();

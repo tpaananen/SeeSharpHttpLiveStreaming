@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 using SeeSharpHttpLiveStreaming.Playlist;
+using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
 
 namespace SeeSharpHttpLiveStreaming.Tests.Playlist
 {
@@ -42,6 +43,16 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist
             var playlistObject = HlsPlaylistParser.Parse(playlist, Uri);
 
             AssertMediaPlaylist(playlistObject);
+
+            var segment = ((MediaPlaylist)playlistObject.Playlist).MediaSegments.ElementAt(0);
+            Assert.AreEqual(new Uri("http://www.source.com/init.php?id=121"), segment.Map.Uri);
+            Assert.AreEqual(new ByteRange(8192), segment.Map.ByteRange);
+            segment = ((MediaPlaylist)playlistObject.Playlist).MediaSegments.ElementAt(1);
+            Assert.AreEqual(new Uri("http://www.source.com/init.php?id=121"), segment.Map.Uri);
+            Assert.AreEqual(new ByteRange(8192), segment.Map.ByteRange);
+            segment = ((MediaPlaylist)playlistObject.Playlist).MediaSegments.ElementAt(2);
+            Assert.AreEqual(new Uri("http://www.source.com/init.php?id=122"), segment.Map.Uri);
+            Assert.AreEqual(new ByteRange(8192, 128), segment.Map.ByteRange);
         }
 
         [Theory]

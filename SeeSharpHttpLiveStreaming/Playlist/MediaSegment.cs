@@ -24,12 +24,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         private readonly IDictionary<string, Key> _keys = new Dictionary<string, Key>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MediaSegment"/> class.
+        /// Initializes a new instance of the <see cref="MediaSegment" /> class.
         /// </summary>
         /// <param name="sequenceNumber">The sequence number.</param>
-        public MediaSegment(long sequenceNumber)
+        /// <param name="map">
+        /// The map. Can be <b>null</b>. This may be updated by the read method.
+        /// </param>
+        public MediaSegment(long sequenceNumber, Map map)
         {
             SequenceNumber = sequenceNumber;
+            Map = map;
         }
 
         /// <summary>
@@ -69,6 +73,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         {
             get { return new ReadOnlyDictionary<string, Key>(_keys); }
         }
+
+        /// <summary>
+        /// Gets the map.
+        /// </summary>
+        public Map Map { get; private set; }
 
         /// <summary>
         /// Reads the tag and either accepts or rejects it.
@@ -121,7 +130,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                     _keys[key.KeyFormat] = key;
                 }
             }
-            // TBD: map
+            else if (tag.TagType == TagType.ExtXMap)
+            {
+                Map = tag as Map;
+            }
         }
     }
 }

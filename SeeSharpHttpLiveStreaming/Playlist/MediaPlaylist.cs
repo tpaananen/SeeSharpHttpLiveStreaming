@@ -77,6 +77,7 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         /// <exception cref="SerializationException">Thrown when the serialization fails.</exception>
         private void Parse(IEnumerable<PlaylistLine> content)
         {
+            Map currentMap = null; // this is optionally, but is updated when a new map is read from the list
             MediaSegment mediaSegment = null;
             foreach (var line in content)
             {
@@ -84,7 +85,17 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 {
                     if (Tag.IsMediaSegmentTag(line.Tag))
                     {
-                        ProcessMediaSegment(line, ref mediaSegment);
+                        if (mediaSegment == null)
+                        {
+                            mediaSegment = new MediaSegment(SequenceNumber + _mediaSegments.Count, currentMap);
+                        }
+
+                        if (!mediaSegment.ReadTag(line, BaseUri, Version))
+                        {
+                            currentMap = mediaSegment.Map;
+                            _mediaSegments.Add(mediaSegment);
+                            mediaSegment = null;
+                        }
                     }
                     else
                     {
@@ -93,7 +104,10 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 }
                 else
                 {
-                    throw new SerializationException("The tag " + line.Tag + " is a master playlist tag. Media playlist tag must not contain master playlist tags.");
+                    throw new SerializationException(
+                        "The tag " + line.Tag + 
+                        " is a master playlist tag." + 
+                        " Media playlist tag must not contain master playlist tags.");
                 }
             }
 
@@ -105,20 +119,6 @@ namespace SeeSharpHttpLiveStreaming.Playlist
             if (IntraFramesOnly && _mediaSegments.Any(d => d.ByteRange == null))
             {
                 throw new SerializationException("The EXT-X-I-FRAMES-ONLY tag is present but byte range tag is missing from the media segment.");
-            }
-        }
-
-        private void ProcessMediaSegment(PlaylistLine line, ref MediaSegment mediaSegment)
-        {
-            if (mediaSegment == null)
-            {
-                mediaSegment = new MediaSegment(SequenceNumber + _mediaSegments.Count);
-            }
-
-            if (!mediaSegment.ReadTag(line, BaseUri, Version))
-            {
-                _mediaSegments.Add(mediaSegment);
-                mediaSegment = null;
             }
         }
 

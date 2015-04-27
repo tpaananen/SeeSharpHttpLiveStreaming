@@ -124,5 +124,12 @@ namespace SeeSharpHttpLiveStreaming.Tests.Playlist.Tags.Media.MediaSegment
             Assert.AreEqual(byteRange.Length, _byteRange.Length);
             Assert.AreEqual(byteRange.StartIndex, _byteRange.StartIndex);
         }
+
+        [Test]
+        public void TestByteRangeToString()
+        {
+            Assert.AreEqual("0@0", _byteRange.ToString());
+            Assert.AreEqual("121@256", new ByteRange(121, 256).ToString());
+        }
     }
 }
