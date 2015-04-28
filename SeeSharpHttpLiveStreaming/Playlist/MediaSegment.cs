@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SeeSharpHttpLiveStreaming.Playlist.Tags;
 using SeeSharpHttpLiveStreaming.Playlist.Tags.Media.MediaSegment;
+using SeeSharpHttpLiveStreaming.Utils;
 
 namespace SeeSharpHttpLiveStreaming.Playlist
 {
@@ -80,6 +81,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist
         public Map Map { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is final.
+        /// </summary>
+        public bool IsFinal { get; set; }
+
+        /// <summary>
+        /// Gets the downloaded data.
+        /// </summary>
+        public byte[] Data { get; private set; }
+
+        /// <summary>
         /// Reads the tag and either accepts or rejects it.
         /// If the segment rejects the tag, parser should create a new segment
         /// which will accept the tag.
@@ -141,6 +152,16 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 key.SetSequenceNumber(SequenceNumber);
                 _keys[key.KeyFormat] = key;
             }
+        }
+
+        /// <summary>
+        /// Sets the data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        internal void SetData(byte[] data)
+        {
+            data.RequireNotEmpty("data");
+            Data = data;
         }
     }
 }

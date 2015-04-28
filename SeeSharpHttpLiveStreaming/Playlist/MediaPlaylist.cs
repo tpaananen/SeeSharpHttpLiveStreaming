@@ -111,6 +111,11 @@ namespace SeeSharpHttpLiveStreaming.Playlist
                 }
             }
 
+            if (IsFinal)
+            {
+                _mediaSegments.Last().IsFinal = true;
+            }
+
             ValidateMediaSegments();
         }
 
