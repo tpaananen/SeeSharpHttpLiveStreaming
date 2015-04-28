@@ -12,7 +12,7 @@ Plan:
 - Just provide a URI by subscribing
 - Optionally select a variant stream if available
 - Subscribers can observe the data as raw bytes using the observable API.
-- ...
+- Control via subscribtion
 
 
 Links:
